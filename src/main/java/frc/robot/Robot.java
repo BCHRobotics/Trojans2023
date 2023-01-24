@@ -4,11 +4,13 @@
 
 package frc.robot;
 
+
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.io.subsystems.IO;
 import frc.subsystems.Drivetrain;
 import frc.teleop.TeleopControl;
+import frc.util.devices.Gyro;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -27,7 +29,7 @@ public class Robot extends TimedRobot {
     private Drivetrain drive;
 
     public static boolean teleopInitialized = false;
-
+    Gyro gyro = new Gyro();
     /**
      * This function is run when the robot is first started up and should be used
      * for any
@@ -124,12 +126,18 @@ public class Robot extends TimedRobot {
         this.robotIO.resetInputs();
         this.drive.firstCycle();
         this.teleopControl.initialize();
+        
+        
     }
 
     /** This function is called periodically during test mode. */
     @Override
     public void testPeriodic() {
         SmartDashboard.updateValues();
+        
         this.robotIO.updateInputs();
+        gyro.getPitch();
+        
+
     }
 }

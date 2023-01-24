@@ -25,5 +25,17 @@ public class Gyro extends AHRS {
     @Override
     public double getAngle() {
         return this.getPitch();
+        
     }
+    @Override
+    public float getYaw(){
+        return this.getYaw();
+    }
+    
+    @Override
+    public float getRoll(){
+        return this.getRoll();
+    }
+
+    
 }
