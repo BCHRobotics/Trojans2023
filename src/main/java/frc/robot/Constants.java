@@ -44,7 +44,7 @@ public class Constants {
                         0, 6000, 3500, 0.1);
 
         // Gyro PID Constants
-        public static final Terms GYRO_CONSTANTS = new Terms(0, 0, 0, 0);
+        public static final Terms GYRO_CONSTANTS = new Terms(0.005, 0.001, 0, 0);
 
         // Auto directory
         public static final String ROOT_DIRECTORY = "csv/";

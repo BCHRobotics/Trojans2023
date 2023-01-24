@@ -25,8 +25,8 @@ public class PID {
 
     public void referenceTimer() {
         // Calculate delta t
-        this.currentTime = System.nanoTime();
-        this.deltaTime = ((double) (this.currentTime - this.previousTime)) / 1.0e9;
+        this.currentTime = System.nanoTime() / 1000000;
+        this.deltaTime = ((double) (this.currentTime - this.previousTime)) / 1.0e6;
         this.previousTime = this.currentTime;
     }
 

@@ -1,7 +1,6 @@
 package frc.subsystems;
 
 import edu.wpi.first.wpilibj.SerialPort;
-import edu.wpi.first.wpilibj.I2C.Port;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.io.subsystems.DriveIO;
 import frc.robot.Constants;
@@ -179,10 +178,16 @@ public class Drivetrain extends Subsystem {
     /**
      * Uses PID to balance robot
      */
-    public void balance() {
-        gyroPid.setTarget(0);
-        gyroPid.referenceTimer();
-        gyroPid.setInput(gyro.getAngle());
-        this.setOutput(this.gyroPid.getOutput(), 0);
+    public double balance() {
+        this.gyroPid.setTarget(0);
+        this.gyroPid.referenceTimer();
+        this.gyroPid.setInput(gyro.getAngle());
+        this.gyroPid.calculate();
+        return this.gyroPid.getOutput();
+    }
+
+    public void balanceIdle() {
+        this.gyroPid.resetTimer();
+        this.gyroPid.resetError();
     }
 }
