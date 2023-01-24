@@ -1,19 +1,27 @@
 package frc.subsystems;
 
+import edu.wpi.first.wpilibj.SerialPort;
+import edu.wpi.first.wpilibj.I2C.Port;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.io.subsystems.DriveIO;
 import frc.robot.Constants;
+import frc.util.pid.PID;
+import frc.util.devices.Gyro;
 
 public class Drivetrain extends Subsystem {
     private static Drivetrain instance;
 
     public enum DriveState {
-        OUTPUT, 
+        OUTPUT,
         VELOCITY,
         POSITION
     }
 
     private DriveIO driveIO;
+
+    // Objects for balancing
+    private PID gyroPid = new PID(Constants.GYRO_CONSTANTS);
+    private Gyro gyro = new Gyro(SerialPort.Port.kUSB);
 
     // states
     private DriveState currentState = DriveState.POSITION;
@@ -91,6 +99,7 @@ public class Drivetrain extends Subsystem {
 
     /**
      * Set drive position mode
+     * 
      * @param state
      */
     public void setPositionMode(boolean state) {
@@ -99,6 +108,7 @@ public class Drivetrain extends Subsystem {
 
     /**
      * Get drive position mode
+     * 
      * @return
      */
     public boolean getPositionMode() {
@@ -107,16 +117,18 @@ public class Drivetrain extends Subsystem {
 
     /**
      * Sets output to drive
-     * @param y percent output [-1 to 1] for forward movement
+     * 
+     * @param y    percent output [-1 to 1] for forward movement
      * @param turn percent output [-1 to 1] for turn movement
      */
     public void setOutput(double y, double turn) {
         this.leftOut = (y + turn);
-        this.rightOut =  (y - turn);
+        this.rightOut = (y - turn);
     }
 
     /**
      * Sets encoder position for left drive motors
+     * 
      * @param position
      */
     public void setDriveLeft(double position) {
@@ -125,6 +137,7 @@ public class Drivetrain extends Subsystem {
 
     /**
      * Sets encoder position for right drive motors
+     * 
      * @param position
      */
     public void setDriveRight(double position) {
@@ -133,6 +146,7 @@ public class Drivetrain extends Subsystem {
 
     /**
      * Sets braking mode on drive motors
+     * 
      * @param state
      */
     public void brake(boolean state) {
@@ -149,6 +163,7 @@ public class Drivetrain extends Subsystem {
 
     /**
      * Turns drivetrain/chasis by a provided angle
+     * 
      * @param angle
      */
     public void seekTarget(double angle) {
@@ -159,5 +174,15 @@ public class Drivetrain extends Subsystem {
 
         this.setDriveLeft(this.driveIO.getDriveL1Encoder().getPosition() + driveRevolutionsLeft);
         this.setDriveRight(this.driveIO.getDriveR1Encoder().getPosition() + driveRevolutionsRight);
+    }
+
+    /**
+     * Uses PID to balance robot
+     */
+    public void balance() {
+        gyroPid.setTarget(0);
+        gyroPid.referenceTimer();
+        gyroPid.setInput(gyro.getAngle());
+        this.setOutput(this.gyroPid.getOutput(), 0);
     }
 }

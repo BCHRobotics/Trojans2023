@@ -45,8 +45,8 @@ public class TeleopDriver extends TeleopComponent {
 
         double speed = Constants.MAX_OUTPUT;
 
-        speed -= (this.driverController.getLeftTriggerAxis() * Constants.BONUS_OUT);
-        speed += (this.driverController.getRightTriggerAxis() * Constants.BONUS_OUT);
+        speed -= (this.driverController.getLeftTriggerAxis() * Constants.MAX_INTERVAL);
+        speed += (this.driverController.getRightTriggerAxis() * Constants.MAX_INTERVAL);
 
         SmartDashboard.putNumber("Drive Output", speed);
 

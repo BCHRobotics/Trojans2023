@@ -5,12 +5,12 @@ import frc.util.devices.Controller.Axis;
 import frc.util.devices.Controller.Side;
 
 public class DriverInput {
-    private static DriverInput instance;
+	private static DriverInput instance;
 
-    private Controller driver;
-    private Controller operator;
+	private Controller driver;
+	private Controller operator;
 
-    // Creates boolean variables that stores if a certain step/mode was pressed
+	// Creates boolean variables that stores if a certain step/mode was pressed
 	private boolean autonIncreaseStepWasPressed = false;
 	private boolean autonDecreaseStepWasPressed = false;
 
@@ -20,50 +20,52 @@ public class DriverInput {
 	private boolean autonIncreaseMode10WasPressed = false;
 	private boolean autonDecreaseMode10WasPressed = false;
 
-    /**
-     * Get the instance of the DriverInput, if none create a new instance
-     * 
-     * @return instance of the DriverInput
-     */
-    public static DriverInput getInstance() {
-        if (instance == null) {
-            instance = new DriverInput();
-        }
-        return instance;
-    }
+	/**
+	 * Get the instance of the DriverInput, if none create a new instance
+	 * 
+	 * @return instance of the DriverInput
+	 */
+	public static DriverInput getInstance() {
+		if (instance == null) {
+			instance = new DriverInput();
+		}
+		return instance;
+	}
 
-    private DriverInput() {
-        this.driver = new Controller(0);
-        this.operator = new Controller(1);
-    }
+	private DriverInput() {
+		this.driver = new Controller(0);
+		this.operator = new Controller(1);
+	}
 
-    /**
-     * Get the driver controller
-     * 
-     * @return Driver controller
-     */
-    public Controller getDriverController() {
-        return this.driver;
-    }
+	/**
+	 * Get the driver controller
+	 * 
+	 * @return Driver controller
+	 */
+	public Controller getDriverController() {
+		return this.driver;
+	}
 
-    /**
-     * Get the operator controller
-     * 
-     * @return Operator Controller
-     */
-    public Controller getOperatorController() {
-        return this.operator;
-    }
+	/**
+	 * Get the operator controller
+	 * 
+	 * @return Operator Controller
+	 */
+	public Controller getOperatorController() {
+		return this.operator;
+	}
 
-    /**
-     * If either the driver or the operator presses the 'Y' button during autonomous, then it will cancel.
-     * Note: This cannot be used during compilation but is useful for debugging code.
-     * 
-     * @return true if cancel button was pressed
-     */
-    public boolean getAutoOverride() {
-        return this.driver.getYButton() || this.operator.getYButton();
-    }
+	/**
+	 * If either the driver or the operator presses the 'Y' button during
+	 * autonomous, then it will cancel.
+	 * Note: This cannot be used during compilation but is useful for debugging
+	 * code.
+	 * 
+	 * @return true if cancel button was pressed
+	 */
+	public boolean getAutoOverride() {
+		return this.driver.getYButton() || this.operator.getYButton();
+	}
 
 	// AUTO SELECTION CONTROLS
 
@@ -72,7 +74,7 @@ public class DriverInput {
 	}
 
 	public boolean getAutonSetDelayButton() {
-		return false;//this.driver.getRightTrigger() > 0.2;
+		return false;// this.driver.getRightTrigger() > 0.2;
 	}
 
 	public double getAutonDelayStick() {
