@@ -126,9 +126,13 @@ public class DriveIO implements IIO {
         if (mode) {
             this.driveL1.setIdleMode(CANSparkMax.IdleMode.kBrake);
             this.driveR1.setIdleMode(CANSparkMax.IdleMode.kBrake);
+            this.driveL2.setIdleMode(CANSparkMax.IdleMode.kBrake);
+            this.driveR2.setIdleMode(CANSparkMax.IdleMode.kBrake);
         } else {
             this.driveL1.setIdleMode(CANSparkMax.IdleMode.kCoast);
             this.driveR1.setIdleMode(CANSparkMax.IdleMode.kCoast);
+            this.driveL2.setIdleMode(CANSparkMax.IdleMode.kCoast);
+            this.driveR2.setIdleMode(CANSparkMax.IdleMode.kCoast);
         }
         this.driveL1.burnFlash();
         this.driveR1.burnFlash();

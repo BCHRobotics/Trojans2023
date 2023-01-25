@@ -65,6 +65,7 @@ public class TeleopDriver extends TeleopComponent {
 
         if (this.driverController.getAButton()) {
             this.straight = this.drivetrain.balance();
+            this.drivetrain.brake(true);
             this.turn = 0;
         } else
             this.drivetrain.balanceIdle();
