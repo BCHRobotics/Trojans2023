@@ -8,14 +8,15 @@ public class IO {
     private static IO instance;
 
     public static IO getInstance() {
-        if(instance == null) instance = new IO();
+        if (instance == null)
+            instance = new IO();
         return instance;
     }
 
     private IO() {
         this.subsystems = new ArrayList<>();
 
-        this.subsystems.add(DriveIO.getInstance());
+        this.subsystems.add(ClawIO.getInstance());
     }
 
     public void updateInputs() {
