@@ -1,5 +1,6 @@
 package frc.io;
 
+import frc.robot.Constants;
 import frc.util.devices.Controller;
 import frc.util.devices.Controller.Axis;
 import frc.util.devices.Controller.Side;
@@ -9,16 +10,6 @@ public class DriverInput {
 
 	private Controller driver;
 	private Controller operator;
-
-	// Creates boolean variables that stores if a certain step/mode was pressed
-	private boolean autonIncreaseStepWasPressed = false;
-	private boolean autonDecreaseStepWasPressed = false;
-
-	private boolean autonIncreaseModeWasPressed = false;
-	private boolean autonDecreaseModeWasPressed = false;
-
-	private boolean autonIncreaseMode10WasPressed = false;
-	private boolean autonDecreaseMode10WasPressed = false;
 
 	/**
 	 * Get the instance of the DriverInput, if none create a new instance
@@ -56,76 +47,49 @@ public class DriverInput {
 	}
 
 	/**
-	 * If either the driver or the operator presses the 'Y' button during
-	 * autonomous, then it will cancel.
-	 * Note: This cannot be used during compilation but is useful for debugging
-	 * code.
+	 * Get the maximum drive speed in percent decimal 0 --> 1
 	 * 
-	 * @return true if cancel button was pressed
+	 * @return Max drive speed
 	 */
-	public boolean getAutoOverride() {
-		return this.driver.getYButton() || this.operator.getYButton();
+	public double getDriveMaxSpeed() {
+		return Constants.MAX_OUTPUT - (this.driver.getLeftTriggerAxis() * Constants.MAX_INTERVAL)
+				+ (this.driver.getRightTriggerAxis() * Constants.MAX_INTERVAL);
 	}
 
-	// AUTO SELECTION CONTROLS
-
-	public boolean getResumeAutoButton() {
-		return driver.getYButton();
+	/**
+	 * Get the drive speed forward and backward in percent decimal 0 --> 1
+	 * 
+	 * @return Drive forward or backward speed
+	 */
+	public double getDriveFrwd() {
+		return this.driver.getJoystick(Side.LEFT, Axis.Y) * this.getDriveMaxSpeed();
 	}
 
-	public boolean getAutonSetDelayButton() {
-		return false;// this.driver.getRightTrigger() > 0.2;
+	/**
+	 * Get the drive speed for turning in percent decimal 0 --> 1
+	 * 
+	 * @return Drive turning speed
+	 */
+	public double getDriveTurn() {
+		return this.driver.getJoystick(Side.RIGHT, Axis.X) * this.getDriveMaxSpeed();
 	}
 
-	public double getAutonDelayStick() {
-		return this.driver.getJoystick(Side.LEFT, Axis.Y);
+	/**
+	 * Get the brake state boolean
+	 * 
+	 * @return Brake state
+	 */
+	public boolean getDriveBrakes() {
+		return this.driver.getLeftBumper();
 	}
 
-	public boolean getAutonStepIncrease() {
-		// only returns true on rising edge
-		boolean result = this.driver.getRightBumper() && !this.autonIncreaseStepWasPressed;
-		this.autonIncreaseStepWasPressed = this.driver.getRightBumper();
-		return result;
-
+	/**
+	 * Get whether or not the drive should be in balance mode
+	 * 
+	 * @return Balance mode
+	 */
+	public boolean getBalanceMode() {
+		return this.driver.getYButton();
 	}
 
-	public boolean getAutonStepDecrease() {
-		// only returns true on rising edge
-		boolean result = this.driver.getLeftBumper() && !this.autonDecreaseStepWasPressed;
-		this.autonDecreaseStepWasPressed = this.driver.getLeftBumper();
-		return result;
-
-	}
-
-	public boolean getAutonModeIncrease() {
-		// only returns true on rising edge
-		boolean result = this.driver.getXButton() && !this.autonIncreaseModeWasPressed;
-		this.autonIncreaseModeWasPressed = this.driver.getXButton();
-		return result;
-
-	}
-
-	public boolean getAutonModeDecrease() {
-		// only returns true on rising edge
-		boolean result = this.driver.getAButton() && !this.autonDecreaseModeWasPressed;
-		this.autonDecreaseModeWasPressed = this.driver.getAButton();
-		return result;
-
-	}
-
-	public boolean getAutonModeIncreaseBy10() {
-		// only returns true on rising edge
-		boolean result = this.driver.getYButton() && !this.autonIncreaseMode10WasPressed;
-		this.autonIncreaseMode10WasPressed = this.driver.getYButton();
-		return result;
-
-	}
-
-	public boolean getAutonModeDecreaseBy10() {
-		// only returns true on rising edge
-		boolean result = this.driver.getXButton() && !this.autonDecreaseMode10WasPressed;
-		this.autonDecreaseMode10WasPressed = this.driver.getXButton();
-		return result;
-
-	}
 }

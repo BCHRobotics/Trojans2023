@@ -12,7 +12,6 @@ public class Drivetrain extends Subsystem {
 
     public enum DriveState {
         OUTPUT,
-        VELOCITY,
         POSITION
     }
 
@@ -21,6 +20,9 @@ public class Drivetrain extends Subsystem {
     // Objects for balancing
     private PID gyroPid = new PID(Constants.GYRO_CONSTANTS);
     private Gyro gyro = new Gyro(SerialPort.Port.kUSB);
+
+    // Objects for target seeking
+    private PID seekPID = new PID(Constants.SEEK_CONSTANTS);
 
     // states
     private DriveState currentState = DriveState.POSITION;
@@ -61,19 +63,15 @@ public class Drivetrain extends Subsystem {
     public void run() {
         SmartDashboard.putString("DRIVE_STATE", this.currentState.toString());
 
-        if (this.positionMode) {
+        if (this.positionMode)
             this.currentState = DriveState.POSITION;
-        } else {
+        else
             this.currentState = DriveState.OUTPUT;
-        }
 
         switch (currentState) {
             case OUTPUT:
                 this.driveIO.setDriveLeft(this.leftOut);
                 this.driveIO.setDriveRight(this.rightOut);
-                break;
-            case VELOCITY:
-                this.disable();
                 break;
             case POSITION:
                 this.driveIO.setDriveLeftPos(this.posLeft);
@@ -84,7 +82,7 @@ public class Drivetrain extends Subsystem {
                 break;
         }
 
-        this.driveIO.brakeMode(this.brakeMode);
+        this.driveIO.brakeMode(this.positionMode ? true : this.brakeMode);
     }
 
     @Override
@@ -120,30 +118,23 @@ public class Drivetrain extends Subsystem {
     /**
      * Sets output to drive
      * 
-     * @param y    percent output [-1 to 1] for forward movement
+     * @param frwd percent output [-1 to 1] for forward/backward movement
      * @param turn percent output [-1 to 1] for turn movement
      */
-    public void setOutput(double y, double turn) {
-        this.leftOut = (y + turn);
-        this.rightOut = (y - turn);
+    public void setOutput(double frwd, double turn) {
+        this.leftOut = (frwd + turn);
+        this.rightOut = (frwd - turn);
     }
 
     /**
-     * Sets encoder position for left drive motors
+     * Sets chasis position using relative encoders
      * 
-     * @param position
+     * @param left
+     * @param right
      */
-    public void setDriveLeft(double position) {
-        this.posLeft = position;
-    }
-
-    /**
-     * Sets encoder position for right drive motors
-     * 
-     * @param position
-     */
-    public void setDriveRight(double position) {
-        this.posRight = position;
+    public void setPosition(double left, double right) {
+        this.posLeft = left;
+        this.posRight = right;
     }
 
     /**
@@ -151,30 +142,50 @@ public class Drivetrain extends Subsystem {
      * 
      * @param state
      */
-    public void brake(boolean state) {
+    public void setBrakes(boolean state) {
         this.brakeMode = state;
     }
 
     /**
      * @return Drive motor brake state
      */
-    public boolean getBrakeState() {
+    public boolean getBrakes() {
         return this.brakeMode;
     }
 
     /**
-     * Turns drivetrain/chasis by a provided angle
+     * Turns drivetrain/chasis by a provided angle using smart motion
      * 
-     * @param angle
+     * @param angle in degrees
      */
     public void seekTarget(double angle) {
-        SmartDashboard.putNumber("Limelight X", angle);
+        SmartDashboard.putNumber("Vision θ", angle);
 
-        double driveRevolutionsLeft = (angle / Constants.CHASIS_LEFT_CONVERSION);
-        double driveRevolutionsRight = (angle / Constants.CHASIS_RIGHT_CONVERSION);
+        this.setPosition(this.driveIO.getDriveL1Encoder().getPosition() + (angle / Constants.CHASIS_LEFT_CONVERSION),
+                this.driveIO.getDriveR1Encoder().getPosition() + (angle / Constants.CHASIS_RIGHT_CONVERSION));
+    }
 
-        this.setDriveLeft(this.driveIO.getDriveL1Encoder().getPosition() + driveRevolutionsLeft);
-        this.setDriveRight(this.driveIO.getDriveR1Encoder().getPosition() + driveRevolutionsRight);
+    /**
+     * Turns drivetrain/chasis by a provided angle using PID
+     * 
+     * @param angle in degrees
+     */
+    public void seekTargetPID(double angle) {
+        SmartDashboard.putNumber("Vision Φ", angle);
+
+        this.seekPID.setTarget(0);
+        this.seekPID.referenceTimer();
+        this.seekPID.setInput(angle);
+        this.seekPID.calculate();
+        this.setOutput(this.seekPID.getOutput(), 0);
+    }
+
+    /**
+     * Resets seekTargetPID() variables to remain idle
+     */
+    public void seekTargetIdle() {
+        this.seekPID.resetTimer();
+        this.seekPID.resetError();
     }
 
     /**
@@ -188,6 +199,9 @@ public class Drivetrain extends Subsystem {
         return this.gyroPid.getOutput();
     }
 
+    /**
+     * Resets balance() variables to remain idle
+     */
     public void balanceIdle() {
         this.gyroPid.resetTimer();
         this.gyroPid.resetError();

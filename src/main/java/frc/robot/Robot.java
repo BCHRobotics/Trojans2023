@@ -7,7 +7,6 @@ package frc.robot;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.io.subsystems.IO;
-import frc.subsystems.Drivetrain;
 import frc.teleop.TeleopControl;
 
 /**
@@ -24,8 +23,6 @@ public class Robot extends TimedRobot {
     private IO robotIO;
     private TeleopControl teleopControl;
 
-    private Drivetrain drive;
-
     public static boolean teleopInitialized = false;
 
     /**
@@ -38,8 +35,6 @@ public class Robot extends TimedRobot {
         this.robotIO = IO.getInstance();
         this.robotIO.resetInputs();
         this.teleopControl = TeleopControl.getInstance();
-
-        this.drive = Drivetrain.getInstance();
     }
 
     /**
@@ -123,7 +118,6 @@ public class Robot extends TimedRobot {
     @Override
     public void testInit() {
         this.robotIO.resetInputs();
-        this.drive.firstCycle();
         this.teleopControl.initialize();
     }
 
