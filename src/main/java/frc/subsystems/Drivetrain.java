@@ -53,6 +53,7 @@ public class Drivetrain extends Subsystem {
     @Override
     public void firstCycle() {
         this.driveIO = DriveIO.getInstance();
+        this.gyro.resetGyroPosition();
         this.resetPosition();
     }
 
@@ -82,6 +83,8 @@ public class Drivetrain extends Subsystem {
                 this.disable();
                 break;
         }
+
+        this.driveIO.brakeMode(this.brakeMode);
     }
 
     @Override
@@ -150,7 +153,6 @@ public class Drivetrain extends Subsystem {
      */
     public void brake(boolean state) {
         this.brakeMode = state;
-        this.driveIO.brakeMode(state);
     }
 
     /**

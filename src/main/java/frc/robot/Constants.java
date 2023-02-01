@@ -31,6 +31,9 @@ public class Constants {
         public static final double CHASIS_LEFT_CONVERSION = 0;
         public static final double CHASIS_RIGHT_CONVERSION = 0;
 
+        // Position Balancing Limits
+        public static final double BALANCE_LIMIT = 12;
+
         // Arm conversion factors
         public static final double ARM_CONVERSION_FACTOR = (11 / 1296) * 360;
         public static final double WRIST_CONVERSION_FACTOR = (1 / 100) * 360;

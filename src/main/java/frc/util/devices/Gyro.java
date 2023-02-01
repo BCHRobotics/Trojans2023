@@ -26,4 +26,8 @@ public class Gyro extends AHRS {
     public double getAngle() {
         return (double) Math.round(-this.getPitch());
     }
+
+    public void resetGyroPosition() {
+        this.calibrate();
+    }
 }
