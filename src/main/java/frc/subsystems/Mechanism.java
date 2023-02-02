@@ -39,7 +39,7 @@ public class Mechanism extends Subsystem {
     public void firstCycle() {
         this.armIO = ArmIO.getInstance();
         this.clawIO = ClawIO.getInstance();
-        this.resetPosition();
+        this.resetEncoders();
     }
 
     @Override
@@ -91,7 +91,7 @@ public class Mechanism extends Subsystem {
     }
 
     /**
-     * Sets Claw state
+     * Sets Claw position in actuator inches
      * 
      * @param position
      */

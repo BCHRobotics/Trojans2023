@@ -42,7 +42,7 @@ public class ClawIO implements IIO {
     }
 
     private void initMotors() {
-        this.claw = new CANSparkMax(Constants.WRIST_ID, MotorType.kBrushless);
+        this.claw = new CANSparkMax(Constants.CLAW_ID, MotorType.kBrushless);
         this.pump = new CANSparkMax(Constants.PUMP_ID, MotorType.kBrushed);
 
         this.clawEncoder = claw.getEncoder();
@@ -55,7 +55,7 @@ public class ClawIO implements IIO {
 
         this.clawPidController = new SparkMaxPID(this.claw, this.clawConstants);
 
-        this.claw.setInverted(true);
+        this.claw.setInverted(false);
 
         this.clawEncoder.setPositionConversionFactor(Constants.CLAW_CONVERSION_FACTOR);
     }

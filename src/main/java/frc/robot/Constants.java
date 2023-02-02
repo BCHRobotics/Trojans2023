@@ -28,8 +28,8 @@ public class Constants {
         public static final int PUMP_ID = 31;
 
         // Chasis conversion factors
-        public static final double CHASIS_LEFT_CONVERSION = 0;
-        public static final double CHASIS_RIGHT_CONVERSION = 0;
+        public static final double CHASIS_LEFT_CONVERSION = 1;
+        public static final double CHASIS_RIGHT_CONVERSION = 1;
 
         // Position Balancing Limits
         public static final double BALANCE_LIMIT = 12;
@@ -37,10 +37,14 @@ public class Constants {
         // Arm conversion factors
         public static final double ARM_CONVERSION_FACTOR = (11 / 1296) * 360;
         public static final double WRIST_CONVERSION_FACTOR = (1 / 100) * 360;
-        public static final double CLAW_CONVERSION_FACTOR = (1 / 100) * 360;
+        public static final double CLAW_CONVERSION_FACTOR = 0.165 / 4;
 
         // Appendage Dimensions
         public static final double ARM_LENGTH = 30;
+
+        // Game piece actuator presets in inches
+        public static final double CUBE_PRESET = 1;
+        public static final double CONE_PRESET = 3;
 
         // CSV Test version
         public static final int VERSION = 0;

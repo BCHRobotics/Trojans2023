@@ -92,4 +92,13 @@ public class DriverInput {
 		return this.driver.getYButton();
 	}
 
+	/**
+	 * Get drivers D-Pad input for testing
+	 * 
+	 * @return Driver D-Pad input
+	 */
+	public int getDpadInput() {
+		return this.driver.getPOV();
+	}
+
 }
