@@ -6,26 +6,13 @@ import frc.util.devices.Controller.Axis;
 import frc.util.devices.Controller.Side;
 
 public class DriverInput {
-	private static DriverInput instance;
 
-	private Controller driver;
-	private Controller operator;
-
-	/**
-	 * Get the instance of the DriverInput, if none create a new instance
-	 * 
-	 * @return instance of the DriverInput
-	 */
-	public static DriverInput getInstance() {
-		if (instance == null) {
-			instance = new DriverInput();
-		}
-		return instance;
-	}
+	private static Controller driver;
+	private static Controller operator;
 
 	private DriverInput() {
-		this.driver = new Controller(0);
-		this.operator = new Controller(1);
+		driver = new Controller(0);
+		operator = new Controller(1);
 	}
 
 	/**
@@ -33,8 +20,8 @@ public class DriverInput {
 	 * 
 	 * @return Driver controller
 	 */
-	public Controller getDriverController() {
-		return this.driver;
+	public static Controller getDriverController() {
+		return driver;
 	}
 
 	/**
@@ -42,8 +29,8 @@ public class DriverInput {
 	 * 
 	 * @return Operator Controller
 	 */
-	public Controller getOperatorController() {
-		return this.operator;
+	public static Controller getOperatorController() {
+		return operator;
 	}
 
 	/**
@@ -51,9 +38,9 @@ public class DriverInput {
 	 * 
 	 * @return Max drive speed
 	 */
-	public double getDriveMaxSpeed() {
-		return Constants.MAX_OUTPUT - (this.driver.getLeftTriggerAxis() * Constants.MAX_INTERVAL)
-				+ (this.driver.getRightTriggerAxis() * Constants.MAX_INTERVAL);
+	public static double getDriveMaxSpeed() {
+		return Constants.MAX_OUTPUT - (driver.getLeftTriggerAxis() * Constants.MAX_INTERVAL)
+				+ (driver.getRightTriggerAxis() * Constants.MAX_INTERVAL);
 	}
 
 	/**
@@ -61,8 +48,8 @@ public class DriverInput {
 	 * 
 	 * @return Drive forward or backward speed
 	 */
-	public double getDriveFrwd() {
-		return this.driver.getJoystick(Side.LEFT, Axis.Y) * this.getDriveMaxSpeed();
+	public static double getDriveFrwd() {
+		return driver.getJoystick(Side.LEFT, Axis.Y) * getDriveMaxSpeed();
 	}
 
 	/**
@@ -70,8 +57,8 @@ public class DriverInput {
 	 * 
 	 * @return Drive turning speed
 	 */
-	public double getDriveTurn() {
-		return this.driver.getJoystick(Side.RIGHT, Axis.X) * this.getDriveMaxSpeed();
+	public static double getDriveTurn() {
+		return driver.getJoystick(Side.RIGHT, Axis.X) * getDriveMaxSpeed();
 	}
 
 	/**
@@ -79,8 +66,8 @@ public class DriverInput {
 	 * 
 	 * @return Brake state
 	 */
-	public boolean getDriveBrakes() {
-		return this.driver.getLeftBumper();
+	public static boolean getDriveBrakes() {
+		return driver.getLeftBumper();
 	}
 
 	/**
@@ -88,8 +75,17 @@ public class DriverInput {
 	 * 
 	 * @return Balance mode
 	 */
-	public boolean getBalanceMode() {
-		return this.driver.getYButton();
+	public static boolean getBalanceMode() {
+		return driver.getYButton();
+	}
+
+	/**
+	 * Get drivers D-Pad input for testing
+	 * 
+	 * @return Driver D-Pad input
+	 */
+	public static int getDpadInput() {
+		return driver.getPOV();
 	}
 
 }

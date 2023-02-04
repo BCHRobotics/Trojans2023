@@ -1,30 +1,31 @@
-package frc.util.pid;
+package frc.util.control;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class SparkMaxConstants {
-    //#region turret
+    // #region turret
 
-        // PID coefficients
-        public double kP; 
-        public double kI;
-        public double kD; 
-        public double kIz; 
-        public double kFF;
-        public double kMinOutput;
-        public double kMaxOutput;
+    // PID coefficients
+    public double kP;
+    public double kI;
+    public double kD;
+    public double kIz;
+    public double kFF;
+    public double kMinOutput;
+    public double kMaxOutput;
 
-        // Smart Motion Coefficients
-        public int slot;
-        public double minVel; // rpm
-        public double maxVel; // rpm
-        public double maxAcc; // rpm
-        public double allowedErr;
+    // Smart Motion Coefficients
+    public int slot;
+    public double minVel; // rpm
+    public double maxVel; // rpm
+    public double maxAcc; // rpm
+    public double allowedErr;
 
-    ////#endregion turret
+    //// #endregion turret
 
     /**
      * PID Values for Spark MAX Controller
+     * 
      * @param kP
      * @param kI
      * @param kD
@@ -38,7 +39,8 @@ public class SparkMaxConstants {
      * @param maxAcc
      * @param allowedErr
      */
-    public SparkMaxConstants(double kP, double kI, double kD, double kIz, double kFF, double kMinOutput, double kMaxOutput, int slot, double minVel, double maxVel, double maxAcc, double allowedErr) {
+    public SparkMaxConstants(double kP, double kI, double kD, double kIz, double kFF, double kMinOutput,
+            double kMaxOutput, int slot, double minVel, double maxVel, double maxAcc, double allowedErr) {
         this.kP = kP;
         this.kI = kI;
         this.kD = kD;
@@ -85,9 +87,9 @@ public class SparkMaxConstants {
 
     @Override
     public String toString() {
-        return String.format("kP: %f, kI: %f, kD: %f, kIz: %f, kFF: %f\n" + 
-            "kMaxOutput: %f, kMinOutput: %f\n" +
-            "maxVel: %f, minVel: %f, maxAcc: %f, allowedErr: %f",
-            kP, kI, kD, kIz, kFF, kMaxOutput, kMinOutput, maxVel, minVel, maxAcc, allowedErr);
+        return String.format("kP: %f, kI: %f, kD: %f, kIz: %f, kFF: %f\n" +
+                "kMaxOutput: %f, kMinOutput: %f\n" +
+                "maxVel: %f, minVel: %f, maxAcc: %f, allowedErr: %f",
+                kP, kI, kD, kIz, kFF, kMaxOutput, kMinOutput, maxVel, minVel, maxAcc, allowedErr);
     }
 }

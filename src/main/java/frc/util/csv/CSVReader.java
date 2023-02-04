@@ -8,8 +8,8 @@ import java.util.Scanner;
 
 import frc.robot.Constants;
 
-public class CSVReader {
-    
+public final class CSVReader {
+
     private static final String COMMA_DELIMITER = ",";
     private static final String fileType = ".csv";
     private static String path;

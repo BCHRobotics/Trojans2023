@@ -1,4 +1,4 @@
-package frc.util.pid;
+package frc.util.control;
 
 public class PID {
 
@@ -25,8 +25,8 @@ public class PID {
 
     public void referenceTimer() {
         // Calculate delta t
-        this.currentTime = System.nanoTime() / 1000000;
-        this.deltaTime = ((double) (this.currentTime - this.previousTime) / 1e6);
+        this.currentTime = System.nanoTime();
+        this.deltaTime = ((double) (this.currentTime - this.previousTime) / 1e18);
         this.previousTime = this.currentTime;
     }
 

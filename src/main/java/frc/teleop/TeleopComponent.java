@@ -1,7 +1,7 @@
 package frc.teleop;
 
-public abstract class TeleopComponent {
-    
+public interface TeleopComponent {
+
     public abstract void firstCycle();
 
     public abstract void run();

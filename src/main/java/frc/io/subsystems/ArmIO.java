@@ -7,8 +7,8 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 // Import required Classes
 import frc.robot.Constants;
-import frc.util.pid.SparkMaxConstants;
-import frc.util.pid.SparkMaxPID;
+import frc.util.control.SparkMaxConstants;
+import frc.util.control.SparkMaxPID;
 
 public class ArmIO implements IIO {
     private static ArmIO instance;

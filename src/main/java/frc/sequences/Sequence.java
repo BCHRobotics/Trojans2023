@@ -1,6 +1,6 @@
 package frc.sequences;
 
-public abstract class Sequence {
+public interface Sequence {
     // Called just before this Command runs the first time
     public abstract void initialize();
 

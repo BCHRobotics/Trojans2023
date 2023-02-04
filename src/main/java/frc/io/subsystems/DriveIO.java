@@ -3,13 +3,14 @@ package frc.io.subsystems;
 // Import required Libraries
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
+import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
-
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+
 // Import required Classes
 import frc.robot.Constants;
-import frc.util.pid.SparkMaxConstants;
-import frc.util.pid.SparkMaxPID;
+import frc.util.control.SparkMaxConstants;
+import frc.util.control.SparkMaxPID;
 
 public class DriveIO implements IIO {
     private static DriveIO instance;
@@ -19,6 +20,8 @@ public class DriveIO implements IIO {
     private CANSparkMax driveR1;
     private CANSparkMax driveL2;
     private CANSparkMax driveR2;
+
+    private IdleMode idleMode;
 
     // Drive encoders
     private RelativeEncoder driveL1Encoder;
@@ -49,7 +52,6 @@ public class DriveIO implements IIO {
             return;
 
         initMainMotors();
-        SmartDashboard.putBoolean("Brake Mode", true);
 
         if (!miniBot)
             initFollowMotors();
@@ -123,19 +125,20 @@ public class DriveIO implements IIO {
     }
 
     public void brakeMode(boolean mode) {
-        if (mode) {
-            this.driveL1.setIdleMode(CANSparkMax.IdleMode.kBrake);
-            this.driveR1.setIdleMode(CANSparkMax.IdleMode.kBrake);
-            this.driveL2.setIdleMode(CANSparkMax.IdleMode.kBrake);
-            this.driveR2.setIdleMode(CANSparkMax.IdleMode.kBrake);
-        } else {
-            this.driveL1.setIdleMode(CANSparkMax.IdleMode.kCoast);
-            this.driveR1.setIdleMode(CANSparkMax.IdleMode.kCoast);
-            this.driveL2.setIdleMode(CANSparkMax.IdleMode.kCoast);
-            this.driveR2.setIdleMode(CANSparkMax.IdleMode.kCoast);
-        }
+        this.idleMode = mode ? CANSparkMax.IdleMode.kBrake : CANSparkMax.IdleMode.kCoast;
+
+        this.driveL1.setIdleMode(this.idleMode);
+        this.driveR1.setIdleMode(this.idleMode);
         this.driveL1.burnFlash();
         this.driveR1.burnFlash();
+
+        if (!miniBot) {
+            this.driveL2.setIdleMode(this.idleMode);
+            this.driveR2.setIdleMode(this.idleMode);
+            this.driveL2.burnFlash();
+            this.driveR2.burnFlash();
+        }
+
         SmartDashboard.putBoolean("Brake Mode", mode);
     }
 
@@ -191,6 +194,8 @@ public class DriveIO implements IIO {
     public void stopAllOutputs() {
         if (!enabled)
             return;
+
+        this.brakeMode(true);
 
         this.driveL1.disable();
         this.driveR1.disable();

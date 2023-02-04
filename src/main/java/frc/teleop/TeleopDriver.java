@@ -2,13 +2,15 @@ package frc.teleop;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.io.DriverInput;
+import frc.robot.Constants;
 import frc.subsystems.Drivetrain;
+import frc.subsystems.Mechanism;
 
-public class TeleopDriver extends TeleopComponent {
+public class TeleopDriver implements TeleopComponent {
     private static TeleopDriver instance;
 
     private Drivetrain drivetrain;
-    private DriverInput driverInput;
+    private Mechanism mechanism;
 
     private double frwd = 0;
     private double turn = 0;
@@ -26,34 +28,43 @@ public class TeleopDriver extends TeleopComponent {
     }
 
     private TeleopDriver() {
-        this.driverInput = DriverInput.getInstance();
         this.drivetrain = Drivetrain.getInstance();
+        this.mechanism = Mechanism.getInstance();
     }
 
     @Override
     public void firstCycle() {
         this.drivetrain.firstCycle();
+        this.mechanism.firstCycle();
     }
 
     @Override
     public void run() {
 
-        SmartDashboard.putNumber("Max Drive Speed %", this.driverInput.getDriveMaxSpeed() * 100);
+        SmartDashboard.putNumber("Max Drive Speed %", DriverInput.getDriveMaxSpeed() * 100);
 
         if (!this.drivetrain.getPositionMode())
-            this.drivetrain.setBrakes(this.driverInput.getDriveBrakes());
+            this.drivetrain.setBrakes(DriverInput.getDriveBrakes());
 
-        if (this.driverInput.getBalanceMode()) {
+        if (DriverInput.getBalanceMode()) {
             this.frwd = this.drivetrain.balance();
             this.turn = 0;
         } else {
             this.drivetrain.balanceIdle();
-            this.frwd = this.driverInput.getDriveFrwd();
-            this.turn = this.driverInput.getDriveTurn();
+            this.frwd = DriverInput.getDriveFrwd();
+            this.turn = DriverInput.getDriveTurn();
         }
+
+        if (DriverInput.getDpadInput() == 0)
+            this.mechanism.setClawPos(Constants.CONE_PRESET);
+        else if (DriverInput.getDpadInput() == 90)
+            this.mechanism.setClawPos(Constants.CUBE_PRESET);
+        else
+            this.mechanism.resetPosition();
 
         this.drivetrain.setOutput(frwd, turn);
         this.drivetrain.run();
+        this.mechanism.run();
 
     }
 

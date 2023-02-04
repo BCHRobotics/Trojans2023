@@ -15,7 +15,8 @@ public class IO {
 
     private IO() {
         this.subsystems = new ArrayList<>();
-
+        this.subsystems.add(DriveIO.getInstance());
+        this.subsystems.add(ArmIO.getInstance());
         this.subsystems.add(ClawIO.getInstance());
     }
 
