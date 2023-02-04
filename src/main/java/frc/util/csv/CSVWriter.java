@@ -10,16 +10,16 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-public class CSVWriter {
+public final class CSVWriter {
     public static String headers;
     public static List<List<Double>> dataLines = new ArrayList<>();
     String filePath = new String();
     String directory = new String();
 
-    public CSVWriter(String root){
+    public CSVWriter(String root) {
         directory = root;
     }
-    
+
     public void setFileName(String fileName) {
         this.filePath = directory + fileName + ".csv";
     }
@@ -32,16 +32,16 @@ public class CSVWriter {
         }
     }
 
-    public void setHeader(String inputHeaders){
+    public void setHeader(String inputHeaders) {
         headers = inputHeaders;
     }
 
     public void importData(List<List<Double>> data) {
         dataLines = data;
     }
-    
+
     public void output() throws IOException {
-        
+
         File csvOutputFile = new File(this.filePath);
         try (PrintWriter pw = new PrintWriter(csvOutputFile)) {
             pw.println(headers);
@@ -49,7 +49,8 @@ public class CSVWriter {
         } catch (Exception e) {
             return;
         }
-        if (!csvOutputFile.exists()) System.err.println("Failed!");
+        if (!csvOutputFile.exists())
+            System.err.println("Failed!");
     }
 
     private String convertToCSV(List<Double> data) {

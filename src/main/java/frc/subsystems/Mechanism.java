@@ -5,7 +5,7 @@ import frc.io.subsystems.ClawIO;
 import frc.robot.Constants;
 import java.lang.Math;
 
-public class Mechanism extends Subsystem {
+public class Mechanism implements Subsystem {
     private static Mechanism instance;
 
     private ArmIO armIO;
@@ -31,7 +31,7 @@ public class Mechanism extends Subsystem {
         return instance;
     }
 
-    private Mechanism() {
+    protected Mechanism() {
         this.firstCycle();
     }
 

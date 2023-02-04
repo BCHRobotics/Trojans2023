@@ -9,8 +9,8 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 // Import required Classes
 import frc.robot.Constants;
-import frc.util.pid.SparkMaxConstants;
-import frc.util.pid.SparkMaxPID;
+import frc.util.control.SparkMaxConstants;
+import frc.util.control.SparkMaxPID;
 
 public class DriveIO implements IIO {
     private static DriveIO instance;

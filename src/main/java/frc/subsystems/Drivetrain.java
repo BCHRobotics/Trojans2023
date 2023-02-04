@@ -4,13 +4,13 @@ import edu.wpi.first.wpilibj.SerialPort;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.io.subsystems.DriveIO;
 import frc.robot.Constants;
-import frc.util.pid.PID;
+import frc.util.control.PID;
 import frc.util.devices.Gyro;
 
-public class Drivetrain extends Subsystem {
+public class Drivetrain implements Subsystem {
     private static Drivetrain instance;
 
-    public enum DriveState {
+    private enum DriveState {
         OUTPUT,
         POSITION
     }
@@ -48,7 +48,7 @@ public class Drivetrain extends Subsystem {
         return instance;
     }
 
-    private Drivetrain() {
+    protected Drivetrain() {
         this.firstCycle();
     }
 

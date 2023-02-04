@@ -1,4 +1,4 @@
-package frc.util.pid;
+package frc.util.control;
 
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.SparkMaxPIDController;
@@ -29,8 +29,8 @@ public class SparkMaxPID {
 
     public void setConstants(SparkMaxConstants c) {
         this.slot = c.slot;
-        
-        pidController.setP(c.kP, c.slot);  
+
+        pidController.setP(c.kP, c.slot);
         pidController.setI(c.kI, c.slot);
         pidController.setD(c.kD, c.slot);
         pidController.setIZone(c.kIz, c.slot);
@@ -44,18 +44,18 @@ public class SparkMaxPID {
 
     public SparkMaxConstants getConstants(int slot) {
         return new SparkMaxConstants(
-            pidController.getP(slot), 
-            pidController.getI(slot),
-            pidController.getD(slot),
-            pidController.getIZone(slot),
-            pidController.getFF(slot), 
-            pidController.getOutputMin(slot), 
-            pidController.getOutputMax(slot), 
-            this.slot, 
-            pidController.getSmartMotionMinOutputVelocity(slot), 
-            pidController.getSmartMotionMaxVelocity(slot),
-            pidController.getSmartMotionMaxAccel(slot), 
-            pidController.getSmartMotionAllowedClosedLoopError(slot));
+                pidController.getP(slot),
+                pidController.getI(slot),
+                pidController.getD(slot),
+                pidController.getIZone(slot),
+                pidController.getFF(slot),
+                pidController.getOutputMin(slot),
+                pidController.getOutputMax(slot),
+                this.slot,
+                pidController.getSmartMotionMinOutputVelocity(slot),
+                pidController.getSmartMotionMaxVelocity(slot),
+                pidController.getSmartMotionMaxAccel(slot),
+                pidController.getSmartMotionAllowedClosedLoopError(slot));
     }
 
     public SparkMaxConstants getConstants() {
@@ -66,7 +66,7 @@ public class SparkMaxPID {
         pidController.setReference(setPoint, CANSparkMax.ControlType.kSmartMotion, this.slot);
     }
 
-    public void setVelocity(double speed){
+    public void setVelocity(double speed) {
         pidController.setReference(speed, CANSparkMax.ControlType.kSmartVelocity, this.slot);
     }
 

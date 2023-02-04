@@ -1,4 +1,4 @@
-package frc.util.pid;
+package frc.util.control;
 
 public class PID {
 

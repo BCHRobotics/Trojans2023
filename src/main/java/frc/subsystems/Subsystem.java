@@ -1,14 +1,14 @@
 package frc.subsystems;
 
-public abstract class Subsystem {
-    
-    // Create an abstract class that initializes everything in the subsystem
+public interface Subsystem {
+
+	// Create an abstract method that initializes everything in the subsystem
 	public abstract void firstCycle();
 
 	// runs the subsytem (does everything)
 	public abstract void run();
 
-	// disables
+	// disables all systems involved
 	public abstract void disable();
 
 }

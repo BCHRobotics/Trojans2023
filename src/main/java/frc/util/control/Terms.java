@@ -1,4 +1,4 @@
-package frc.util.pid;
+package frc.util.control;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
@@ -12,6 +12,7 @@ public class Terms {
 
     /**
      * PID Values for Basic Balancing Algorithm
+     * 
      * @param kP
      * @param kI
      * @param kD
@@ -42,5 +43,5 @@ public class Terms {
     public String toString() {
         return String.format("kP: %f, kI: %f, kD: %f, kFF: %f\n", kP, kI, kD, kFF);
     }
-    
+
 }
