@@ -80,12 +80,12 @@ public class DriverInput {
 	}
 
 	/**
-	 * Get drivers D-Pad input for testing
+	 * Get drivers Intake state boolean
 	 * 
-	 * @return Driver D-Pad input
+	 * @return Intake state
 	 */
-	public static int getDpadInput() {
-		return driver.getPOV();
+	public static boolean getIntakeState() {
+		return driver.getRightBumper();
 	}
 
 }
