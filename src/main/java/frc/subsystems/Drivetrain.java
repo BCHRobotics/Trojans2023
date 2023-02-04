@@ -11,6 +11,9 @@ public class Drivetrain implements Subsystem {
 
     private static Drivetrain instance;
 
+    private boolean enabled = Constants.DRIVE_ENABLED;
+    private boolean gyroEnabled = Constants.GYRO_ENABLED;
+
     private enum DriveState {
         OUTPUT,
         POSITION
@@ -19,8 +22,8 @@ public class Drivetrain implements Subsystem {
     private DriveIO driveIO;
 
     // Objects for balancing
-    private PID gyroPid = new PID(Constants.GYRO_CONSTANTS);
-    private Gyro gyro = new Gyro(SerialPort.Port.kUSB);
+    private PID gyroPid;
+    private Gyro gyro;
 
     // states
     private DriveState currentState = DriveState.POSITION;
@@ -33,8 +36,6 @@ public class Drivetrain implements Subsystem {
 
     private boolean positionMode;
     private boolean brakeMode;
-
-    private boolean enabled = Constants.DRIVE_ENABLED;
 
     /**
      * Get the instance of the Drive, if none create a new instance
@@ -61,7 +62,12 @@ public class Drivetrain implements Subsystem {
             return;
 
         this.driveIO = DriveIO.getInstance();
-        this.gyro.resetGyroPosition();
+        if (gyroEnabled) {
+            // Objects for balancing
+            this.gyroPid = new PID(Constants.GYRO_CONSTANTS);
+            this.gyro = new Gyro(SerialPort.Port.kUSB);
+            this.gyro.resetGyroPosition();
+        }
         this.resetPosition();
     }
 
@@ -205,12 +211,12 @@ public class Drivetrain implements Subsystem {
      * Uses PID to balance robot
      */
     public double balance() {
-        if (!enabled)
+        if (!gyroEnabled)
             return 0;
 
         this.gyroPid.setTarget(0);
         this.gyroPid.referenceTimer();
-        this.gyroPid.setInput(gyro.getAngle());
+        // this.gyroPid.setInput(gyro.getAngle());
         this.gyroPid.calculate();
         return this.gyroPid.getOutput();
     }
@@ -219,7 +225,7 @@ public class Drivetrain implements Subsystem {
      * Resets balance() variables to remain idle
      */
     public void balanceIdle() {
-        if (!enabled)
+        if (!gyroEnabled)
             return;
 
         this.gyroPid.resetTimer();

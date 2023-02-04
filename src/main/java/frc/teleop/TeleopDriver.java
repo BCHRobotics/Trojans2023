@@ -2,6 +2,7 @@ package frc.teleop;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.io.DriverInput;
+import frc.robot.Constants;
 import frc.commands.chasis.Drive;
 import frc.commands.chasis.Pickup;
 
@@ -45,7 +46,7 @@ public class TeleopDriver implements TeleopComponent {
         if (!this.drive.getPositionMode())
             this.drive.setBrakes(DriverInput.getDriveBrakes());
 
-        if (DriverInput.getBalanceMode()) {
+        if (DriverInput.getBalanceMode() && Constants.GYRO_ENABLED) {
             this.frwd = this.drive.balance();
             this.turn = 0;
         } else {

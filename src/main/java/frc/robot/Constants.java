@@ -7,11 +7,15 @@ public class Constants {
         // Subsytems toggle logic
         public static final boolean USING_DASHBOARD = true;
         public static final boolean DRIVE_ENABLED = true;
-        public static final boolean INTAKE_ENABLED = true;
+        public static final boolean INTAKE_ENABLED = false;
+        public static final boolean GYRO_ENABLED = false;
         public static final boolean MINI_BOT = false;
 
         // Controller deadzones
         public static final double CONTROLLER_DEADZONE = 0.1;
+
+        // Drive motors inverted
+        public static final boolean DRIVE_INVERTED = false;
 
         // Drive restrictions
         public static final double MAX_OUTPUT = 0.75;
