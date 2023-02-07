@@ -19,7 +19,7 @@ To drive the code you must have:
 These are the vendor libraries that we are using. These are what you need to copy if they are missing.
 
 ```
-https://www.kauailabs.com/dist/frc/2023/navx_frc.json
+https://dev.studica.com/releases/2023/NavX.json
 https://software-metadata.revrobotics.com/REVLib.json
 ```
 
