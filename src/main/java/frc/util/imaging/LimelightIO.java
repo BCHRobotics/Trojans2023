@@ -125,7 +125,7 @@ public class LimelightIO {
                 //drive to result[0] and result[1] may need tuning
                 //turn to target position
                 double ang = Math.atan2(result[0]-curx, result[1]-cury);
-                dr.seekTargetPID(getanglex()-ang); //method doesnt exist in this branch
+                dr.seekTarget(getanglex()-ang); 
                 //move forward until at target
 
 
@@ -134,7 +134,7 @@ public class LimelightIO {
             }else{
                 double ang = Math.atan2(result[0]-curx, result[1]-cury);
                 //drive to result[2] and result[3] may need tuning
-                dr.seekTargetPID(getanglex()-ang); //method doesnt exist in this branch
+                dr.seekTarget(getanglex()-ang); 
                 //move forward until at target
                 curx=result[2];
                 cury=result[3];
