@@ -62,7 +62,7 @@ public class DriverInput {
 	 * @return Brake state
 	 */
 	public static boolean getDriveBrakes() {
-		return driver.getLeftBumper();
+		return driver.getLeftBumper() || driver.getRightBumper();
 	}
 
 	/**

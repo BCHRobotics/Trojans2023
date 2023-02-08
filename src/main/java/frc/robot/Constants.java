@@ -18,7 +18,7 @@ public class Constants {
         public static final boolean DRIVE_INVERTED = false;
 
         // Drive restrictions
-        public static final double MAX_OUTPUT = 0.75;
+        public static final double MAX_OUTPUT = 0.6;
         public static final double MAX_INTERVAL = 0.25;
 
         // Robot dimensions
