@@ -8,24 +8,14 @@ import frc.util.devices.Controller.Side;
 public class DriverInput {
 
 	private static Controller driver = new Controller(0);
-	private static Controller operator = new Controller(1);
 
 	/**
 	 * Get the driver controller
 	 * 
 	 * @return Driver controller
 	 */
-	public static Controller getDriverController() {
+	public static Controller getController() {
 		return driver;
-	}
-
-	/**
-	 * Get the operator controller
-	 * 
-	 * @return Operator Controller
-	 */
-	public static Controller getOperatorController() {
-		return operator;
 	}
 
 	/**

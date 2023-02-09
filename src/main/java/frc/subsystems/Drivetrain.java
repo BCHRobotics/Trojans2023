@@ -26,6 +26,9 @@ public class Drivetrain implements Subsystem {
     private PID gyroPid;
     private Gyro gyro;
 
+    // Objects for target seeking
+    private PID seekPID;
+
     // states
     private DriveState currentState = DriveState.POSITION;
 
@@ -68,6 +71,10 @@ public class Drivetrain implements Subsystem {
             this.gyro = new Gyro(SerialPort.Port.kUSB);
             this.gyro.resetGyroPosition();
         }
+
+        // Objects for target seeking
+        this.seekPID = new PID(Constants.SEEK_CONSTANTS);
+
         this.resetEncoderPosition();
     }
 
@@ -228,6 +235,7 @@ public class Drivetrain implements Subsystem {
      * 
      * @param angle in degrees
      */
+    @Deprecated
     public void seekTarget(double angle) {
         if (!enabled)
             return;
@@ -239,9 +247,32 @@ public class Drivetrain implements Subsystem {
     }
 
     /**
+     * Turns drivetrain/chasis by a provided angle using PID
+     * 
+     * @param angle in degrees
+     */
+    public void seekTargetPID(double angle) {
+        SmartDashboard.putNumber("Vision Φ", angle);
+
+        this.seekPID.setTarget(0);
+        this.seekPID.referenceTimer();
+        this.seekPID.setInput(angle);
+        this.seekPID.calculate();
+        this.setOutput(this.seekPID.getOutput(), 0);
+    }
+
+    /**
+     * Resets seekTargetPID() variables to remain idle
+     */
+    public void seekTargetIdle() {
+        this.seekPID.resetTimer();
+        this.seekPID.resetError();
+    }
+
+    /**
      * Uses PID to balance robot on charging station
      */
-    public void balance() {
+    public void balancePID() {
         if (!gyroEnabled)
             return;
 
@@ -264,4 +295,5 @@ public class Drivetrain implements Subsystem {
         this.gyroPid.resetTimer();
         this.gyroPid.resetError();
     }
+
 }
