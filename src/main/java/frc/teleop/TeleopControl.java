@@ -2,6 +2,8 @@ package frc.teleop;
 
 import java.util.ArrayList;
 
+import frc.robot.Constants;
+
 public class TeleopControl {
 
 	public ArrayList<TeleopComponent> components;
@@ -17,6 +19,7 @@ public class TeleopControl {
 	private TeleopControl() {
 		this.components = new ArrayList<>();
 
+		this.components.add(TeleopOperator.getInstance());
 		this.components.add(TeleopOperator.getInstance());
 	}
 

@@ -8,6 +8,8 @@ import java.lang.Math;
 public class Mechanism implements Subsystem {
     private static Mechanism instance;
 
+    private boolean enabled = (Constants.ARM_ENABLED && Constants.CLAW_ENABLED);
+
     private ArmIO armIO;
     private ClawIO clawIO;
 
@@ -32,11 +34,16 @@ public class Mechanism implements Subsystem {
     }
 
     protected Mechanism() {
+        if (!enabled)
+            return;
         this.firstCycle();
     }
 
     @Override
     public void firstCycle() {
+        if (!enabled)
+            return;
+
         this.armIO = ArmIO.getInstance();
         this.clawIO = ClawIO.getInstance();
         this.resetEncoders();
@@ -44,6 +51,9 @@ public class Mechanism implements Subsystem {
 
     @Override
     public void run() {
+        if (!enabled)
+            return;
+
         this.armIO.setArmPos(this.armPos);
         this.armIO.setWristPos(this.wristPos + this.wristOffset);
         this.clawIO.setClawPos(this.clawPos);
@@ -52,6 +62,9 @@ public class Mechanism implements Subsystem {
 
     @Override
     public void disable() {
+        if (!enabled)
+            return;
+
         this.armIO.stopAllOutputs();
         this.clawIO.stopAllOutputs();
     }
@@ -60,6 +73,9 @@ public class Mechanism implements Subsystem {
      * Reset appendages to zero position
      */
     public void resetPosition() {
+        if (!enabled)
+            return;
+
         this.armIO.setArmPos(0);
         this.clawIO.setClawPos(this.wristOffset);
     }
@@ -68,6 +84,9 @@ public class Mechanism implements Subsystem {
      * Reset encoders to zero position
      */
     public void resetEncoders() {
+        if (!enabled)
+            return;
+
         this.armIO.resetInputs();
         this.clawIO.resetInputs();
     }
@@ -78,6 +97,9 @@ public class Mechanism implements Subsystem {
      * @param position
      */
     public void setWristHeight(double height) {
+        if (!enabled)
+            return;
+
         this.endHeight = height;
         this.armPos = Math.acos(-(this.endHeight - Constants.SHOULDER_HEIGHT) / Constants.ARM_LENGTH);
         this.wristPos = this.armPos + this.wristOffset;
@@ -87,6 +109,9 @@ public class Mechanism implements Subsystem {
      * @return End effector height in inches
      */
     public double getWristHeight() {
+        if (!enabled)
+            return 0;
+
         return this.endHeight;
     }
 
@@ -96,6 +121,9 @@ public class Mechanism implements Subsystem {
      * @param position
      */
     public void setWristOffset(double angle) {
+        if (!enabled)
+            return;
+
         this.wristOffset = angle;
     }
 
@@ -103,6 +131,9 @@ public class Mechanism implements Subsystem {
      * @return Wrist offset in degrees
      */
     public double getWristOffset() {
+        if (!enabled)
+            return 0;
+
         return this.wristOffset;
     }
 
@@ -112,6 +143,9 @@ public class Mechanism implements Subsystem {
      * @param position
      */
     public void setClawPos(double position) {
+        if (!enabled)
+            return;
+
         this.clawPos = position;
     }
 
@@ -119,6 +153,9 @@ public class Mechanism implements Subsystem {
      * @return Claw open vs closed distance
      */
     public double getClawGap() {
+        if (!enabled)
+            return 0;
+
         return this.clawPos;
     }
 
@@ -128,6 +165,9 @@ public class Mechanism implements Subsystem {
      * @param state
      */
     public void setSuctionMode(boolean state) {
+        if (!enabled)
+            return;
+
         this.pumpMode = state;
     }
 
@@ -137,6 +177,9 @@ public class Mechanism implements Subsystem {
      * @return
      */
     public boolean getSuctionMode() {
+        if (!enabled)
+            return false;
+
         return this.pumpMode;
     }
 }
