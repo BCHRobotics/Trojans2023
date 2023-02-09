@@ -3,14 +3,14 @@ package frc.teleop;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.io.DriverInput;
 import frc.robot.Constants;
-import frc.subsystems.Drivetrain;
-import frc.subsystems.Mechanism;
+import frc.commands.chasis.Drive;
+import frc.commands.chasis.Pickup;
 
 public class TeleopDriver implements TeleopComponent {
     private static TeleopDriver instance;
 
-    private Drivetrain drivetrain;
-    private Mechanism mechanism;
+    private Drive drive;
+    private Pickup intake;
 
     private double frwd = 0;
     private double turn = 0;
@@ -28,14 +28,14 @@ public class TeleopDriver implements TeleopComponent {
     }
 
     private TeleopDriver() {
-        this.drivetrain = Drivetrain.getInstance();
-        this.mechanism = Mechanism.getInstance();
+        this.drive = Drive.getInstance();
+        this.intake = Pickup.getInstance();
     }
 
     @Override
     public void firstCycle() {
-        this.drivetrain.firstCycle();
-        this.mechanism.firstCycle();
+        this.drive.firstCycle();
+        this.intake.firstCycle();
     }
 
     @Override
@@ -43,33 +43,29 @@ public class TeleopDriver implements TeleopComponent {
 
         SmartDashboard.putNumber("Max Drive Speed %", DriverInput.getDriveMaxSpeed() * 100);
 
-        if (!this.drivetrain.getPositionMode())
-            this.drivetrain.setBrakes(DriverInput.getDriveBrakes());
+        if (!this.drive.getPositionMode())
+            this.drive.setBrakes(DriverInput.getDriveBrakes());
 
-        if (DriverInput.getBalanceMode()) {
-            this.frwd = this.drivetrain.balance();
+        if (DriverInput.getBalanceMode() && Constants.GYRO_ENABLED) {
+            this.frwd = this.drive.balance();
             this.turn = 0;
         } else {
-            this.drivetrain.balanceIdle();
+            this.drive.balanceIdle();
             this.frwd = DriverInput.getDriveFrwd();
             this.turn = DriverInput.getDriveTurn();
+            this.intake.setIntakeSpeed(0.8);
+            this.intake.setIntakeState(DriverInput.getIntakeState());
         }
 
-        if (DriverInput.getDpadInput() == 0)
-            this.mechanism.setClawPos(Constants.CONE_PRESET);
-        else if (DriverInput.getDpadInput() == 90)
-            this.mechanism.setClawPos(Constants.CUBE_PRESET);
-        else
-            this.mechanism.resetPosition();
-
-        this.drivetrain.setOutput(frwd, turn);
-        this.drivetrain.run();
-        this.mechanism.run();
+        this.drive.setOutput(frwd, turn);
+        this.drive.run();
+        this.intake.run();
 
     }
 
     @Override
     public void disable() {
-        this.drivetrain.disable();
+        this.drive.disable();
+        this.intake.disable();
     }
 }

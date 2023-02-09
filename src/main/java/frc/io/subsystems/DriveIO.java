@@ -76,8 +76,8 @@ public class DriveIO implements IIO {
         this.driveL1PidController = new SparkMaxPID(this.driveL1, this.driveL1Constants);
         this.driveR1PidController = new SparkMaxPID(this.driveR1, this.driveR1Constants);
 
-        this.driveL1.setInverted(false);
-        this.driveR1.setInverted(true);
+        this.driveL1.setInverted(Constants.DRIVE_INVERTED);
+        this.driveR1.setInverted(!Constants.DRIVE_INVERTED);
     }
 
     private void initFollowMotors() {

@@ -7,13 +7,8 @@ import frc.util.devices.Controller.Side;
 
 public class DriverInput {
 
-	private static Controller driver;
-	private static Controller operator;
-
-	private DriverInput() {
-		driver = new Controller(0);
-		operator = new Controller(1);
-	}
+	private static Controller driver = new Controller(0);
+	private static Controller operator = new Controller(1);
 
 	/**
 	 * Get the driver controller
@@ -44,7 +39,7 @@ public class DriverInput {
 	}
 
 	/**
-	 * Get the drive speed forward and backward in percent decimal 0 --> 1
+	 * Get the drive speed forward and backward in percent decimal -1 --> 1
 	 * 
 	 * @return Drive forward or backward speed
 	 */
@@ -53,7 +48,7 @@ public class DriverInput {
 	}
 
 	/**
-	 * Get the drive speed for turning in percent decimal 0 --> 1
+	 * Get the drive speed for turning in percent decimal -1 --> 1
 	 * 
 	 * @return Drive turning speed
 	 */
@@ -67,7 +62,7 @@ public class DriverInput {
 	 * @return Brake state
 	 */
 	public static boolean getDriveBrakes() {
-		return driver.getLeftBumper();
+		return driver.getLeftBumper() || driver.getRightBumper();
 	}
 
 	/**
@@ -80,12 +75,12 @@ public class DriverInput {
 	}
 
 	/**
-	 * Get drivers D-Pad input for testing
+	 * Get drivers Intake state boolean
 	 * 
-	 * @return Driver D-Pad input
+	 * @return Intake state
 	 */
-	public static int getDpadInput() {
-		return driver.getPOV();
+	public static boolean getIntakeState() {
+		return driver.getRightBumper();
 	}
 
 }
