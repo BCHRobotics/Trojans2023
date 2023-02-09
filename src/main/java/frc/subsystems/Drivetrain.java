@@ -16,7 +16,8 @@ public class Drivetrain implements Subsystem {
 
     private enum DriveState {
         OUTPUT,
-        POSITION
+        POSITION,
+        BALANCE,
     }
 
     private DriveIO driveIO;
@@ -34,7 +35,6 @@ public class Drivetrain implements Subsystem {
     private double posLeft;
     private double posRight;
 
-    private boolean positionMode;
     private boolean brakeMode;
 
     /**
@@ -68,7 +68,7 @@ public class Drivetrain implements Subsystem {
             this.gyro = new Gyro(SerialPort.Port.kUSB);
             this.gyro.resetGyroPosition();
         }
-        this.resetPosition();
+        this.resetEncoderPosition();
     }
 
     @Override
@@ -77,11 +77,6 @@ public class Drivetrain implements Subsystem {
             return;
 
         SmartDashboard.putString("DRIVE_STATE", this.currentState.toString());
-
-        if (this.positionMode)
-            this.currentState = DriveState.POSITION;
-        else
-            this.currentState = DriveState.OUTPUT;
 
         switch (currentState) {
             case OUTPUT:
@@ -92,12 +87,16 @@ public class Drivetrain implements Subsystem {
                 this.driveIO.setDriveLeftPos(this.posLeft);
                 this.driveIO.setDriveRightPos(this.posRight);
                 break;
+            case BALANCE:
+                this.driveIO.setDriveLeftPos(this.leftOut);
+                this.driveIO.setDriveRightPos(this.rightOut);
+                break;
             default:
                 this.disable();
                 break;
         }
 
-        this.driveIO.brakeMode(this.positionMode ? true : this.brakeMode);
+        this.driveIO.brakeMode(this.currentState != DriveState.OUTPUT ? true : this.brakeMode);
     }
 
     @Override
@@ -111,35 +110,39 @@ public class Drivetrain implements Subsystem {
     /**
      * Reset encoders to zero position
      */
-    public void resetPosition() {
+    public void resetEncoderPosition() {
         if (!enabled)
             return;
 
         this.driveIO.resetInputs();
     }
 
+    @Deprecated
     /**
-     * Set drive position mode
+     * Set drive mode:
      * 
      * @param state
      */
-    public void setPositionMode(boolean state) {
+    public void setDriveMode(DriveState state) {
         if (!enabled)
             return;
 
-        this.positionMode = state;
+        this.currentState = state;
     }
 
     /**
-     * Get drive position mode
-     * 
-     * @return
+     * @return Drive mode
+     *         <ul>
+     *         <li>Output Mode</li>
+     *         <li>Position Mode</li>
+     *         <li>Balance Mode</li>
+     *         </ul>
      */
-    public boolean getPositionMode() {
+    public DriveState getDriveMode() {
         if (!enabled)
-            return false;
+            return null;
 
-        return this.positionMode;
+        return this.currentState;
     }
 
     /**
@@ -152,6 +155,8 @@ public class Drivetrain implements Subsystem {
         if (!enabled)
             return;
 
+        this.currentState = DriveState.OUTPUT;
+
         this.leftOut = (frwd + turn);
         this.rightOut = (frwd - turn);
     }
@@ -159,15 +164,41 @@ public class Drivetrain implements Subsystem {
     /**
      * Sets chasis position using relative encoders
      * 
-     * @param left
-     * @param right
+     * @param left  relative position in inches
+     * @param right relative position in inches
      */
     public void setPosition(double left, double right) {
         if (!enabled)
             return;
 
+        this.currentState = DriveState.POSITION;
+
         this.posLeft = left;
         this.posRight = right;
+    }
+
+    /**
+     * Gets chasis position using relative encoders
+     * 
+     * @return left relative position in inches
+     */
+    public double getLeftPosition() {
+        if (!enabled)
+            return 0;
+
+        return this.posLeft;
+    }
+
+    /**
+     * Gets chasis position using relative encoders
+     * 
+     * @return right relative position in inches
+     */
+    public double getRightPosition() {
+        if (!enabled)
+            return 0;
+
+        return this.posRight;
     }
 
     /**
@@ -208,23 +239,25 @@ public class Drivetrain implements Subsystem {
     }
 
     /**
-     * Uses PID to balance robot
+     * Uses PID to balance robot on charging station
      */
-    public double balance() {
+    public void balance() {
         if (!gyroEnabled)
-            return 0;
+            return;
+
+        this.currentState = DriveState.BALANCE;
 
         this.gyroPid.setTarget(0);
         this.gyroPid.referenceTimer();
-        // this.gyroPid.setInput(gyro.getAngle());
+        this.gyroPid.setInput(gyro.getAngle());
         this.gyroPid.calculate();
-        return this.gyroPid.getOutput();
+        this.setOutput(this.gyroPid.getOutput(), 0);
     }
 
     /**
-     * Resets balance() variables to remain idle
+     * Resets balance method variables to remain idle when not balancing
      */
-    public void balanceIdle() {
+    public void unrestrained() {
         if (!gyroEnabled)
             return;
 

@@ -7,7 +7,6 @@ public class Constants {
         // Subsytems toggle logic
         public static final boolean USING_DASHBOARD = true;
         public static final boolean DRIVE_ENABLED = true;
-        public static final boolean INTAKE_ENABLED = false;
         public static final boolean GYRO_ENABLED = false;
         public static final boolean MINI_BOT = false;
 
@@ -16,6 +15,7 @@ public class Constants {
 
         // Drive motors inverted
         public static final boolean DRIVE_INVERTED = false;
+        public static final boolean DRIVE_OUT_OF_SYNC = false;
 
         // Drive restrictions
         public static final double MAX_OUTPUT = 0.6;
@@ -29,13 +29,6 @@ public class Constants {
         public static final int DRIVE_RIGHT1_ID = 11;
         public static final int DRIVE_LEFT2_ID = 12;
         public static final int DRIVE_RIGHT2_ID = 13;
-
-        // CAN ID(s) for Intake
-        public static final int INTAKE_ID = 20;
-
-        // Intake solenoid ports
-        public static final int INTAKE_LOWERED = 0;
-        public static final int INTAKE_RAISED = 1;
 
         // Chasis conversion factors
         public static final double CHASIS_LEFT_CONVERSION = 1;

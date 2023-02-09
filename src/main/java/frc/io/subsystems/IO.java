@@ -16,7 +16,6 @@ public class IO {
     private IO() {
         this.subsystems = new ArrayList<>();
         this.subsystems.add(DriveIO.getInstance());
-        this.subsystems.add(IntakeIO.getInstance());
     }
 
     public void updateInputs() {

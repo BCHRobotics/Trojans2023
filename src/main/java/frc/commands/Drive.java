@@ -1,10 +1,8 @@
-package frc.commands.chasis;
+package frc.commands;
 
-import frc.commands.Command;
 import frc.subsystems.Drivetrain;
 
-public final class Drive extends Drivetrain implements Command {
-
+public class Drive extends Drivetrain implements Command {
     private static Drive instance;
 
     private static boolean isFinished;
@@ -29,14 +27,14 @@ public final class Drive extends Drivetrain implements Command {
     }
 
     @Override
-    public void end() {
-        // TODO Auto-generated method stub
-
+    public boolean isFinished() {
+        return Drive.isFinished;
     }
 
     @Override
-    public boolean isFinished() {
-        return Drive.isFinished;
+    public void end() {
+        // TODO Auto-generated method stub
+
     }
 
 }

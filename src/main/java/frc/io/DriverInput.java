@@ -74,13 +74,4 @@ public class DriverInput {
 		return driver.getYButton();
 	}
 
-	/**
-	 * Get drivers Intake state boolean
-	 * 
-	 * @return Intake state
-	 */
-	public static boolean getIntakeState() {
-		return driver.getRightBumper();
-	}
-
 }

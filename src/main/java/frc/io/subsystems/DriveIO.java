@@ -9,7 +9,6 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 // Import required Classes
 import frc.robot.Constants;
-import frc.util.control.SparkMaxConstants;
 import frc.util.control.SparkMaxPID;
 
 public class DriveIO implements IIO {
@@ -32,10 +31,6 @@ public class DriveIO implements IIO {
     // PID Controllers
     private SparkMaxPID driveL1PidController;
     private SparkMaxPID driveR1PidController;
-
-    // PID Constants
-    private SparkMaxConstants driveL1Constants = Constants.DRIVEL1_CONSTANTS;
-    private SparkMaxConstants driveR1Constants = Constants.DRIVER1_CONSTANTS;
 
     private boolean enabled = Constants.DRIVE_ENABLED;
     private boolean miniBot = Constants.MINI_BOT;
@@ -73,11 +68,14 @@ public class DriveIO implements IIO {
         this.driveL1.setSmartCurrentLimit(60, 10);
         this.driveR1.setSmartCurrentLimit(60, 10);
 
-        this.driveL1PidController = new SparkMaxPID(this.driveL1, this.driveL1Constants);
-        this.driveR1PidController = new SparkMaxPID(this.driveR1, this.driveR1Constants);
+        this.driveL1PidController = new SparkMaxPID(this.driveL1, Constants.DRIVEL1_CONSTANTS);
+        this.driveR1PidController = new SparkMaxPID(this.driveR1, Constants.DRIVER1_CONSTANTS);
 
         this.driveL1.setInverted(Constants.DRIVE_INVERTED);
         this.driveR1.setInverted(!Constants.DRIVE_INVERTED);
+
+        this.driveL1Encoder.setPositionConversionFactor(Constants.CHASIS_LEFT_CONVERSION);
+        this.driveR1Encoder.setPositionConversionFactor(Constants.CHASIS_RIGHT_CONVERSION);
     }
 
     private void initFollowMotors() {
@@ -96,8 +94,11 @@ public class DriveIO implements IIO {
         this.driveL2.setSmartCurrentLimit(60, 10);
         this.driveR2.setSmartCurrentLimit(60, 10);
 
-        this.driveL2.follow(this.driveL1, false);
-        this.driveR2.follow(this.driveR1, false);
+        this.driveL2.follow(this.driveL1, Constants.DRIVE_OUT_OF_SYNC);
+        this.driveR2.follow(this.driveR1, Constants.DRIVE_OUT_OF_SYNC);
+
+        this.driveL2Encoder.setPositionConversionFactor(Constants.CHASIS_LEFT_CONVERSION);
+        this.driveR2Encoder.setPositionConversionFactor(Constants.CHASIS_RIGHT_CONVERSION);
     }
 
     public void setDriveLeft(double speed) {
@@ -125,6 +126,9 @@ public class DriveIO implements IIO {
     }
 
     public void brakeMode(boolean mode) {
+        if (!enabled)
+            return;
+
         this.idleMode = mode ? CANSparkMax.IdleMode.kBrake : CANSparkMax.IdleMode.kCoast;
 
         this.driveL1.setIdleMode(this.idleMode);
