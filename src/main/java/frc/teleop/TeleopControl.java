@@ -2,8 +2,6 @@ package frc.teleop;
 
 import java.util.ArrayList;
 
-import frc.robot.Constants;
-
 public class TeleopControl {
 
 	public ArrayList<TeleopComponent> components;

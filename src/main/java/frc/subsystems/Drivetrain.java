@@ -56,6 +56,16 @@ public class Drivetrain implements Subsystem {
         if (!enabled)
             return;
 
+        this.driveIO = DriveIO.getInstance();
+        if (gyroEnabled) {
+            // Objects for balancing
+            this.gyroPid = new PID(Constants.GYRO_CONSTANTS);
+            this.gyro = new Gyro(SerialPort.Port.kMXP);
+        }
+
+        // Objects for target seeking
+        this.seekPID = new PID(Constants.SEEK_CONSTANTS);
+
         this.firstCycle();
     }
 
@@ -63,18 +73,7 @@ public class Drivetrain implements Subsystem {
     public void firstCycle() {
         if (!enabled)
             return;
-
-        this.driveIO = DriveIO.getInstance();
-        if (gyroEnabled) {
-            // Objects for balancing
-            this.gyroPid = new PID(Constants.GYRO_CONSTANTS);
-            this.gyro = new Gyro(SerialPort.Port.kUSB);
-            this.gyro.resetGyroPosition();
-        }
-
-        // Objects for target seeking
-        this.seekPID = new PID(Constants.SEEK_CONSTANTS);
-
+        this.gyro.resetGyroPosition();
         this.resetEncoderPosition();
     }
 

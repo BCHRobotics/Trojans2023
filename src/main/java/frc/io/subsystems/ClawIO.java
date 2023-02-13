@@ -55,6 +55,8 @@ public class ClawIO implements IIO {
 
         this.clawPidController = new SparkMaxPID(this.claw, this.clawConstants);
 
+        this.clawPidController.setFeedbackDevice(clawEncoder);
+
         this.claw.setInverted(false);
 
         this.clawEncoder.setPositionConversionFactor(Constants.CLAW_CONVERSION_FACTOR);

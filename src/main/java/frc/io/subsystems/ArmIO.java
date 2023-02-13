@@ -2,8 +2,9 @@ package frc.io.subsystems;
 
 // Import required Libraries
 import com.revrobotics.CANSparkMax;
-import com.revrobotics.RelativeEncoder;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+import com.revrobotics.SparkMaxAbsoluteEncoder;
+import com.revrobotics.SparkMaxAbsoluteEncoder.Type;
 
 // Import required Classes
 import frc.robot.Constants;
@@ -12,13 +13,13 @@ import frc.util.control.SparkMaxPID;
 public class ArmIO implements IIO {
     private static ArmIO instance;
 
-    // Drive motors
+    // Arm motors
     private CANSparkMax shoulder;
     private CANSparkMax wrist;
 
-    // Drive encoders
-    private RelativeEncoder shoulderEncoder;
-    private RelativeEncoder wristEncoder;
+    // Arm encoders
+    private SparkMaxAbsoluteEncoder shoulderEncoder;
+    private SparkMaxAbsoluteEncoder wristEncoder;
 
     // PID Controllers
     private SparkMaxPID shoulderPidController;
@@ -43,8 +44,8 @@ public class ArmIO implements IIO {
         this.shoulder = new CANSparkMax(Constants.SHOULDER_ID, MotorType.kBrushless);
         this.wrist = new CANSparkMax(Constants.WRIST_ID, MotorType.kBrushless);
 
-        this.shoulderEncoder = wrist.getEncoder();
-        this.wristEncoder = wrist.getEncoder();
+        this.shoulderEncoder = wrist.getAbsoluteEncoder(Type.kDutyCycle);
+        this.wristEncoder = wrist.getAbsoluteEncoder(Type.kDutyCycle);
 
         this.shoulder.restoreFactoryDefaults();
         this.wrist.restoreFactoryDefaults();
@@ -57,6 +58,9 @@ public class ArmIO implements IIO {
 
         this.shoulderPidController = new SparkMaxPID(this.shoulder, Constants.SHOULDER_CONSTANTS);
         this.wristPidController = new SparkMaxPID(this.wrist, Constants.WRIST_CONSTANTS);
+
+        this.shoulderPidController.setFeedbackDevice(shoulderEncoder);
+        this.wristPidController.setFeedbackDevice(wristEncoder);
 
         this.shoulder.setInverted(false);
         this.wrist.setInverted(false);
@@ -79,14 +83,14 @@ public class ArmIO implements IIO {
         this.wristPidController.setPosition(position);
     }
 
-    public RelativeEncoder getShoulderEncoder() {
+    public SparkMaxAbsoluteEncoder getShoulderEncoder() {
         if (!enabled)
             return null;
 
         return this.shoulderEncoder;
     }
 
-    public RelativeEncoder getWristEncoder() {
+    public SparkMaxAbsoluteEncoder getWristEncoder() {
         if (!enabled)
             return null;
 

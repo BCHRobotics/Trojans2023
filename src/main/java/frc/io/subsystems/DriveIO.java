@@ -71,6 +71,9 @@ public class DriveIO implements IIO {
         this.driveL1PidController = new SparkMaxPID(this.driveL1, Constants.DRIVEL1_CONSTANTS);
         this.driveR1PidController = new SparkMaxPID(this.driveR1, Constants.DRIVER1_CONSTANTS);
 
+        this.driveL1PidController.setFeedbackDevice(driveL1Encoder);
+        this.driveR1PidController.setFeedbackDevice(driveR1Encoder);
+
         this.driveL1.setInverted(Constants.DRIVE_INVERTED);
         this.driveR1.setInverted(!Constants.DRIVE_INVERTED);
 
