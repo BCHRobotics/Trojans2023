@@ -30,7 +30,7 @@ public class IO {
     }
 
     /**
-     * Reset absolute appendages to zero position
+     * Reset relative encoders to zero position
      */
     public void resetInputs() {
         for (IIO io : subsystems) {

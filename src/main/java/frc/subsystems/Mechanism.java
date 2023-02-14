@@ -81,6 +81,28 @@ public class Mechanism implements Subsystem {
     }
 
     /**
+     * Sets raw shoulder angle in degrees from zero position
+     * 
+     * @param angle
+     */
+    public void setShoulderAngle(double angle) {
+        if (!enabled)
+            return;
+
+        this.armPos = angle;
+    }
+
+    /**
+     * @return Shoulder anlge in degrees from encoder
+     */
+    public double getShoulderAngle() {
+        if (!enabled)
+            return 0;
+
+        return this.armIO.getShoulderEncoder().getPosition();
+    }
+
+    /**
      * Sets end effector height in inches
      * 
      * @param position
@@ -105,9 +127,21 @@ public class Mechanism implements Subsystem {
     }
 
     /**
-     * Sets wrist offset in degrees
+     * Sets wrist angle in degrees from zero position
      * 
-     * @param position
+     * @param angle
+     */
+    public void setWristAngle(double angle) {
+        if (!enabled)
+            return;
+
+        this.wristPos = angle;
+    }
+
+    /**
+     * Sets wrist offset in degrees from encoder
+     * 
+     * @param angle
      */
     public void setWristOffset(double angle) {
         if (!enabled)
@@ -127,6 +161,16 @@ public class Mechanism implements Subsystem {
     }
 
     /**
+     * @return Wrist angle in degrees from encoder
+     */
+    public double getWristAngle() {
+        if (!enabled)
+            return 0;
+
+        return this.armIO.getWristEncoder().getPosition();
+    }
+
+    /**
      * Sets Claw position in actuator inches
      * 
      * @param position
@@ -141,11 +185,11 @@ public class Mechanism implements Subsystem {
     /**
      * @return Claw open vs closed distance
      */
-    public double getClawGap() {
+    public double getClawPos() {
         if (!enabled)
             return 0;
 
-        return this.clawPos;
+        return this.clawIO.getClawEncoder().getPosition();
     }
 
     /**

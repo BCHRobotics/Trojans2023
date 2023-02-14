@@ -50,6 +50,7 @@ public class Robot extends TimedRobot {
      */
     @Override
     public void robotPeriodic() {
+        SmartDashboard.updateValues();
     }
 
     /**
@@ -78,7 +79,6 @@ public class Robot extends TimedRobot {
     @Override
     public void autonomousPeriodic() {
         this.robotIO.updateInputs();
-        SmartDashboard.updateValues();
     }
 
     /** This function is called once when teleop is enabled. */
@@ -97,13 +97,12 @@ public class Robot extends TimedRobot {
         }
         this.robotIO.updateInputs();
         this.teleopControl.runCycle();
-        SmartDashboard.updateValues();
     }
 
     /** This function is called once when the robot is disabled. */
     @Override
     public void disabledInit() {
-        this.robotIO.resetInputs();
+        this.robotIO.stopAllOutputs();
         this.teleopControl.disable();
     }
 
@@ -111,7 +110,6 @@ public class Robot extends TimedRobot {
     @Override
     public void disabledPeriodic() {
         this.robotIO.updateInputs();
-        SmartDashboard.updateValues();
     }
 
     /** This function is called once when test mode is enabled. */
@@ -124,7 +122,6 @@ public class Robot extends TimedRobot {
     /** This function is called periodically during test mode. */
     @Override
     public void testPeriodic() {
-        SmartDashboard.updateValues();
         this.robotIO.updateInputs();
     }
 }

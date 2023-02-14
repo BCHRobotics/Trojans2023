@@ -196,7 +196,7 @@ public class Drivetrain implements Subsystem {
         if (!enabled)
             return 0;
 
-        return this.posLeft;
+        return this.driveIO.getDriveL1Encoder().getPosition();
     }
 
     /**
@@ -208,7 +208,7 @@ public class Drivetrain implements Subsystem {
         if (!enabled)
             return 0;
 
-        return this.posRight;
+        return this.driveIO.getDriveR1Encoder().getPosition();
     }
 
     /**
@@ -275,23 +275,25 @@ public class Drivetrain implements Subsystem {
     /**
      * Uses PID to balance robot on charging station
      */
-    public void balancePID() {
+    public void balancePID(boolean trigger) {
         if (!gyroEnabled)
             return;
+        if (trigger) {
+            this.currentState = DriveState.BALANCE;
 
-        this.currentState = DriveState.BALANCE;
-
-        this.gyroPid.setTarget(0);
-        this.gyroPid.referenceTimer();
-        this.gyroPid.setInput(gyro.getAngle());
-        this.gyroPid.calculate();
-        this.setOutput(this.gyroPid.getOutput(), 0);
+            this.gyroPid.setTarget(0);
+            this.gyroPid.referenceTimer();
+            this.gyroPid.setInput(gyro.getAngle());
+            this.gyroPid.calculate();
+            this.setOutput(this.gyroPid.getOutput(), 0);
+        } else
+            this.unrestrained();
     }
 
     /**
      * Resets balance method variables to remain idle when not balancing
      */
-    public void unrestrained() {
+    private void unrestrained() {
         if (!gyroEnabled)
             return;
 
