@@ -77,7 +77,8 @@ public class Drivetrain implements Subsystem {
     public void firstCycle() {
         if (!enabled)
             return;
-        this.gyro.resetGyroPosition();
+        if (gyroEnabled)
+            this.gyro.resetGyroPosition();
         this.resetEncoderPosition();
     }
 

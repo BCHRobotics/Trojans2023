@@ -8,6 +8,8 @@ import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.io.subsystems.IO;
 import frc.teleop.TeleopControl;
+import frc.auto.AutoBuilder;
+import frc.auto.AutoControl;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -22,8 +24,14 @@ public class Robot extends TimedRobot {
 
     private IO robotIO;
     private TeleopControl teleopControl;
+    private AutoControl autoControl;
+    private AutoBuilder autoBuilder;
 
     public static boolean teleopInitialized = false;
+
+    private static boolean isRecording = false;
+    private static boolean stopedRecording = false;
+    private static boolean vectorButton = false;
 
     /**
      * This function is run when the robot is first started up and should be used
@@ -35,6 +43,8 @@ public class Robot extends TimedRobot {
         this.robotIO = IO.getInstance();
         this.robotIO.resetInputs();
         this.teleopControl = TeleopControl.getInstance();
+        this.autoControl = AutoControl.getInstance();
+        this.autoBuilder = AutoBuilder.getInstance();
     }
 
     /**
@@ -73,12 +83,14 @@ public class Robot extends TimedRobot {
     @Override
     public void autonomousInit() {
         this.robotIO.resetInputs();
+        this.autoControl.initialize();
     }
 
     /** This function is called periodically during autonomous. */
     @Override
     public void autonomousPeriodic() {
         this.robotIO.updateInputs();
+        this.autoControl.runCycle();
     }
 
     /** This function is called once when teleop is enabled. */
@@ -104,6 +116,7 @@ public class Robot extends TimedRobot {
     public void disabledInit() {
         this.robotIO.stopAllOutputs();
         this.teleopControl.disable();
+        this.autoControl.disable();
     }
 
     /** This function is called periodically when disabled. */
@@ -117,11 +130,43 @@ public class Robot extends TimedRobot {
     public void testInit() {
         this.robotIO.resetInputs();
         this.teleopControl.initialize();
+
+        SmartDashboard.putBoolean("Recording", false);
+        SmartDashboard.putBoolean("Record Vector", false);
     }
 
     /** This function is called periodically during test mode. */
     @Override
     public void testPeriodic() {
         this.robotIO.updateInputs();
+        SmartDashboard.updateValues();
+
+        try {
+            if (SmartDashboard.getBoolean("Recording", false) == true) {
+                this.teleopControl.runCycle();
+                if (isRecording == false) {
+                    this.autoBuilder.setStartRecording();
+                    this.autoBuilder.recordData();
+                    isRecording = true;
+                    stopedRecording = false;
+                }
+                vectorButton = SmartDashboard.getBoolean("Record Vector", false);
+                if (vectorButton == true) {
+                    this.autoBuilder.recordData();
+                    vectorButton = false;
+                    SmartDashboard.putBoolean("Record Vector", false);
+                }
+
+            } else {
+                isRecording = false;
+                if (stopedRecording == false) {
+                    this.autoBuilder.convertData();
+                    this.robotIO.resetInputs();
+                    stopedRecording = true;
+                }
+            }
+        } catch (Exception e) {
+            return;
+        }
     }
 }

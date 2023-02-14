@@ -84,7 +84,7 @@ public class Constants {
         public static final ArmPresets TOP_DROPOFF = new ArmPresets(0, 0);
 
         // CSV Test version
-        public static final int VERSION = 0;
+        public static final int VERSION = 1;
         public static final String TEACH_MODE_FILE_NAME = "LIVE_RECORD";
 
         // Autonomous directory

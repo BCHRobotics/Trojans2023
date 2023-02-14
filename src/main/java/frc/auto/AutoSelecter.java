@@ -21,7 +21,7 @@ public class AutoSelecter {
         autoChooser.addOption("1_CUBE_LOW", "AUTO_PATH_2");
         autoChooser.addOption("2_CONE_MID", "AUTO_PATH_3");
         autoChooser.addOption("2_CUBE_MID", "AUTO_PATH_4");
-        autoChooser.addOption("LIVE_RECORD", Constants.TEACH_MODE_FILE_NAME);
+        autoChooser.addOption("LIVE_RECORD", Constants.TEACH_MODE_FILE_NAME + "_" + Constants.VERSION);
 
         SmartDashboard.putData("Autonomous Route", autoChooser);
     }

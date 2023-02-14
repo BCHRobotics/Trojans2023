@@ -62,7 +62,7 @@ public class AutoBuilder {
 
     public void convertData() {
         try {
-            writer.setFileName(Constants.TEACH_MODE_FILE_NAME);
+            writer.setFileName(Constants.TEACH_MODE_FILE_NAME + "_" + Constants.VERSION);
             writer.deleteCopy();
             writer.setHeader(
                     "time,leftDrive,rightDrive,shoulder,wrist,claw,pump,limelight,balance");
