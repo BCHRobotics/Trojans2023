@@ -1,14 +1,15 @@
-package frc.teleop;
+package frc.auto;
 
-public interface TeleopComponent {
+public abstract class AutoComponent {
 
     /**
-     * Create an abstract method that initializes everything in the Teleop Component
+     * Create an abstract method that initializes everything in the Autonomous
+     * Component
      */
     public abstract void firstCycle();
 
     /**
-     * Runs the Teleop Component (does everything)
+     * Runs the Autonomous Pathway
      */
     public abstract void run();
 

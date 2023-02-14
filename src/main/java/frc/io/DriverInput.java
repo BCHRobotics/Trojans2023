@@ -7,25 +7,15 @@ import frc.util.devices.Controller.Side;
 
 public class DriverInput {
 
-	private static Controller driver = new Controller(0);
-	private static Controller operator = new Controller(1);
+	private static Controller driver = new Controller(Constants.DRIVER_PORT);
 
 	/**
 	 * Get the driver controller
 	 * 
 	 * @return Driver controller
 	 */
-	public static Controller getDriverController() {
+	public static Controller getController() {
 		return driver;
-	}
-
-	/**
-	 * Get the operator controller
-	 * 
-	 * @return Operator Controller
-	 */
-	public static Controller getOperatorController() {
-		return operator;
 	}
 
 	/**
@@ -62,7 +52,7 @@ public class DriverInput {
 	 * @return Brake state
 	 */
 	public static boolean getDriveBrakes() {
-		return driver.getLeftBumper();
+		return driver.getLeftBumper() || driver.getRightBumper();
 	}
 
 	/**
@@ -72,15 +62,6 @@ public class DriverInput {
 	 */
 	public static boolean getBalanceMode() {
 		return driver.getYButton();
-	}
-
-	/**
-	 * Get drivers Intake state boolean
-	 * 
-	 * @return Intake state
-	 */
-	public static boolean getIntakeState() {
-		return driver.getRightBumper();
 	}
 
 }

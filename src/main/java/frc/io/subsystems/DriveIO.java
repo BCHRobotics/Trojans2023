@@ -9,7 +9,6 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 // Import required Classes
 import frc.robot.Constants;
-import frc.util.control.SparkMaxConstants;
 import frc.util.control.SparkMaxPID;
 
 public class DriveIO implements IIO {
@@ -21,6 +20,7 @@ public class DriveIO implements IIO {
     private CANSparkMax driveL2;
     private CANSparkMax driveR2;
 
+    // Brake mode
     private IdleMode idleMode;
 
     // Drive encoders
@@ -32,10 +32,6 @@ public class DriveIO implements IIO {
     // PID Controllers
     private SparkMaxPID driveL1PidController;
     private SparkMaxPID driveR1PidController;
-
-    // PID Constants
-    private SparkMaxConstants driveL1Constants = Constants.DRIVEL1_CONSTANTS;
-    private SparkMaxConstants driveR1Constants = Constants.DRIVER1_CONSTANTS;
 
     private boolean enabled = Constants.DRIVE_ENABLED;
     private boolean miniBot = Constants.MINI_BOT;
@@ -57,6 +53,9 @@ public class DriveIO implements IIO {
             initFollowMotors();
     }
 
+    /**
+     * Initializes primary drive motors
+     */
     private void initMainMotors() {
         this.driveL1 = new CANSparkMax(Constants.DRIVE_LEFT1_ID, MotorType.kBrushless);
         this.driveR1 = new CANSparkMax(Constants.DRIVE_RIGHT1_ID, MotorType.kBrushless);
@@ -73,13 +72,22 @@ public class DriveIO implements IIO {
         this.driveL1.setSmartCurrentLimit(60, 10);
         this.driveR1.setSmartCurrentLimit(60, 10);
 
-        this.driveL1PidController = new SparkMaxPID(this.driveL1, this.driveL1Constants);
-        this.driveR1PidController = new SparkMaxPID(this.driveR1, this.driveR1Constants);
+        this.driveL1PidController = new SparkMaxPID(this.driveL1, Constants.DRIVEL1_CONSTANTS);
+        this.driveR1PidController = new SparkMaxPID(this.driveR1, Constants.DRIVER1_CONSTANTS);
+
+        this.driveL1PidController.setFeedbackDevice(driveL1Encoder);
+        this.driveR1PidController.setFeedbackDevice(driveR1Encoder);
 
         this.driveL1.setInverted(Constants.DRIVE_INVERTED);
         this.driveR1.setInverted(!Constants.DRIVE_INVERTED);
+
+        this.driveL1Encoder.setPositionConversionFactor(Constants.CHASIS_LEFT_CONVERSION);
+        this.driveR1Encoder.setPositionConversionFactor(Constants.CHASIS_RIGHT_CONVERSION);
     }
 
+    /**
+     * Initializes secondary drive motors
+     */
     private void initFollowMotors() {
         this.driveL2 = new CANSparkMax(Constants.DRIVE_LEFT2_ID, MotorType.kBrushless);
         this.driveR2 = new CANSparkMax(Constants.DRIVE_RIGHT2_ID, MotorType.kBrushless);
@@ -96,35 +104,66 @@ public class DriveIO implements IIO {
         this.driveL2.setSmartCurrentLimit(60, 10);
         this.driveR2.setSmartCurrentLimit(60, 10);
 
-        this.driveL2.follow(this.driveL1, false);
-        this.driveR2.follow(this.driveR1, false);
+        this.driveL2.follow(this.driveL1, Constants.DRIVE_OUT_OF_SYNC);
+        this.driveR2.follow(this.driveR1, Constants.DRIVE_OUT_OF_SYNC);
+
+        this.driveL2Encoder.setPositionConversionFactor(Constants.CHASIS_LEFT_CONVERSION);
+        this.driveR2Encoder.setPositionConversionFactor(Constants.CHASIS_RIGHT_CONVERSION);
     }
 
+    /**
+     * Sets drive left speed in percent output -1 --> 1
+     * 
+     * @param speed
+     */
     public void setDriveLeft(double speed) {
         if (!enabled)
             return;
         this.driveL1.set(speed);
     }
 
+    /**
+     * Sets drive right speed in percent output -1 --> 1
+     * 
+     * @param speed
+     */
     public void setDriveRight(double speed) {
         if (!enabled)
             return;
         this.driveR1.set(speed);
     }
 
+    /**
+     * Sets drive left position in inches
+     * 
+     * @param position
+     */
     public void setDriveLeftPos(double position) {
         if (!enabled)
             return;
         this.driveL1PidController.setPosition(position);
     }
 
+    /**
+     * Sets drive right position in inches
+     * 
+     * @param position
+     */
     public void setDriveRightPos(double position) {
         if (!enabled)
             return;
         this.driveR1PidController.setPosition(position);
     }
 
+    /**
+     * Sets braking mode
+     * 
+     * @param mode
+     */
     public void brakeMode(boolean mode) {
+        if (!enabled)
+            return;
+
         this.idleMode = mode ? CANSparkMax.IdleMode.kBrake : CANSparkMax.IdleMode.kCoast;
 
         this.driveL1.setIdleMode(this.idleMode);
@@ -142,34 +181,53 @@ public class DriveIO implements IIO {
         SmartDashboard.putBoolean("Brake Mode", mode);
     }
 
-    // #region EncoderPositions
-
+    /**
+     * Gets drivetrain front left relative encoder object
+     * 
+     * @return Drive Front Left Relative Encoder
+     */
     public RelativeEncoder getDriveL1Encoder() {
         if (!enabled)
             return null;
         return this.driveL1Encoder;
     }
 
-    public RelativeEncoder getDriveL2Encoder() {
-        if (!enabled || !miniBot)
-            return null;
-        return this.driveL2Encoder;
-    }
-
+    /**
+     * Gets drivetrain front right relative encoder object
+     * 
+     * @return Drive Front Right Relative Encoder
+     */
     public RelativeEncoder getDriveR1Encoder() {
         if (!enabled)
             return null;
         return this.driveR1Encoder;
     }
 
+    /**
+     * Gets drivetrain back left relative encoder object
+     * 
+     * @return Drive Back Left Relative Encoder
+     */
+    public RelativeEncoder getDriveL2Encoder() {
+        if (!enabled || !miniBot)
+            return null;
+        return this.driveL2Encoder;
+    }
+
+    /**
+     * Gets drivetrain back right relative encoder object
+     * 
+     * @return Drive Back Right Relative Encoder
+     */
     public RelativeEncoder getDriveR2Encoder() {
         if (!enabled || !miniBot)
             return null;
         return this.driveR2Encoder;
     }
 
-    // #endregion EncoderPositions
-
+    /**
+     * Resets relative encoders to zero position
+     */
     @Override
     public void resetInputs() {
         if (!enabled)
@@ -184,12 +242,15 @@ public class DriveIO implements IIO {
         }
     }
 
-    @Override
+    @Deprecated
     public void updateInputs() {
         if (!enabled)
             return;
     }
 
+    /**
+     * Disables all drive motors
+     */
     @Override
     public void stopAllOutputs() {
         if (!enabled)

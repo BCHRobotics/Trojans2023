@@ -1,6 +1,9 @@
 package frc.util.control;
 
 import com.revrobotics.CANSparkMax;
+import com.revrobotics.RelativeEncoder;
+import com.revrobotics.SparkMaxAbsoluteEncoder;
+import com.revrobotics.SparkMaxAlternateEncoder;
 import com.revrobotics.SparkMaxPIDController;
 
 public class SparkMaxPID {
@@ -60,6 +63,18 @@ public class SparkMaxPID {
 
     public SparkMaxConstants getConstants() {
         return this.getConstants(this.slot);
+    }
+
+    public void setFeedbackDevice(RelativeEncoder device) {
+        pidController.setFeedbackDevice(device);
+    }
+
+    public void setFeedbackDevice(SparkMaxAbsoluteEncoder device) {
+        pidController.setFeedbackDevice(device);
+    }
+
+    public void setFeedbackDevice(SparkMaxAlternateEncoder device) {
+        pidController.setFeedbackDevice(device);
     }
 
     public void setPosition(double setPoint) {

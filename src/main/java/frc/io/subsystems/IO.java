@@ -16,21 +16,31 @@ public class IO {
     private IO() {
         this.subsystems = new ArrayList<>();
         this.subsystems.add(DriveIO.getInstance());
-        this.subsystems.add(IntakeIO.getInstance());
+        this.subsystems.add(ArmIO.getInstance());
+        this.subsystems.add(ClawIO.getInstance());
     }
 
+    /**
+     * Updates all robot inputs
+     */
     public void updateInputs() {
         for (IIO io : this.subsystems) {
             io.updateInputs();
         }
     }
 
+    /**
+     * Reset relative encoders to zero position
+     */
     public void resetInputs() {
         for (IIO io : subsystems) {
             io.resetInputs();
         }
     }
 
+    /**
+     * Disables all robot outputs
+     */
     public void stopAllOutputs() {
         for (IIO io : subsystems) {
             io.stopAllOutputs();

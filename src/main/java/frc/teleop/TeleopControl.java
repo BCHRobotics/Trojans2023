@@ -18,6 +18,7 @@ public class TeleopControl {
 		this.components = new ArrayList<>();
 
 		this.components.add(TeleopDriver.getInstance());
+		this.components.add(TeleopOperator.getInstance());
 	}
 
 	public void initialize() {

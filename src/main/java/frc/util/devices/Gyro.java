@@ -4,6 +4,7 @@ import com.kauailabs.navx.frc.AHRS;
 
 import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.SerialPort;
+import frc.robot.Constants;
 
 public class Gyro extends AHRS {
 
@@ -24,10 +25,14 @@ public class Gyro extends AHRS {
 
     @Override
     public double getAngle() {
+        if (!Constants.GYRO_ENABLED)
+            return 0;
         return (double) Math.round(-this.getPitch());
     }
 
     public void resetGyroPosition() {
+        if (!Constants.GYRO_ENABLED)
+            return;
         this.calibrate();
     }
 }

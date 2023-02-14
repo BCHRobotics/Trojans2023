@@ -1,12 +1,12 @@
 package frc.util.imaging;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.networktables.NetworkTable;
-import edu.wpi.first.networktables.NetworkTableEntry;
-import edu.wpi.first.networktables.NetworkTableInstance;
-//import frc.robot.Constants;
-import java.lang.Object;
+
 import java.awt.geom.Line2D;
 import java.util.*;
+
+import edu.wpi.first.networktables.*;
+import frc.robot.Constants;
+
+
 
 import frc.subsystems.Drivetrain;
 //import frc.io.SensorInput; //for future sensor input (motors and gyro)
@@ -54,40 +54,66 @@ public class LimelightIO {
     public double gettid(){
         return tid.getDouble(0.0);
     }
+    
     public boolean gettv(){
         return (tv.getDouble(0.0)==0?false:true);
     }
+
     public double getpipe(){
         return getpipe.getDouble(0.0);
     }
+
     public double[] getcamerapose(){
         return camerapose.getDoubleArray(new double[6]);
     }
 
-    public double getdistancevert(){ //get vertical distance from bot to april tag
-        //-1=place holder
-        double h1 = 37; //height of april tag from ground
-        double h2 = -1; //height of limelight from ground
+    public double gettx(){
+        return tx.getDouble(0.0);
+    }
 
-        double a1 = getty(); //angle of limelight crosshair to april tag
-        double a2 = -1; //angle of limelight on robot vertically
-        double ar = (a1+a2)*(Math.PI/180); //merge both angles and turn to radians
-        double dis = (h1-h2)/Math.tan(ar); //merge lengths and apply trig: tan(a)=opposite/adjacent
+    public double getty(){
+        return ty.getDouble(0.0);
+    }
+
+    public double getta(){
+        return ta.getDouble(0.0);
+    }
+
+    public double getx(){
+        return botpose.getDoubleArray(new double[6])[0];
+    }
+
+    public double gety(){
+        return botpose.getDoubleArray(new double[6])[1];
+    }
+
+    public double getz(){
+        return botpose.getDoubleArray(new double[6])[2];
+    }
+
+    public double getanglex(){
+        return botpose.getDoubleArray(new double[6])[3];
+    }
+
+    public double[] getbotposearr(){
+        return botpose.getDoubleArray(new double[6]);
+    }
+
+    public double getForOff(){ //returns forward offset from bot to april tag
+
+        double a1 = getty();
+        double ar = (a1+Constants.limelightVertAng)*(Math.PI/180);
+        double dis = ((Constants.aprilTagHeight-Constants.limelightHeight)/Math.tan(ar))-Constants.limelightIndent; 
 
         dis = Math.round(dis*100)/100.0;
-
         return dis;
     }
 
-    public double getdisthor(){ //get horizontal distance from bot to april tag 
-        //-1=place holder
-        double h1 = getdistancevert(); //vertical distance from bot to april tag
-        double h2 = -1; //how far back the lime light is from the front of the bot
-
-        double a1 = gettx(); //the angle from the bot to the april tag horizontally
-        double a2 = -1; //angle of limelight on robot horizontally
-        double ar = (a1+a2)*(Math.PI/180); //merge both angles and turn to radians
-        double dis = (h1-h2)*Math.tan(ar); //merge lengths and apply trig: tan(a)=opposite/adjacent
+    public double getSideOff(){ //return sideways offset from bot to april tag, negative is left, positive is right 
+        double h1 = getForOff() + Constants.limelightIndent;
+        double a1 = gettx();
+        double ar = (a1+Constants.limelightHorAng)*(Math.PI/180);
+        double dis = (h1-Constants.limelightIndent)*Math.tan(ar);
 
         dis = Math.round(dis*100)/100.0;
         return dis;
@@ -125,7 +151,7 @@ public class LimelightIO {
                 //drive to result[0] and result[1] may need tuning
                 //turn to target position
                 double ang = Math.atan2(result[0]-curx, result[1]-cury);
-                dr.seekTarget(getanglex()-ang); 
+                dr.seekTargetPID(getanglex()-ang);
                 //move forward until at target
 
 
@@ -134,7 +160,7 @@ public class LimelightIO {
             }else{
                 double ang = Math.atan2(result[0]-curx, result[1]-cury);
                 //drive to result[2] and result[3] may need tuning
-                dr.seekTarget(getanglex()-ang); 
+                dr.seekTargetPID(getanglex()-ang);
                 //move forward until at target
                 curx=result[2];
                 cury=result[3];
@@ -151,33 +177,28 @@ public class LimelightIO {
     
     
 
-    //temp coords of charge station
-    private double cx1=0;//x coord of top right of charge station
-    private double cy1=0;//y coord of top right of charge station
-    private double cx2=0;//x coord of bottom left of charge station
-    private double cy2=0;//y coord of bottom left of charge station
 
-    public double[] crosscharge(double x1, double y1, double x2, double y2){ //x1 and y1 is bot pose, x2 and y2 is target pose
-        //line of charging station which bot crosses, in the form of (x1, y1), (x2, y2)
+
+    public double[] crosscharge(double x1, double y1, double x2, double y2){ //part of charge station which bot could collide with
         double[] result = new double[4];
-        Arrays.fill(result, Double.MAX_VALUE); //if all values within result are Double.Max_Value once returned then the path does not cut across charge station
+        Arrays.fill(result, Double.MAX_VALUE); //null values for if bot doesn't collide
 
-        //declaring line segments for the sides of the charging station and the robot path
         Line2D route = new Line2D.Double(x1, y1, x2, y2); //robot path
-        Line2D top = new Line2D.Double(cx2, cy1, cx1, cy1); //top charging station line segment
-        Line2D btm = new Line2D.Double(cx2, cy2, cx1, cy2); //bottom charging station line segment
-        Line2D left = new Line2D.Double(cx2, cy2, cx2, cy1); //left charging station line segment
-        Line2D right = new Line2D.Double(cx1, cy2, cx1, cy1); //right charging station line segment
+        Line2D top = new Line2D.Double(Constants.cx2, Constants.cy1, Constants.cx1, Constants.cy1); //top charging station line segment
+        Line2D btm = new Line2D.Double(Constants.cx2, Constants.cy2, Constants.cx1, Constants.cy2); //bottom charging station line segment
+        Line2D left = new Line2D.Double(Constants.cx2, Constants.cy2, Constants.cx2, Constants.cy1); //left charging station line segment
+        Line2D right = new Line2D.Double(Constants.cx1, Constants.cy2, Constants.cx1, Constants.cy1); //right charging station line segment
 
-        if(y2-y1==0){ //if path is parallel to x axis
-            if(x2>x1&&route.intersectsLine(left)){//if target pose is to the right of bot
+        //edge case if bot is travelling parallel to an axis
+        if(y2-y1==0){ //x axis
+            if(x2>x1&&route.intersectsLine(left)){//if target is to the right of bot
                 setresult(result, "left");
             }else if(route.intersectsLine(right)){//if target is to the left of bot
                 setresult(result, "right");
             }
             return result;
         }
-        if(x2-x1==0){ //if path is perpendicular to x axis
+        if(x2-x1==0){ //y axis
             if(y2>y1&&route.intersectsLine(top)){//if target is above the bot
                 setresult(result, "top");
             }else if(route.intersectsLine(btm)){//if target is below the bot
@@ -185,10 +206,11 @@ public class LimelightIO {
             }
             return result;
         }
-        //models the path from current location (x1, y1) to the destination (x2, y2) as a function y=mx+b
-        double mx = (y2-y1)/(x2-x1); //get slope value of function
 
-        if(mx>0){
+        double m = (y2-y1)/(x2-x1);
+
+        
+        if(m>0){
             //slope is positive
             if(x2>x1){
                 //x increases and slope is positive, meaning robot goes from btm left to top right, thus must cross btm or left line first
@@ -207,7 +229,7 @@ public class LimelightIO {
                 }
                 return result;
             }
-        }else if(mx<0){
+        }else if(m<0){
             //slope is negative
             if(x2>x1){
                 //x increases and slope is negative, meaning robot goes from top left to btm right, thus must cross top or left line first
@@ -232,67 +254,27 @@ public class LimelightIO {
 
     private void setresult(double result[], String s){//function to set values for intersection
         if(s.equals("left")){
-            result[0] = cx2;
-            result[1] = cy2;
-            result[2] = cx2;
-            result[3] = cy1;
+            result[0] = Constants.cx2;
+            result[1] = Constants.cy2;
+            result[2] = Constants.cx2;
+            result[3] = Constants.cy1;
         }else if(s.equals("right")){
-            result[0] = cx1;
-            result[1] = cy2;
-            result[2] = cx1;
-            result[3] = cy1;
+            result[0] = Constants.cx1;
+            result[1] = Constants.cy2;
+            result[2] = Constants.cx1;
+            result[3] = Constants.cy1;
         }else if(s.equals("top")){
-            result[0] = cx2;
-            result[1] = cy1;
-            result[2] = cx1;
-            result[3] = cy1; 
+            result[0] = Constants.cx2;
+            result[1] = Constants.cy1;
+            result[2] = Constants.cx1;
+            result[3] = Constants.cy1; 
         }else{ //bottom
-            result[0] = cx2;
-            result[1] = cy2;
-            result[2] = cx1;
-            result[3] = cy2;
+            result[0] = Constants.cx2;
+            result[1] = Constants.cy2;
+            result[2] = Constants.cx1;
+            result[3] = Constants.cy2;
         }
     }
 
-    public void drive(double x){
-        //go forward a certain amount using spark max metre sensors
-    }
 
-    public void turnangle(double angle){
-
-        //algorithm to change angle of bot goes here
-
-    }
-
-    public double gettx(){
-        return tx.getDouble(0.0);
-    }
-
-    public double getty(){
-        return ty.getDouble(0.0);
-    }
-
-    public double getta(){
-        return ta.getDouble(0.0);
-    }
-
-    public double getx(){
-        return botpose.getDoubleArray(new double[6])[0];
-    }
-
-    public double gety(){
-        return botpose.getDoubleArray(new double[6])[1];
-    }
-
-    public double getz(){
-        return botpose.getDoubleArray(new double[6])[2];
-    }
-
-    public double getanglex(){
-        return botpose.getDoubleArray(new double[6])[3];
-    }
-
-    public double[] getbotposearr(){
-        return botpose.getDoubleArray(new double[6]);
-    }
 }
