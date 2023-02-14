@@ -11,10 +11,11 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public final class CSVWriter {
-    public static String headers;
-    public static List<List<Double>> dataLines = new ArrayList<>();
-    String filePath = new String();
-    String directory = new String();
+
+    private String headers;
+    private List<List<Double>> dataLines = new ArrayList<>();
+    private String filePath = new String();
+    private String directory = new String();
 
     public CSVWriter(String root) {
         directory = root;
@@ -50,7 +51,7 @@ public final class CSVWriter {
             return;
         }
         if (!csvOutputFile.exists())
-            System.err.println("Failed!");
+            System.err.println("CSV Output Failed!");
     }
 
     private String convertToCSV(List<Double> data) {

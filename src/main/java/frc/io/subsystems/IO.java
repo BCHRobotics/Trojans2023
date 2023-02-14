@@ -20,18 +20,27 @@ public class IO {
         this.subsystems.add(ClawIO.getInstance());
     }
 
+    /**
+     * Updates all robot inputs
+     */
     public void updateInputs() {
         for (IIO io : this.subsystems) {
             io.updateInputs();
         }
     }
 
+    /**
+     * Reset absolute appendages to zero position
+     */
     public void resetInputs() {
         for (IIO io : subsystems) {
             io.resetInputs();
         }
     }
 
+    /**
+     * Disables all robot outputs
+     */
     public void stopAllOutputs() {
         for (IIO io : subsystems) {
             io.stopAllOutputs();

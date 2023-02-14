@@ -2,7 +2,7 @@ package frc.robot;
 
 import frc.util.control.SparkMaxConstants;
 import frc.util.control.Terms;
-
+import edu.wpi.first.wpilibj.SerialPort;
 import frc.util.control.ArmPresets;
 
 public class Constants {
@@ -16,6 +16,11 @@ public class Constants {
 
         // Controller deadzones
         public static final double CONTROLLER_DEADZONE = 0.1;
+        public static final int DRIVER_PORT = 0;
+        public static final int OPERATOR_PORT = 1;
+
+        // Gyro port
+        public static final SerialPort.Port GYRO_PORT = SerialPort.Port.kUSB;
 
         // Drive motors inverted
         public static final boolean DRIVE_INVERTED = false;
@@ -25,10 +30,11 @@ public class Constants {
         public static final double MAX_OUTPUT = 0.6;
         public static final double MAX_INTERVAL = 0.25;
 
-        // Robot dimensions (inches)
+        // Robot dimensions (inches) TODO: Correct Dimensions
         public static final double WHEEL_DIAMETER = 6;
         public static final double SHOULDER_HEIGHT = 40;
         public static final double ARM_LENGTH = 30;
+        public static final double WRIST_LENGTH = 12;
 
         // CAN ID(s) for Drivetrain
         public static final int DRIVE_LEFT1_ID = 10;
@@ -44,14 +50,24 @@ public class Constants {
         public static final int CLAW_ID = 30;
         public static final int PUMP_ID = 31;
 
+        // TODO: Correct conversion factors
+
         // Chasis conversion factors
         public static final double CHASIS_LEFT_CONVERSION = 1;
         public static final double CHASIS_RIGHT_CONVERSION = 1;
 
         // Robot arm conversion factors
-        public static final double SHOULDER_CONVERSION_FACTOR = (11 / 1296) * 360;
-        public static final double WRIST_CONVERSION_FACTOR = (1 / 100) * 360;
+        public static final double SHOULDER_CONVERSION_FACTOR = 360;
+        public static final double WRIST_CONVERSION_FACTOR = 360;
         public static final double CLAW_CONVERSION_FACTOR = 0.165 / 4;
+
+        // Robot arm encoder offset TODO: Correct encoder inversions
+        public static final boolean SHOULDER_ENCODER_INVERTED = false;
+        public static final boolean WRIST_ENCODER_INVERTED = false;
+
+        // Robot arm encoder offset TODO: Correct encoder offsets
+        public static final double SHOULDER_ENCODER_OFFSET = 0;
+        public static final double WRIST_ENCODER_OFFSET = 0;
 
         // Position Balancing Limits
         public static final double BALANCE_LIMIT = 12;
@@ -82,7 +98,7 @@ public class Constants {
                         0,
                         0, 6000, 3500, 0.1);
 
-        // Drive PID Constants
+        // Mechanism PID Constants
         public static final SparkMaxConstants SHOULDER_CONSTANTS = new SparkMaxConstants(1e-4, 0, 0, 0, 0.000156, -1, 1,
                         0,
                         0, 6000, 3500, 0.1);

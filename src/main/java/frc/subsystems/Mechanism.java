@@ -22,9 +22,9 @@ public class Mechanism implements Subsystem {
     private boolean pumpMode;
 
     /**
-     * Get the instance of the Drive, if none create a new instance
+     * Get the instance of the Mechanism, if none create a new instance
      * 
-     * @return instance of the Drive
+     * @return instance of the Mechanism
      */
     public static Mechanism getInstance() {
         if (instance == null) {
@@ -46,7 +46,7 @@ public class Mechanism implements Subsystem {
 
         this.armIO = ArmIO.getInstance();
         this.clawIO = ClawIO.getInstance();
-        this.resetEncoders();
+        this.resetPosition();
     }
 
     @Override
@@ -54,8 +54,8 @@ public class Mechanism implements Subsystem {
         if (!enabled)
             return;
 
-        this.armIO.setArmPos(this.armPos);
-        this.armIO.setWristPos(this.wristPos + this.wristOffset);
+        this.armIO.setShoulderAngle(this.armPos);
+        this.armIO.setWristAngle(this.wristPos + this.wristOffset);
         this.clawIO.setClawPos(this.clawPos);
         this.clawIO.setPump(this.pumpMode);
     }
@@ -76,19 +76,8 @@ public class Mechanism implements Subsystem {
         if (!enabled)
             return;
 
-        this.armIO.setArmPos(0);
-        this.clawIO.setClawPos(this.wristOffset);
-    }
-
-    /**
-     * Reset encoders to zero position
-     */
-    public void resetEncoders() {
-        if (!enabled)
-            return;
-
-        this.armIO.resetInputs();
-        this.clawIO.resetInputs();
+        this.armIO.resetPositions();
+        this.clawIO.resetPosition();
     }
 
     /**

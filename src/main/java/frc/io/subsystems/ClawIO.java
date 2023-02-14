@@ -13,11 +13,11 @@ import frc.util.control.SparkMaxPID;
 public class ClawIO implements IIO {
     private static ClawIO instance;
 
-    // Drive motors
+    // Claw motors
     private CANSparkMax claw;
     private CANSparkMax pump;
 
-    // Drive encoders
+    // Claw encoders
     private RelativeEncoder clawEncoder;
 
     // PID Controllers
@@ -41,6 +41,9 @@ public class ClawIO implements IIO {
         initMotors();
     }
 
+    /**
+     * Initializes claw motors
+     */
     private void initMotors() {
         this.claw = new CANSparkMax(Constants.CLAW_ID, MotorType.kBrushless);
         this.pump = new CANSparkMax(Constants.PUMP_ID, MotorType.kBrushed);
@@ -62,6 +65,11 @@ public class ClawIO implements IIO {
         this.clawEncoder.setPositionConversionFactor(Constants.CLAW_CONVERSION_FACTOR);
     }
 
+    /**
+     * Sets claw opening in inches
+     * 
+     * @param position
+     */
     public void setClawPos(double position) {
         if (!enabled)
             return;
@@ -69,6 +77,11 @@ public class ClawIO implements IIO {
         this.clawPidController.setPosition(position);
     }
 
+    /**
+     * Sets pneumatic suction state boolean
+     * 
+     * @param state
+     */
     public void setPump(boolean state) {
         if (!enabled)
             return;
@@ -76,6 +89,11 @@ public class ClawIO implements IIO {
         this.pump.set(state ? 1 : 0);
     }
 
+    /**
+     * Gets claw relative encoder object
+     * 
+     * @return Claw Relative Encoder
+     */
     public RelativeEncoder getClawEncoder() {
         if (!enabled)
             return null;
@@ -83,20 +101,39 @@ public class ClawIO implements IIO {
         return this.clawEncoder;
     }
 
-    @Override
-    public void resetInputs() {
+    /**
+     * Resets claw to zero position
+     */
+    public void resetPosition() {
         if (!enabled)
             return;
 
         this.clawPidController.setPosition(0);
     }
 
-    @Override
+    /**
+     * Resets claw encoder to zero position
+     * 
+     * <p>
+     * Deprecated since claw encoders should not be reset through code
+     */
+    @Deprecated
+    public void resetInputs() {
+        if (!enabled)
+            return;
+
+        this.clawEncoder.setPosition(0);
+    }
+
+    @Deprecated
     public void updateInputs() {
         if (!enabled)
             return;
     }
 
+    /**
+     * Disables claw and pump motors
+     */
     @Override
     public void stopAllOutputs() {
         if (!enabled)

@@ -26,6 +26,7 @@ public class Controller extends XboxController {
 
         boolean left = side == Side.LEFT;
         boolean y = axis == Axis.Y;
+
         // multiplies by -1 if y-axis (inverted normally)
         return handleDeadzone((y ? -1 : 1) * this.getRawAxis((left ? 0 : 4) + (y ? 1 : 0)), deadzone);
     }

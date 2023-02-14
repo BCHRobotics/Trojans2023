@@ -19,16 +19,29 @@ public class ArmPresets {
         this.wristOffset = offset;
     }
 
+    /**
+     * Push preset properties to the Smart Dashboard
+     * 
+     * @param name
+     */
     public void pushToDashboard(String name) {
         SmartDashboard.putNumber(name + "Wrist Height", wristHeight);
         SmartDashboard.putNumber(name + "Wrist Offset", wristOffset);
     }
 
+    /**
+     * Retrieve preset properties from the Smart Dashboard
+     * 
+     * @param name
+     */
     public void getFromDashboard(String name) {
         wristHeight = SmartDashboard.getNumber(name + "Wrist Height", 0);
         wristOffset = SmartDashboard.getNumber(name + "Wrist Offset", 0);
     }
 
+    /**
+     * @return String representation of preset properties
+     */
     @Override
     public String toString() {
         return String.format("Wrist Height: %f, Wrist Offset: %f\n", wristHeight, wristOffset);

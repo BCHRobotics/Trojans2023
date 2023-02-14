@@ -1,6 +1,6 @@
 package frc.subsystems;
 
-import edu.wpi.first.wpilibj.SerialPort;
+// Import required classes
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.io.subsystems.DriveIO;
 import frc.robot.Constants;
@@ -29,15 +29,18 @@ public class Drivetrain implements Subsystem {
     // Objects for target seeking
     private PID seekPID;
 
-    // states
+    // Drive states
     private DriveState currentState = DriveState.POSITION;
 
+    // Motor output variables
     private double leftOut;
     private double rightOut;
 
+    // Drive position variables
     private double posLeft;
     private double posRight;
 
+    // Drive brakes variable
     private boolean brakeMode;
 
     /**
@@ -57,10 +60,11 @@ public class Drivetrain implements Subsystem {
             return;
 
         this.driveIO = DriveIO.getInstance();
+
         if (gyroEnabled) {
             // Objects for balancing
             this.gyroPid = new PID(Constants.GYRO_CONSTANTS);
-            this.gyro = new Gyro(SerialPort.Port.kMXP);
+            this.gyro = new Gyro(Constants.GYRO_PORT);
         }
 
         // Objects for target seeking
@@ -123,12 +127,12 @@ public class Drivetrain implements Subsystem {
         this.driveIO.resetInputs();
     }
 
-    @Deprecated
     /**
      * Set drive mode:
      * 
      * @param state
      */
+    @Deprecated
     public void setDriveMode(DriveState state) {
         if (!enabled)
             return;
@@ -154,8 +158,8 @@ public class Drivetrain implements Subsystem {
     /**
      * Sets output to drive
      * 
-     * @param frwd percent output [-1 to 1] for forward/backward movement
-     * @param turn percent output [-1 to 1] for turn movement
+     * @param frwd percent output [-1 --> 1] for forward/backward movement
+     * @param turn percent output [-1 --> 1] for turn movement
      */
     public void setOutput(double frwd, double turn) {
         if (!enabled)

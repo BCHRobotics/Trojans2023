@@ -7,7 +7,7 @@ import frc.util.devices.Controller.Side;
 
 public class DriverInput {
 
-	private static Controller driver = new Controller(0);
+	private static Controller driver = new Controller(Constants.DRIVER_PORT);
 
 	/**
 	 * Get the driver controller

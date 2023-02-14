@@ -40,12 +40,21 @@ public class ArmIO implements IIO {
         initMotors();
     }
 
+    /**
+     * Initializes arm motors
+     */
     private void initMotors() {
         this.shoulder = new CANSparkMax(Constants.SHOULDER_ID, MotorType.kBrushless);
         this.wrist = new CANSparkMax(Constants.WRIST_ID, MotorType.kBrushless);
 
         this.shoulderEncoder = wrist.getAbsoluteEncoder(Type.kDutyCycle);
         this.wristEncoder = wrist.getAbsoluteEncoder(Type.kDutyCycle);
+
+        this.shoulderEncoder.setInverted(Constants.SHOULDER_ENCODER_INVERTED);
+        this.wristEncoder.setInverted(Constants.WRIST_ENCODER_INVERTED);
+
+        this.shoulderEncoder.setZeroOffset(Constants.SHOULDER_ENCODER_OFFSET);
+        this.wristEncoder.setZeroOffset(Constants.WRIST_ENCODER_OFFSET);
 
         this.shoulder.restoreFactoryDefaults();
         this.wrist.restoreFactoryDefaults();
@@ -69,20 +78,35 @@ public class ArmIO implements IIO {
         this.wristEncoder.setPositionConversionFactor(Constants.WRIST_CONVERSION_FACTOR);
     }
 
-    public void setArmPos(double position) {
+    /**
+     * Sets shoulder anlge in degrees from zero reference
+     * 
+     * @param angle
+     */
+    public void setShoulderAngle(double angle) {
         if (!enabled)
             return;
 
-        this.shoulderPidController.setPosition(position);
+        this.shoulderPidController.setPosition(angle);
     }
 
-    public void setWristPos(double position) {
+    /**
+     * Sets wrist angle in degrees from zero reference
+     * 
+     * @param angle
+     */
+    public void setWristAngle(double angle) {
         if (!enabled)
             return;
 
-        this.wristPidController.setPosition(position);
+        this.wristPidController.setPosition(angle);
     }
 
+    /**
+     * Gets shoulder absolute encoder object
+     * 
+     * @return Shoulder Absolute Encoder
+     */
     public SparkMaxAbsoluteEncoder getShoulderEncoder() {
         if (!enabled)
             return null;
@@ -90,6 +114,11 @@ public class ArmIO implements IIO {
         return this.shoulderEncoder;
     }
 
+    /**
+     * Gets wrist absolute encoder object
+     * 
+     * @return Wrist Absolute Encoder
+     */
     public SparkMaxAbsoluteEncoder getWristEncoder() {
         if (!enabled)
             return null;
@@ -97,8 +126,10 @@ public class ArmIO implements IIO {
         return this.wristEncoder;
     }
 
-    @Override
-    public void resetInputs() {
+    /**
+     * Resets appendages to zero position
+     */
+    public void resetPositions() {
         if (!enabled)
             return;
 
@@ -106,12 +137,27 @@ public class ArmIO implements IIO {
         this.wristPidController.setPosition(0);
     }
 
-    @Override
+    /**
+     * Resets arm and wrist encoders to zero position
+     * 
+     * <p>
+     * Deprecated since absolute encoders should not be reset through code
+     */
+    @Deprecated
+    public void resetInputs() {
+        if (!enabled)
+            return;
+    }
+
+    @Deprecated
     public void updateInputs() {
         if (!enabled)
             return;
     }
 
+    /**
+     * Disables shoulder and wrist motors
+     */
     @Override
     public void stopAllOutputs() {
         if (!enabled)

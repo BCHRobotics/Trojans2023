@@ -20,6 +20,7 @@ public class DriveIO implements IIO {
     private CANSparkMax driveL2;
     private CANSparkMax driveR2;
 
+    // Brake mode
     private IdleMode idleMode;
 
     // Drive encoders
@@ -52,6 +53,9 @@ public class DriveIO implements IIO {
             initFollowMotors();
     }
 
+    /**
+     * Initializes primary drive motors
+     */
     private void initMainMotors() {
         this.driveL1 = new CANSparkMax(Constants.DRIVE_LEFT1_ID, MotorType.kBrushless);
         this.driveR1 = new CANSparkMax(Constants.DRIVE_RIGHT1_ID, MotorType.kBrushless);
@@ -81,6 +85,9 @@ public class DriveIO implements IIO {
         this.driveR1Encoder.setPositionConversionFactor(Constants.CHASIS_RIGHT_CONVERSION);
     }
 
+    /**
+     * Initializes secondary drive motors
+     */
     private void initFollowMotors() {
         this.driveL2 = new CANSparkMax(Constants.DRIVE_LEFT2_ID, MotorType.kBrushless);
         this.driveR2 = new CANSparkMax(Constants.DRIVE_RIGHT2_ID, MotorType.kBrushless);
@@ -104,30 +111,55 @@ public class DriveIO implements IIO {
         this.driveR2Encoder.setPositionConversionFactor(Constants.CHASIS_RIGHT_CONVERSION);
     }
 
+    /**
+     * Sets drive left speed in percent output -1 --> 1
+     * 
+     * @param speed
+     */
     public void setDriveLeft(double speed) {
         if (!enabled)
             return;
         this.driveL1.set(speed);
     }
 
+    /**
+     * Sets drive right speed in percent output -1 --> 1
+     * 
+     * @param speed
+     */
     public void setDriveRight(double speed) {
         if (!enabled)
             return;
         this.driveR1.set(speed);
     }
 
+    /**
+     * Sets drive left position in inches
+     * 
+     * @param position
+     */
     public void setDriveLeftPos(double position) {
         if (!enabled)
             return;
         this.driveL1PidController.setPosition(position);
     }
 
+    /**
+     * Sets drive right position in inches
+     * 
+     * @param position
+     */
     public void setDriveRightPos(double position) {
         if (!enabled)
             return;
         this.driveR1PidController.setPosition(position);
     }
 
+    /**
+     * Sets braking mode
+     * 
+     * @param mode
+     */
     public void brakeMode(boolean mode) {
         if (!enabled)
             return;
@@ -149,34 +181,53 @@ public class DriveIO implements IIO {
         SmartDashboard.putBoolean("Brake Mode", mode);
     }
 
-    // #region EncoderPositions
-
+    /**
+     * Gets drivetrain front left relative encoder object
+     * 
+     * @return Drive Front Left Relative Encoder
+     */
     public RelativeEncoder getDriveL1Encoder() {
         if (!enabled)
             return null;
         return this.driveL1Encoder;
     }
 
-    public RelativeEncoder getDriveL2Encoder() {
-        if (!enabled || !miniBot)
-            return null;
-        return this.driveL2Encoder;
-    }
-
+    /**
+     * Gets drivetrain front right relative encoder object
+     * 
+     * @return Drive Front Right Relative Encoder
+     */
     public RelativeEncoder getDriveR1Encoder() {
         if (!enabled)
             return null;
         return this.driveR1Encoder;
     }
 
+    /**
+     * Gets drivetrain back left relative encoder object
+     * 
+     * @return Drive Back Left Relative Encoder
+     */
+    public RelativeEncoder getDriveL2Encoder() {
+        if (!enabled || !miniBot)
+            return null;
+        return this.driveL2Encoder;
+    }
+
+    /**
+     * Gets drivetrain back right relative encoder object
+     * 
+     * @return Drive Back Right Relative Encoder
+     */
     public RelativeEncoder getDriveR2Encoder() {
         if (!enabled || !miniBot)
             return null;
         return this.driveR2Encoder;
     }
 
-    // #endregion EncoderPositions
-
+    /**
+     * Resets relative encoders to zero position
+     */
     @Override
     public void resetInputs() {
         if (!enabled)
@@ -191,12 +242,15 @@ public class DriveIO implements IIO {
         }
     }
 
-    @Override
+    @Deprecated
     public void updateInputs() {
         if (!enabled)
             return;
     }
 
+    /**
+     * Disables all drive motors
+     */
     @Override
     public void stopAllOutputs() {
         if (!enabled)

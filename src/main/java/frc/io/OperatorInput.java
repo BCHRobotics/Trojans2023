@@ -1,12 +1,13 @@
 package frc.io;
 
+import frc.robot.Constants;
 import frc.util.devices.Controller;
 import frc.util.devices.Controller.Axis;
 import frc.util.devices.Controller.Side;
 
 public class OperatorInput {
 
-    private static Controller operator = new Controller(1);
+    private static Controller operator = new Controller(Constants.OPERATOR_PORT);
 
     /**
      * Get the operator controller
@@ -18,7 +19,7 @@ public class OperatorInput {
     }
 
     /**
-     * Get the wrist offset in degrees -90 --> 90
+     * Get the wrist offset in degrees -90° --> 90°
      * 
      * @return Wrist offset
      */
@@ -27,7 +28,7 @@ public class OperatorInput {
     }
 
     /**
-     * Get the Operator D-Pad input degrees 0 --> 360
+     * Get the Operator D-Pad input degrees 0°(N) --> 315°(NW)
      * 
      * @return Operator controller D-Pad input
      */
