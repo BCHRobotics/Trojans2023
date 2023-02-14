@@ -30,6 +30,8 @@ public class TeleopDriver implements TeleopComponent {
     private TeleopDriver() {
         this.drive = Drive.getInstance();
         this.intake = Pickup.getInstance();
+
+        // HI MY NAME IS NOAH!
     }
 
     @Override
