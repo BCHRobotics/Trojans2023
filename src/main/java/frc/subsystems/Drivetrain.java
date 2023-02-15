@@ -89,6 +89,9 @@ public class Drivetrain implements Subsystem {
 
         SmartDashboard.putString("DRIVE_STATE", this.currentState.toString());
 
+        SmartDashboard.putNumber("DriveL Pos", this.getLeftPosition());
+        SmartDashboard.putNumber("DriveR Pos", this.getRightPosition());
+
         switch (currentState) {
             case OUTPUT:
                 this.driveIO.setDriveLeft(this.leftOut);
@@ -210,6 +213,30 @@ public class Drivetrain implements Subsystem {
             return 0;
 
         return this.driveIO.getDriveR1Encoder().getPosition();
+    }
+
+    /**
+     * Gets chasis velocity using relative encoders
+     * 
+     * @return left relative velocity in rpm
+     */
+    public double getLeftVelocity() {
+        if (!enabled)
+            return 0;
+
+        return this.driveIO.getDriveL1Encoder().getVelocity();
+    }
+
+    /**
+     * Gets chasis velocity using relative encoders
+     * 
+     * @return right relative velocity in rpm
+     */
+    public double getRightVelocity() {
+        if (!enabled)
+            return 0;
+
+        return this.driveIO.getDriveR1Encoder().getVelocity();
     }
 
     /**

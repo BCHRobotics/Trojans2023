@@ -28,7 +28,8 @@ public final class CSVWriter {
     public void deleteCopy() {
         try {
             Files.deleteIfExists(Paths.get(this.filePath));
-        } catch (Exception e) {
+        } catch (IOException e) {
+            System.err.println("CSV File deletion Failed!");
             return;
         }
     }

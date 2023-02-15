@@ -23,7 +23,7 @@ public class Constants {
         public static final SerialPort.Port GYRO_PORT = SerialPort.Port.kUSB;
 
         // Drive motors inverted
-        public static final boolean DRIVE_INVERTED = false;
+        public static final boolean DRIVE_INVERTED = true;
         public static final boolean DRIVE_OUT_OF_SYNC = false;
 
         // Drive restrictions
@@ -53,8 +53,8 @@ public class Constants {
         // TODO: Correct conversion factors
 
         // Chasis conversion factors
-        public static final double CHASIS_LEFT_CONVERSION = 1;
-        public static final double CHASIS_RIGHT_CONVERSION = 1;
+        public static final double CHASIS_LEFT_CONVERSION = 70.5 / 33.35684585571289; // inches per revolutions;
+        public static final double CHASIS_RIGHT_CONVERSION = 70.5 / 33.904457092285156; // #inches / #revs;
 
         // Robot arm conversion factors
         public static final double SHOULDER_CONVERSION_FACTOR = 360;
@@ -91,12 +91,14 @@ public class Constants {
         public static final String ROOT_DIRECTORY = "csv/";
 
         // Drive PID Constants
-        public static final SparkMaxConstants DRIVEL1_CONSTANTS = new SparkMaxConstants(1e-4, 0, 0, 0, 0.000156, -1, 1,
+        public static final SparkMaxConstants DRIVEL1_CONSTANTS = new SparkMaxConstants(0.00005, 0, 0, 0, 0.000185, -1,
+                        1,
                         0,
-                        0, 6000, 3500, 0.1);
-        public static final SparkMaxConstants DRIVER1_CONSTANTS = new SparkMaxConstants(1e-4, 0, 0, 0, 0.000156, -1, 1,
+                        0, 2000, 1500, 0.1);
+        public static final SparkMaxConstants DRIVER1_CONSTANTS = new SparkMaxConstants(0.00005, 0, 0, 0, 0.000185, -1,
+                        1,
                         0,
-                        0, 6000, 3500, 0.1);
+                        0, 2000, 1500, 0.1);
 
         // Mechanism PID Constants
         public static final SparkMaxConstants SHOULDER_CONSTANTS = new SparkMaxConstants(1e-4, 0, 0, 0, 0.000156, -1, 1,

@@ -45,6 +45,9 @@ public class Robot extends TimedRobot {
         this.teleopControl = TeleopControl.getInstance();
         this.autoControl = AutoControl.getInstance();
         this.autoBuilder = AutoBuilder.getInstance();
+
+        Constants.DRIVEL1_CONSTANTS.pushToDashboard("Drive Left");
+        Constants.DRIVER1_CONSTANTS.pushToDashboard("Drive Right");
     }
 
     /**

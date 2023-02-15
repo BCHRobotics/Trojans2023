@@ -141,6 +141,7 @@ public class DriveIO implements IIO {
     public void setDriveLeftPos(double position) {
         if (!enabled)
             return;
+        this.driveL1PidController.retrieveDashboardConstants(Constants.DRIVEL1_CONSTANTS, "Drive Left");
         this.driveL1PidController.setPosition(position);
     }
 
@@ -152,6 +153,7 @@ public class DriveIO implements IIO {
     public void setDriveRightPos(double position) {
         if (!enabled)
             return;
+        this.driveR1PidController.retrieveDashboardConstants(Constants.DRIVER1_CONSTANTS, "Drive Right");
         this.driveR1PidController.setPosition(position);
     }
 

@@ -65,6 +65,12 @@ public class SparkMaxPID {
         return this.getConstants(this.slot);
     }
 
+    public void retrieveDashboardConstants(SparkMaxConstants constants, String label) {
+        if (constants.valuesChanged(label))
+            constants.getFromDashboard(label);
+        this.setConstants(constants);
+    }
+
     public void setFeedbackDevice(RelativeEncoder device) {
         pidController.setFeedbackDevice(device);
     }
