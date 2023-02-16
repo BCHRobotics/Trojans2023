@@ -90,17 +90,17 @@ public class LimeLightDrive {
         //edge case if bot is travelling parallel to an axis
         if(y2-y1==0){ //x axis
             if(x2>x1&&route.intersectsLine(left)){//if target is to the right of bot
-                setresult(result, "left");
+                setResult(result, "left");
             }else if(route.intersectsLine(right)){//if target is to the left of bot
-                setresult(result, "right");
+                setResult(result, "right");
             }
             return result;
         }
         if(x2-x1==0){ //y axis
             if(y2>y1&&route.intersectsLine(top)){//if target is above the bot
-                setresult(result, "top");
+                setResult(result, "top");
             }else if(route.intersectsLine(btm)){//if target is below the bot
-                setresult(result, "btm");
+                setResult(result, "btm");
             }
             return result;
         }
@@ -112,17 +112,17 @@ public class LimeLightDrive {
             if(x2>x1){
                 //x increases and slope is positive, meaning robot goes from btm left to top right, thus must cross btm or left line first
                 if(route.intersectsLine(left)){
-                    setresult(result, "left");
+                    setResult(result, "left");
                 }else if(route.intersectsLine(btm)){
-                    setresult(result, "btm");
+                    setResult(result, "btm");
                 }
                 return result; 
             }else {
                 //x decreases and slope is positive, meaning robot goes from top right to btm left, thus must cross top or right line first
                 if(route.intersectsLine(top)){
-                    setresult(result, "top");
+                    setResult(result, "top");
                 }else if(route.intersectsLine(right)){
-                    setresult(result, "right");
+                    setResult(result, "right");
                 }
                 return result;
             }
@@ -131,17 +131,17 @@ public class LimeLightDrive {
             if(x2>x1){
                 //x increases and slope is negative, meaning robot goes from top left to btm right, thus must cross top or left line first
                 if(route.intersectsLine(top)){
-                    setresult(result, "top");
+                    setResult(result, "top");
                 }else if(route.intersectsLine(left)){
-                    setresult(result, "left");
+                    setResult(result, "left");
                 }
                 return result;
             }else {
                 //x decreases and slope is negative, meaning robot goes from btm right to top left, thus must cross btm or right line first
                 if(route.intersectsLine(btm)){
-                    setresult(result, "btm");
+                    setResult(result, "btm");
                 }else if(route.intersectsLine(right)){
-                    setresult(result, "right");
+                    setResult(result, "right");
                 }
                 return result;
             }
@@ -149,27 +149,33 @@ public class LimeLightDrive {
         return result;
     }
 
-    private void setresult(double result[], String s){//function to set values for intersection
-        if(s.equals("left")){
-            result[0] = Constants.cx2;
-            result[1] = Constants.cy2;
-            result[2] = Constants.cx2;
-            result[3] = Constants.cy1;
-        }else if(s.equals("right")){
-            result[0] = Constants.cx1;
-            result[1] = Constants.cy2;
-            result[2] = Constants.cx1;
-            result[3] = Constants.cy1;
-        }else if(s.equals("top")){
-            result[0] = Constants.cx2;
-            result[1] = Constants.cy1;
-            result[2] = Constants.cx1;
-            result[3] = Constants.cy1; 
-        }else{ //bottom
-            result[0] = Constants.cx2;
-            result[1] = Constants.cy2;
-            result[2] = Constants.cx1;
-            result[3] = Constants.cy2;
+    //method which formats results from crosscharge method
+    private void setResult(double result[], String s){
+        switch(s){
+            case "left":
+                result[0] = Constants.cx2;
+                result[1] = Constants.cy2;
+                result[2] = Constants.cx2;
+                result[3] = Constants.cy1;
+                break;
+            case "right":
+                result[0] = Constants.cx1;
+                result[1] = Constants.cy2;
+                result[2] = Constants.cx1;
+                result[3] = Constants.cy1;
+                break;
+            case "top":
+                result[0] = Constants.cx2;
+                result[1] = Constants.cy1;
+                result[2] = Constants.cx1;
+                result[3] = Constants.cy1; 
+                break;
+            case "btm":
+                result[0] = Constants.cx2;
+                result[1] = Constants.cy2;
+                result[2] = Constants.cx1;
+                result[3] = Constants.cy2;
+                break;
         }
     }
 }
