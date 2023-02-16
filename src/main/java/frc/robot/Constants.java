@@ -100,6 +100,11 @@ public class Constants {
         public static final ArmPresets MID_DROPOFF = new ArmPresets(0, 0);
         public static final ArmPresets TOP_DROPOFF = new ArmPresets(0, 0);
 
+        // Limelight vision constants
+        public static final double LIMELIGHT_ANGLE = -20; // degrees
+        public static final double LIMELIGHT_HEIGHT = 120; // inches TODO: Correct limelight height
+        public static final double TARGET_HEIGHT = 4.75; // inches
+
         // CSV Test version
         public static final int VERSION = 1;
         public static final String TEACH_MODE_FILE_NAME = "LIVE_RECORD" + "_" + VERSION;
