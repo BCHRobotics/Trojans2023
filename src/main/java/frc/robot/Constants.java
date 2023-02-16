@@ -4,6 +4,7 @@ import frc.util.control.SparkMaxConstants;
 import frc.util.control.Terms;
 import edu.wpi.first.wpilibj.SerialPort;
 import frc.util.control.ArmPresets;
+import java.awt.geom.Rectangle2D;
 
 public class Constants {
         // Subsytems toggle logic
@@ -115,6 +116,7 @@ public class Constants {
         // Target seek PID Constants
         public static final Terms SEEK_CONSTANTS = new Terms(0.0, 0.0, 0, 0);
 
+
         //Apriltag constants
         //-1 is a placeholder
         public static final double aprilTagHeight = 37.0;
@@ -124,9 +126,11 @@ public class Constants {
         public static final double limelightHorAng = -1; //angled to the left is negative, to right is positive
         public static final double limelightVertAng = -1;
 
-        public static final double cx1 = -1; //charge station top right x coord
-        public static final double cy1 = -1; //charge station top right y coord
-        public static final double cx2 = -1; //charge station bottom left x coord
-        public static final double cy2 = -1; //charge station bottom left y coord
+        // Charge Station Dimentions
+        public static final double cx1 = 6.3354; //charge station top right x coord
+        public static final double cy1 = 0; //charge station top right y coord
+        public static final double cx2 = 4.4054; //charge station bottom left x coord
+        public static final double cy2 = -2.47; //charge station bottom left y coord
+        public static final Rectangle2D CHARGE_STATION = new Rectangle2D.Double(cx1, cy1, cx2 - cx1, cy2 - cy1);
 
 }

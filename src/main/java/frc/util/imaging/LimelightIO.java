@@ -48,8 +48,8 @@ public class LimelightIO {
     }
     
     public boolean gettv(){
-        return (tv.getDouble(0.0)==0?false:true);
-    }
+        return tv.getDouble(0.0)!=0;
+    } 
 
     public double getpipe(){
         return getpipe.getDouble(0.0);
