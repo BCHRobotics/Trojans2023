@@ -81,8 +81,11 @@ public class DriveIO implements IIO {
         this.driveL1.setInverted(Constants.DRIVE_INVERTED);
         this.driveR1.setInverted(!Constants.DRIVE_INVERTED);
 
-        this.driveL1Encoder.setPositionConversionFactor(Constants.CHASIS_LEFT_CONVERSION);
-        this.driveR1Encoder.setPositionConversionFactor(Constants.CHASIS_RIGHT_CONVERSION);
+        this.driveL1Encoder.setPositionConversionFactor(Constants.CHASIS_LEFT_POS_CONVERSION);
+        this.driveR1Encoder.setPositionConversionFactor(Constants.CHASIS_RIGHT_POS_CONVERSION);
+
+        this.driveL1Encoder.setVelocityConversionFactor(Constants.CHASIS_LEFT_VEL_CONVERSION);
+        this.driveR1Encoder.setVelocityConversionFactor(Constants.CHASIS_RIGHT_VEL_CONVERSION);
     }
 
     /**
@@ -107,8 +110,11 @@ public class DriveIO implements IIO {
         this.driveL2.follow(this.driveL1, Constants.DRIVE_OUT_OF_SYNC);
         this.driveR2.follow(this.driveR1, Constants.DRIVE_OUT_OF_SYNC);
 
-        this.driveL2Encoder.setPositionConversionFactor(Constants.CHASIS_LEFT_CONVERSION);
-        this.driveR2Encoder.setPositionConversionFactor(Constants.CHASIS_RIGHT_CONVERSION);
+        this.driveL2Encoder.setPositionConversionFactor(Constants.CHASIS_LEFT_POS_CONVERSION);
+        this.driveR2Encoder.setPositionConversionFactor(Constants.CHASIS_RIGHT_POS_CONVERSION);
+
+        this.driveL2Encoder.setVelocityConversionFactor(Constants.CHASIS_LEFT_VEL_CONVERSION);
+        this.driveR2Encoder.setVelocityConversionFactor(Constants.CHASIS_RIGHT_VEL_CONVERSION);
     }
 
     /**

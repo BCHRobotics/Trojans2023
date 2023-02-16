@@ -23,11 +23,16 @@ public class Gyro extends AHRS {
         this.reset();
     }
 
+    /**
+     * Returns the total accumulated pitch angle (Y Axis, in degrees) reported by
+     * the sensor.
+     */
     @Override
     public double getAngle() {
         if (!Constants.GYRO_ENABLED)
             return 0;
-        return (double) Math.round(-this.getPitch());
+        // Inverts and Rounds pitch angle to 1 decimal
+        return (double) Math.round((this.getPitch() * (Constants.GYRO_OUTPUT_INVERTED ? -1 : 1) * 10) / 10);
     }
 
     public void resetGyroPosition() {

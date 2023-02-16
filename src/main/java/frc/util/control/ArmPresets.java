@@ -35,8 +35,8 @@ public class ArmPresets {
      * @param name
      */
     public void getFromDashboard(String name) {
-        wristHeight = SmartDashboard.getNumber(name + "Wrist Height", 0);
-        wristOffset = SmartDashboard.getNumber(name + "Wrist Offset", 0);
+        this.wristHeight = SmartDashboard.getNumber(name + "Wrist Height", 0);
+        this.wristOffset = SmartDashboard.getNumber(name + "Wrist Offset", 0);
     }
 
     /**

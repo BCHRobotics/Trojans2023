@@ -1,10 +1,11 @@
 package frc.subsystems;
 
+import edu.wpi.first.math.trajectory.TrapezoidProfile;
 // Import required classes
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.io.subsystems.DriveIO;
 import frc.robot.Constants;
-import frc.util.control.PID;
+import frc.util.control.PIDControl;
 import frc.util.devices.Gyro;
 
 public class Drivetrain implements Subsystem {
@@ -23,11 +24,19 @@ public class Drivetrain implements Subsystem {
     private DriveIO driveIO;
 
     // Objects for balancing
-    private PID gyroPid;
+    private PIDControl gyroPid;
     private Gyro gyro;
 
     // Objects for target seeking
-    private PID seekPID;
+    private PIDControl seekPID;
+
+    // Motion Profiling
+    private final TrapezoidProfile.Constraints constraints = new TrapezoidProfile.Constraints(Constants.CHASIS_MAX_VEL,
+            Constants.CHASIS_MAX_ACCEL);
+    private TrapezoidProfile.State leftGoal = new TrapezoidProfile.State();
+    private TrapezoidProfile.State leftSetpoint = new TrapezoidProfile.State();
+    private TrapezoidProfile.State rightGoal = new TrapezoidProfile.State();
+    private TrapezoidProfile.State righttSetpoint = new TrapezoidProfile.State();
 
     // Drive states
     private DriveState currentState = DriveState.POSITION;
@@ -63,12 +72,12 @@ public class Drivetrain implements Subsystem {
 
         if (gyroEnabled) {
             // Objects for balancing
-            this.gyroPid = new PID(Constants.GYRO_CONSTANTS);
+            this.gyroPid = new PIDControl(Constants.GYRO_CONSTANTS);
             this.gyro = new Gyro(Constants.GYRO_PORT);
         }
 
         // Objects for target seeking
-        this.seekPID = new PID(Constants.SEEK_CONSTANTS);
+        this.seekPID = new PIDControl(Constants.SEEK_CONSTANTS);
 
         this.firstCycle();
     }
@@ -91,6 +100,15 @@ public class Drivetrain implements Subsystem {
 
         SmartDashboard.putNumber("DriveL Pos", this.getLeftPosition());
         SmartDashboard.putNumber("DriveR Pos", this.getRightPosition());
+
+        var leftProfile = new TrapezoidProfile(this.constraints, this.leftGoal, this.leftSetpoint);
+        var rightProfile = new TrapezoidProfile(this.constraints, this.rightGoal, this.righttSetpoint);
+
+        this.leftSetpoint = leftProfile.calculate(Constants.LOOP_TIME);
+        this.righttSetpoint = rightProfile.calculate(Constants.LOOP_TIME);
+
+        this.posLeft = this.leftSetpoint.position;
+        this.posRight = this.righttSetpoint.position;
 
         switch (currentState) {
             case OUTPUT:
@@ -187,6 +205,9 @@ public class Drivetrain implements Subsystem {
 
         this.currentState = DriveState.POSITION;
 
+        this.leftGoal = new TrapezoidProfile.State(left, 0);
+        this.rightGoal = new TrapezoidProfile.State(right, 0);
+
         this.posLeft = left;
         this.posRight = right;
     }
@@ -262,19 +283,20 @@ public class Drivetrain implements Subsystem {
     }
 
     /**
-     * Turns drivetrain/chasis by a provided angle using smart motion
+     * Sets chasis turn using relative encoders and smart motion
      * 
-     * @param angle in degrees
+     * @param angle from The Normal Line in degrees
      */
-    @Deprecated
-    public void seekTarget(double angle) {
+    public void setYaw(double angle) {
         if (!enabled)
             return;
 
-        SmartDashboard.putNumber("Vision θ", angle);
+        SmartDashboard.putNumber("Drive Heading θ", angle);
 
-        this.setPosition(this.driveIO.getDriveL1Encoder().getPosition() + (angle / Constants.CHASIS_LEFT_CONVERSION),
-                this.driveIO.getDriveR1Encoder().getPosition() + (angle / Constants.CHASIS_RIGHT_CONVERSION));
+        this.currentState = DriveState.POSITION;
+
+        this.setPosition(this.getLeftPosition() + (angle * Constants.CHASIS_TURN_CONVERSION),
+                this.getRightPosition() - (angle * Constants.CHASIS_TURN_CONVERSION));
     }
 
     /**
@@ -282,22 +304,18 @@ public class Drivetrain implements Subsystem {
      * 
      * @param angle in degrees
      */
-    public void seekTargetPID(double angle) {
-        SmartDashboard.putNumber("Vision Φ", angle);
+    public void setYawPID(double angle) {
+        SmartDashboard.putNumber("Drive Heading Φ", angle);
 
-        this.seekPID.setTarget(0);
-        this.seekPID.referenceTimer();
-        this.seekPID.setInput(angle);
-        this.seekPID.calculate();
-        this.setOutput(this.seekPID.getOutput(), 0);
+        this.seekPID.setSetpoint(0);
+        this.setOutput(this.seekPID.calculate(angle), 0);
     }
 
     /**
      * Resets seekTargetPID() variables to remain idle
      */
-    public void seekTargetIdle() {
-        this.seekPID.resetTimer();
-        this.seekPID.resetError();
+    public void yawIdle() {
+        this.seekPID.reset();
     }
 
     /**
@@ -308,12 +326,9 @@ public class Drivetrain implements Subsystem {
             return;
         if (trigger) {
             this.currentState = DriveState.BALANCE;
-
-            this.gyroPid.setTarget(0);
-            this.gyroPid.referenceTimer();
-            this.gyroPid.setInput(gyro.getAngle());
-            this.gyroPid.calculate();
-            this.setOutput(this.gyroPid.getOutput(), 0);
+            this.gyroPid.enableContinuousInput(-20, 20);
+            this.gyroPid.setSetpoint(0);
+            this.setOutput(this.gyroPid.calculate(this.gyro.getAngle()), 0);
         } else
             this.unrestrained();
     }
@@ -324,9 +339,8 @@ public class Drivetrain implements Subsystem {
     private void unrestrained() {
         if (!gyroEnabled)
             return;
-
-        this.gyroPid.resetTimer();
-        this.gyroPid.resetError();
+        this.gyroPid.disableContinuousInput();
+        this.gyroPid.reset();
     }
 
 }
