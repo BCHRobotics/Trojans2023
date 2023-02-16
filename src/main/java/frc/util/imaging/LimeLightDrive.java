@@ -6,6 +6,14 @@ import frc.robot.Constants;
 import frc.subsystems.Drivetrain;
 
 public class LimeLightDrive {
+    private static LimeLightDrive Instance;
+
+    public static LimeLightDrive getInstance(){
+        if(Instance==null){
+            Instance = new LimeLightDrive();
+        }
+        return Instance;
+    }
 
     private LimelightIO LLI = LimelightIO.getInstance();
     private Drivetrain dr = Drivetrain.getInstance();
