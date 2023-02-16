@@ -10,8 +10,8 @@ public class Output {
         this.pid = new PIDControl(pid);
     }
 
-    public double calculate(double posFF, double velFF, double feedback, double setPoint) {
-        return this.feedForward.calculate(posFF, velFF) + this.pid.calculate(feedback, setPoint);
+    public double calculate(double setPoint, double feedback, double velFF) {
+        return this.feedForward.calculate(setPoint, velFF) + this.pid.calculate(feedback, setPoint);
     }
 
 }

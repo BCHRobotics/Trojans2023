@@ -8,7 +8,7 @@ import com.revrobotics.SparkMaxAbsoluteEncoder.Type;
 
 // Import required Classes
 import frc.robot.Constants;
-import frc.util.control.SparkMaxPID;
+import frc.util.control.Output;
 
 public class ArmIO implements IIO {
     private static ArmIO instance;
@@ -22,8 +22,8 @@ public class ArmIO implements IIO {
     private SparkMaxAbsoluteEncoder wristEncoder;
 
     // PID Controllers
-    private SparkMaxPID shoulderPidController;
-    private SparkMaxPID wristPidController;
+    private Output shoulderPidController;
+    private Output wristPidController;
 
     private boolean enabled = Constants.ARM_ENABLED;
 
@@ -65,11 +65,8 @@ public class ArmIO implements IIO {
         this.shoulder.setSmartCurrentLimit(60, 10);
         this.wrist.setSmartCurrentLimit(60, 10);
 
-        this.shoulderPidController = new SparkMaxPID(this.shoulder, Constants.SHOULDER_CONSTANTS);
-        this.wristPidController = new SparkMaxPID(this.wrist, Constants.WRIST_CONSTANTS);
-
-        this.shoulderPidController.setFeedbackDevice(shoulderEncoder);
-        this.wristPidController.setFeedbackDevice(wristEncoder);
+        this.shoulderPidController = new Output(Constants.SHOULDER_FF_CONSTANTS, Constants.SHOULDER_PID_CONSTANTS);
+        this.wristPidController = new Output(Constants.WRIST_FF_CONSTANTS, Constants.WRIST_PID_CONSTANTS);
 
         this.shoulder.setInverted(false);
         this.wrist.setInverted(false);
@@ -87,7 +84,7 @@ public class ArmIO implements IIO {
         if (!enabled)
             return;
 
-        this.shoulderPidController.setPosition(angle);
+        this.shoulder.set(shoulderPidController.calculate(angle, this.shoulderEncoder.getPosition(), 2));
     }
 
     /**
@@ -99,7 +96,7 @@ public class ArmIO implements IIO {
         if (!enabled)
             return;
 
-        this.wristPidController.setPosition(angle);
+        this.wrist.set(wristPidController.calculate(angle, this.wristEncoder.getPosition(), 2));
     }
 
     /**
@@ -133,8 +130,8 @@ public class ArmIO implements IIO {
         if (!enabled)
             return;
 
-        this.shoulderPidController.setPosition(0);
-        this.wristPidController.setPosition(0);
+        this.setShoulderAngle(0);
+        this.setWristAngle(0);
     }
 
     /**
