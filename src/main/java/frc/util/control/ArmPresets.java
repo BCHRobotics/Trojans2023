@@ -1,23 +1,14 @@
 package frc.util.control;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import lombok.AllArgsConstructor;
 
+@AllArgsConstructor
 public class ArmPresets {
 
     // PID coefficients
     public double wristHeight;
     public double wristOffset;
-
-    /**
-     * PID Values for Basic Balancing Algorithm
-     * 
-     * @param wristHeight
-     * @param wristOffset
-     */
-    public ArmPresets(double height, double offset) {
-        this.wristHeight = height;
-        this.wristOffset = offset;
-    }
 
     /**
      * Push preset properties to the Smart Dashboard
@@ -38,13 +29,4 @@ public class ArmPresets {
         wristHeight = SmartDashboard.getNumber(name + "Wrist Height", 0);
         wristOffset = SmartDashboard.getNumber(name + "Wrist Offset", 0);
     }
-
-    /**
-     * @return String representation of preset properties
-     */
-    @Override
-    public String toString() {
-        return String.format("Wrist Height: %f, Wrist Offset: %f\n", wristHeight, wristOffset);
-    }
-
 }

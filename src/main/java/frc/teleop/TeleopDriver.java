@@ -3,7 +3,6 @@ package frc.teleop;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.subsystems.Drivetrain;
 import frc.io.DriverInput;
-import frc.robot.Constants;
 
 public class TeleopDriver implements TeleopComponent {
     private static TeleopDriver instance;

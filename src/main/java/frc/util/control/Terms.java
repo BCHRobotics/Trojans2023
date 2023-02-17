@@ -1,7 +1,11 @@
 package frc.util.control;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import lombok.AllArgsConstructor;
+import lombok.ToString;
 
+@AllArgsConstructor
+@ToString
 public class Terms {
 
     // PID coefficients
@@ -9,21 +13,6 @@ public class Terms {
     public double kI;
     public double kD;
     public double kFF;
-
-    /**
-     * PID Values for Basic Balancing Algorithm
-     * 
-     * @param kP
-     * @param kI
-     * @param kD
-     * @param kFF
-     */
-    public Terms(double kP, double kI, double kD, double kFF) {
-        this.kP = kP;
-        this.kI = kI;
-        this.kD = kD;
-        this.kFF = kFF;
-    }
 
     public void pushToDashboard(String name) {
         SmartDashboard.putNumber(name + " P Gain", kP);
@@ -38,10 +27,4 @@ public class Terms {
         kD = SmartDashboard.getNumber(name + " D Gain", 0);
         kFF = SmartDashboard.getNumber(name + " Feed Forward", 0);
     }
-
-    @Override
-    public String toString() {
-        return String.format("kP: %f, kI: %f, kD: %f, kFF: %f\n", kP, kI, kD, kFF);
-    }
-
 }

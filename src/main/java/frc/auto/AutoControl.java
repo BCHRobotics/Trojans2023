@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 public class AutoControl {
     
-    public ArrayList<AutoComponent> components;
+    public ArrayList<AutoComponent> components = new ArrayList<>();
     private static AutoControl instance;
 
     public static AutoControl getInstance() {
@@ -15,28 +15,20 @@ public class AutoControl {
     }
 
     private AutoControl() {
-        this.components = new ArrayList<>();
         this.components.add(AutoOperate.getInstance());
-
 		AutoSelecter.getInstance();
     }
 
     public void runCycle() {
-		for (AutoComponent t : this.components) {
-			t.run();
-		}
+		this.components.forEach(AutoComponent::run);
 	}
 
 	public void disable() {
-		for (AutoComponent t : this.components) {
-			t.disable();
-		}
+		this.components.forEach(AutoComponent::disable);
 	}
 
 	public void initialize() {
-		for (AutoComponent t : this.components) {
-			t.firstCycle();
-		}
+		this.components.forEach(AutoComponent::firstCycle);
 	}
 
 }

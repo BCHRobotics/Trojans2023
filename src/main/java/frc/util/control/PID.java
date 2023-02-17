@@ -1,5 +1,8 @@
 package frc.util.control;
 
+import lombok.Getter;
+import lombok.Setter;
+
 public class PID {
 
     // Time Variables
@@ -11,10 +14,10 @@ public class PID {
     private double derivative = 0;
 
     // Input and Outpus
-    private double input = 0;
-    private double setpoint = 0;
-    private double error = 0;
-    private double output = 0;
+    @Setter private double input = 0;
+    @Setter private double target = 0;
+    @Getter private double error = 0;
+    @Getter private double output = 0;
 
     // PID coefficients
     private Terms constants;
@@ -41,17 +44,9 @@ public class PID {
         this.previousError = 0;
     }
 
-    public void setTarget(double target) {
-        this.setpoint = target;
-    }
-
-    public void setInput(double input) {
-        this.input = input;
-    }
-
     public void calculate() {
         // Calculate error, differnce between setpoint and measured value
-        this.error = this.setpoint - this.input;
+        this.error = this.target - this.input;
 
         // Calculate Integral and Derivative terms
         this.integral += this.error * this.deltaTime;
@@ -60,10 +55,6 @@ public class PID {
         // Generate control signal
         this.output = ((this.constants.kP * this.error) + (this.constants.kI * this.integral)
                 + (this.constants.kD * this.derivative)) + this.constants.kFF;
-    }
-
-    public double getOutput() {
-        return this.output;
     }
 
 }

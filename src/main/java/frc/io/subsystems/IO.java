@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 public class IO {
 
-    public ArrayList<IIO> subsystems;
+    public ArrayList<IIO> subsystems = new ArrayList<>();
     private static IO instance;
 
     public static IO getInstance() {
@@ -14,7 +14,6 @@ public class IO {
     }
 
     private IO() {
-        this.subsystems = new ArrayList<>();
         this.subsystems.add(DriveIO.getInstance());
         this.subsystems.add(ArmIO.getInstance());
         this.subsystems.add(ClawIO.getInstance());
@@ -24,27 +23,20 @@ public class IO {
      * Updates all robot inputs
      */
     public void updateInputs() {
-        for (IIO io : this.subsystems) {
-            io.updateInputs();
-        }
+        this.subsystems.forEach(IIO::updateInputs);
     }
 
     /**
      * Reset relative encoders to zero position
      */
     public void resetInputs() {
-        for (IIO io : subsystems) {
-            io.resetInputs();
-        }
+        this.subsystems.forEach(IIO::resetInputs);
     }
 
     /**
      * Disables all robot outputs
      */
     public void stopAllOutputs() {
-        for (IIO io : subsystems) {
-            io.stopAllOutputs();
-        }
+        this.subsystems.forEach(IIO::stopAllOutputs);
     }
-
 }

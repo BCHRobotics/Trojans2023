@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 public class TeleopControl {
 
-	public ArrayList<TeleopComponent> components;
+	public ArrayList<TeleopComponent> components = new ArrayList<>();
 	private static TeleopControl instance;
 
 	public static TeleopControl getInstance() {
@@ -15,28 +15,20 @@ public class TeleopControl {
 	}
 
 	private TeleopControl() {
-		this.components = new ArrayList<>();
-
 		this.components.add(TeleopDriver.getInstance());
 		this.components.add(TeleopOperator.getInstance());
 	}
 
 	public void initialize() {
-		for (TeleopComponent t : this.components) {
-			t.firstCycle();
-		}
+		this.components.forEach(TeleopComponent::firstCycle);
 	}
 
 	public void runCycle() {
-		for (TeleopComponent t : this.components) {
-			t.run();
-		}
+		this.components.forEach(TeleopComponent::run);
 	}
 
 	public void disable() {
-		for (TeleopComponent t : this.components) {
-			t.disable();
-		}
+		this.components.forEach(TeleopComponent::disable);
 	}
 
 }

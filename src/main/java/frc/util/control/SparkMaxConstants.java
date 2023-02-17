@@ -1,7 +1,11 @@
 package frc.util.control;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import lombok.AllArgsConstructor;
+import lombok.ToString;
 
+@AllArgsConstructor
+@ToString
 public class SparkMaxConstants {
     // #region turret
 
@@ -22,38 +26,6 @@ public class SparkMaxConstants {
     public double allowedErr;
 
     //// #endregion turret
-
-    /**
-     * PID Values for Spark MAX Controller
-     * 
-     * @param kP
-     * @param kI
-     * @param kD
-     * @param kIz
-     * @param kFF
-     * @param kMinOutput
-     * @param kMaxOutput
-     * @param slot
-     * @param minVel
-     * @param maxVel
-     * @param maxAcc
-     * @param allowedErr
-     */
-    public SparkMaxConstants(double kP, double kI, double kD, double kIz, double kFF, double kMinOutput,
-            double kMaxOutput, int slot, double minVel, double maxVel, double maxAcc, double allowedErr) {
-        this.kP = kP;
-        this.kI = kI;
-        this.kD = kD;
-        this.kIz = kIz;
-        this.kFF = kFF;
-        this.kMinOutput = kMinOutput;
-        this.kMaxOutput = kMaxOutput;
-        this.minVel = minVel;
-        this.maxVel = maxVel;
-        this.maxAcc = maxAcc;
-        this.allowedErr = allowedErr;
-        this.slot = slot;
-    }
 
     public void pushToDashboard(String name) {
         SmartDashboard.putNumber(name + " P Gain", kP);
@@ -97,13 +69,5 @@ public class SparkMaxConstants {
                 || this.kI != SmartDashboard.getNumber(name + " I Gain", 0)
                 || this.kD != SmartDashboard.getNumber(name + " D Gain", 0)
                 || this.kFF != SmartDashboard.getNumber(name + " Feed Forward", 0));
-    }
-
-    @Override
-    public String toString() {
-        return String.format("kP: %f, kI: %f, kD: %f, kIz: %f, kFF: %f\n" +
-                "kMaxOutput: %f, kMinOutput: %f\n" +
-                "maxVel: %f, minVel: %f, maxAcc: %f, allowedErr: %f",
-                kP, kI, kD, kIz, kFF, kMaxOutput, kMinOutput, maxVel, minVel, maxAcc, allowedErr);
     }
 }
