@@ -27,15 +27,15 @@ public class Constants {
         public static final int OPERATOR_PORT = 1;
 
         // Gyro constants
-        public static final SerialPort.Port GYRO_PORT = SerialPort.Port.kUSB;
+        public static final SerialPort.Port GYRO_PORT = SerialPort.Port.kMXP;
         public static final boolean GYRO_OUTPUT_INVERTED = true;
 
         // Drive motors inverted
-        public static final boolean DRIVE_INVERTED = true;
+        public static final boolean DRIVE_INVERTED = false;
         public static final boolean DRIVE_OUT_OF_SYNC = false;
 
         // Drive restrictions
-        public static final double MAX_OUTPUT = 0.6;
+        public static final double MAX_OUTPUT = 0.75;
         public static final double MAX_INTERVAL = 0.25;
 
         // Robot dimensions (inches) TODO: Correct Dimensions

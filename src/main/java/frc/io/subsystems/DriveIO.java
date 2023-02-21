@@ -69,8 +69,8 @@ public class DriveIO implements IIO {
         this.driveL1.setIdleMode(CANSparkMax.IdleMode.kCoast);
         this.driveR1.setIdleMode(CANSparkMax.IdleMode.kCoast);
 
-        this.driveL1.setSmartCurrentLimit(60, 10);
-        this.driveR1.setSmartCurrentLimit(60, 10);
+        this.driveL1.setSmartCurrentLimit(80, 20);
+        this.driveR1.setSmartCurrentLimit(80, 20);
 
         this.driveL1PidController = new SparkMaxPID(this.driveL1, Constants.DRIVEL1_CONSTANTS);
         this.driveR1PidController = new SparkMaxPID(this.driveR1, Constants.DRIVER1_CONSTANTS);
@@ -104,8 +104,8 @@ public class DriveIO implements IIO {
         this.driveL2.setIdleMode(this.driveL1.getIdleMode());
         this.driveR2.setIdleMode(this.driveR1.getIdleMode());
 
-        this.driveL2.setSmartCurrentLimit(60, 10);
-        this.driveR2.setSmartCurrentLimit(60, 10);
+        this.driveL2.setSmartCurrentLimit(80, 20);
+        this.driveR2.setSmartCurrentLimit(80, 20);
 
         this.driveL2.follow(this.driveL1, Constants.DRIVE_OUT_OF_SYNC);
         this.driveR2.follow(this.driveR1, Constants.DRIVE_OUT_OF_SYNC);
