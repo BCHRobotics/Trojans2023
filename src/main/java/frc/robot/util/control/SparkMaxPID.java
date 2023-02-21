@@ -9,6 +9,7 @@ import com.revrobotics.SparkMaxPIDController;
 public class SparkMaxPID {
 
     private SparkMaxPIDController pidController;
+    private SparkMaxConstants constants;
 
     public SparkMaxPID(CANSparkMax motor) {
         pidController = motor.getPIDController();
@@ -35,23 +36,17 @@ public class SparkMaxPID {
         pidController.setFF(c.kFF);
         pidController.setIZone(c.kIz);
         pidController.setOutputRange(c.minOut, c.maxOut);
+        this.constants = c;
     }
 
     public SparkMaxConstants getConstants() {
-        return new SparkMaxConstants(
-                pidController.getP(),
-                pidController.getI(),
-                pidController.getD(),
-                pidController.getIZone(),
-                pidController.getFF(),
-                pidController.getOutputMin(),
-                pidController.getOutputMax());
+        return this.constants;
     }
 
-    public void retrieveDashboardConstants(SparkMaxConstants constants, String label) {
-        if (constants.valuesChanged(label))
-            constants.getFromDashboard(label);
-        this.setConstants(constants);
+    public void retrieveDashboardConstants() {
+        if (this.constants.valuesChanged(this.constants.name))
+            this.constants.getFromDashboard(this.constants.name);
+        this.setConstants(this.constants);
     }
 
     public void setFeedbackDevice(RelativeEncoder device) {
@@ -72,6 +67,18 @@ public class SparkMaxPID {
 
     public void setVelocity(double speed) {
         pidController.setReference(speed, CANSparkMax.ControlType.kVelocity);
+    }
+
+    public void setPosition(double setPoint, double feedForward) {
+        pidController.setFF(feedForward);
+        pidController.setReference(setPoint, CANSparkMax.ControlType.kPosition);
+        this.setConstants(this.constants);
+    }
+
+    public void setVelocity(double speed, double feedForward) {
+        pidController.setFF(feedForward);
+        pidController.setReference(speed, CANSparkMax.ControlType.kVelocity);
+        this.setConstants(this.constants);
     }
 
 }

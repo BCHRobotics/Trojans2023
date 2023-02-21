@@ -4,67 +4,81 @@
 
 package frc.robot.subsystems;
 
-import com.kauailabs.navx.frc.AHRS;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
-import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
+import edu.wpi.first.math.trajectory.TrapezoidProfile;
+import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
 import edu.wpi.first.util.sendable.SendableBuilder;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants;
+import frc.robot.Constants.Chassis;
+import frc.robot.util.control.SparkMaxPID;
+import frc.robot.util.devices.Gyro;
 
-public class Drivetrain extends SubsystemBase {
+public final class Drivetrain extends SubsystemBase {
 
   /**
    * The Drivetrain subsystem incorporates the sensors and actuators attached to
    * the robots chassis.
    * These include four drive motors, a left and right encoder and a gyro.
    */
-  private final CANSparkMax frontLeftMotor = new CANSparkMax(Constants.Chassis.FRONT_LEFT_ID,
-      Constants.Chassis.MOTOR_TYPE);
-  private final CANSparkMax frontRightMotor = new CANSparkMax(Constants.Chassis.FRONT_RIGHT_ID,
-      Constants.Chassis.MOTOR_TYPE);
-  private final CANSparkMax backLeftMotor = new CANSparkMax(Constants.Chassis.BACK_LEFT_ID,
-      Constants.Chassis.MOTOR_TYPE);
-  private final CANSparkMax backRightMotor = new CANSparkMax(Constants.Chassis.BACK_RIGHT_ID,
-      Constants.Chassis.MOTOR_TYPE);
+  private static final CANSparkMax frontLeftMotor = new CANSparkMax(Chassis.FRONT_LEFT_ID,
+      Chassis.MOTOR_TYPE);
+  private static final CANSparkMax frontRightMotor = new CANSparkMax(Chassis.FRONT_RIGHT_ID,
+      Chassis.MOTOR_TYPE);
+  private static final CANSparkMax backLeftMotor = new CANSparkMax(Chassis.BACK_LEFT_ID,
+      Chassis.MOTOR_TYPE);
+  private static final CANSparkMax backRightMotor = new CANSparkMax(Chassis.BACK_RIGHT_ID,
+      Chassis.MOTOR_TYPE);
 
-  private final RelativeEncoder m_leftEncoder = frontLeftMotor.getEncoder();
-  private final RelativeEncoder m_rightEncoder = frontRightMotor.getEncoder();
+  private static final RelativeEncoder leftEncoder = frontLeftMotor.getEncoder();
+  private static final RelativeEncoder rightEncoder = frontRightMotor.getEncoder();
 
-  private final AHRS m_gyro = new AHRS();
+  private static final SparkMaxPID leftController = new SparkMaxPID(frontLeftMotor, Chassis.LEFT_PID_CONSTANTS);
+  private static final SparkMaxPID rightController = new SparkMaxPID(frontRightMotor, Chassis.RIGHT_PID_CONSTANTS);
 
-  private final DifferentialDrive m_drive = new DifferentialDrive(frontLeftMotor, frontRightMotor);
+  private static final TrapezoidProfile.Constraints motionProfileConstraints = new Constraints(260, 320);
+  private static final TrapezoidProfile leftMotionProfile = new TrapezoidProfile(motionProfileConstraints, null);
+  private static final TrapezoidProfile rightMotionProile = new TrapezoidProfile(motionProfileConstraints, null);
+
+  private static final Gyro gyro = new Gyro(Chassis.GYRO_PORT);
+
+  private static final DifferentialDrive drive = new DifferentialDrive(frontLeftMotor, frontRightMotor);
 
   /** Creates a new ExampleSubsystem. */
   public Drivetrain() {
+
     super();
 
-    frontLeftMotor.setInverted(Constants.Chassis.INVERTED);
-    frontRightMotor.setInverted(!Constants.Chassis.INVERTED);
+    frontLeftMotor.setInverted(Chassis.INVERTED);
+    frontRightMotor.setInverted(!Chassis.INVERTED);
 
-    backLeftMotor.follow(frontLeftMotor, Constants.Chassis.OUT_OF_SYNC);
-    backRightMotor.follow(frontRightMotor, Constants.Chassis.OUT_OF_SYNC);
+    backLeftMotor.follow(frontLeftMotor, Chassis.OUT_OF_SYNC);
+    backRightMotor.follow(frontRightMotor, Chassis.OUT_OF_SYNC);
 
-    m_leftEncoder.setPositionConversionFactor(Constants.Chassis.LEFT_POSITION_CONVERSION);
-    m_rightEncoder.setPositionConversionFactor(Constants.Chassis.RIGHT_POSITION_CONVERSION);
+    leftEncoder.setPositionConversionFactor(Chassis.LEFT_POSITION_CONVERSION);
+    rightEncoder.setPositionConversionFactor(Chassis.RIGHT_POSITION_CONVERSION);
 
-    m_leftEncoder.setVelocityConversionFactor(Constants.Chassis.LEFT_VELOCITY_CONVERSION);
-    m_rightEncoder.setVelocityConversionFactor(Constants.Chassis.RIGHT_VELOCITY_CONVERSION);
+    leftEncoder.setVelocityConversionFactor(Chassis.LEFT_VELOCITY_CONVERSION);
+    rightEncoder.setVelocityConversionFactor(Chassis.RIGHT_VELOCITY_CONVERSION);
 
-    addChild("Gyro", m_gyro);
+    leftController.setFeedbackDevice(leftEncoder);
+    rightController.setFeedbackDevice(rightEncoder);
+
+    addChild("Gyro", gyro);
   }
 
   /** The log method puts interesting information to the SmartDashboard. */
   public void log() {
-    SmartDashboard.putNumber("Left Distance", m_leftEncoder.getPosition());
-    SmartDashboard.putNumber("Right Distance", m_rightEncoder.getPosition());
-    SmartDashboard.putNumber("Left Speed", m_leftEncoder.getVelocity());
-    SmartDashboard.putNumber("Right Speed", m_rightEncoder.getVelocity());
-    SmartDashboard.putNumber("Gyro Pitch", m_gyro.getPitch());
+    SmartDashboard.putNumber("Left Distance", leftEncoder.getPosition());
+    SmartDashboard.putNumber("Right Distance", rightEncoder.getPosition());
+    SmartDashboard.putNumber("Left Speed", leftEncoder.getVelocity());
+    SmartDashboard.putNumber("Right Speed", rightEncoder.getVelocity());
+    SmartDashboard.putNumber("Gyro Pitch", gyro.getPitch());
+    Chassis.LEFT_PID_CONSTANTS.pushToDashboard("Left Drive");
+    Chassis.RIGHT_PID_CONSTANTS.pushToDashboard("Right Drive");
   }
 
   /**
@@ -73,15 +87,37 @@ public class Drivetrain extends SubsystemBase {
    * @param fwd the commanded forward movement
    * @param rot the commanded rotation
    */
-  public void drive(double fwd, double rot) {
-    m_drive.arcadeDrive(fwd, rot);
+  public void drive(double fwd, double rot, boolean sqr) {
+    drive.arcadeDrive(fwd, rot, sqr);
+  }
+
+  /**
+   * Sets chassis left and right position in inches
+   *
+   * @param leftPos  the commanded left movement
+   * @param rightPos the commanded right movement
+   */
+  public void setPosition(double leftPos, double rightPos) {
+    leftController.setPosition(leftPos);
+    rightController.setPosition(rightPos);
+  }
+
+  /**
+   * Sets chassis left and right velocity in inches / sec
+   *
+   * @param leftVel  the commanded left speed
+   * @param rightVel the commanded right speed
+   */
+  public void setVelocity(double leftVel, double rightVel) {
+    leftController.setVelocity(leftVel);
+    rightController.setVelocity(rightVel);
   }
 
   /** Resets the drive encoders and gyro to currently read a position of 0. */
   public void reset() {
-    m_gyro.reset();
-    m_leftEncoder.setPosition(0);
-    m_rightEncoder.setPosition(0);
+    gyro.reset();
+    Drivetrain.leftEncoder.setPosition(0);
+    Drivetrain.rightEncoder.setPosition(0);
   }
 
   /**
@@ -90,7 +126,7 @@ public class Drivetrain extends SubsystemBase {
    * @return The robots heading in degrees.
    */
   public double getHeading() {
-    return m_gyro.getAngle();
+    return Drivetrain.gyro.getAngle();
   }
 
   /**
@@ -99,7 +135,7 @@ public class Drivetrain extends SubsystemBase {
    * @return The robots pitch in degrees.
    */
   public double getPitch() {
-    return m_gyro.getPitch();
+    return Drivetrain.gyro.getPitch();
   }
 
   /**
@@ -108,7 +144,7 @@ public class Drivetrain extends SubsystemBase {
    * @return the left encoder readings
    */
   public double getLeftEncoderDistance() {
-    return m_leftEncoder.getPosition();
+    return Drivetrain.leftEncoder.getPosition();
   }
 
   /**
@@ -117,7 +153,25 @@ public class Drivetrain extends SubsystemBase {
    * @return the right encoder readings
    */
   public double getRightEncoderDistance() {
-    return m_rightEncoder.getPosition();
+    return Drivetrain.rightEncoder.getPosition();
+  }
+
+  /**
+   * Gets the velocity of the left encoder.
+   *
+   * @return the left encoder readings
+   */
+  public double getLeftEncoderVelocity() {
+    return Drivetrain.leftEncoder.getVelocity();
+  }
+
+  /**
+   * Gets the velocity of the right encoder.
+   *
+   * @return the right encoder readings
+   */
+  public double getRightEncoderVelocity() {
+    return Drivetrain.rightEncoder.getVelocity();
   }
 
   /**
@@ -126,7 +180,16 @@ public class Drivetrain extends SubsystemBase {
    * @return the average of the TWO encoder readings
    */
   public double getAverageEncoderDistance() {
-    return (m_leftEncoder.getPosition() + m_rightEncoder.getPosition()) / 2.0;
+    return (this.getLeftEncoderDistance() + this.getRightEncoderDistance()) / 2.0;
+  }
+
+  /**
+   * Gets the average velocity of the TWO encoders.
+   *
+   * @return the average of the TWO encoder readings
+   */
+  public double getAverageEncoderVelocity() {
+    return (this.getLeftEncoderVelocity() + this.getRightEncoderVelocity()) / 2.0;
   }
 
   /**
@@ -136,21 +199,7 @@ public class Drivetrain extends SubsystemBase {
    * @param maxOutput the maximum output to which the drive will be constrained
    */
   public void setMaxOutput(double maxOutput) {
-    m_drive.setMaxOutput(maxOutput);
-  }
-
-  /**
-   * Balance command factory method.
-   *
-   * @return a command
-   */
-  public CommandBase balanceCommand() {
-    // Inline construction of command goes here.
-    // Subsystem::RunOnce implicitly requires `this` subsystem.
-    return runOnce(
-        () -> {
-          /* one-time action goes here */
-        });
+    Drivetrain.drive.setMaxOutput(maxOutput);
   }
 
   /**
@@ -159,7 +208,7 @@ public class Drivetrain extends SubsystemBase {
    *
    * @return value of some boolean subsystem state, such as a digital sensor.
    */
-  public boolean balanced() {
+  public boolean isBalanced() {
     // Query gyro balnace complete.
     return this.getPitch() == 0;
   }
@@ -167,6 +216,9 @@ public class Drivetrain extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
+    super.periodic();
+    leftController.retrieveDashboardConstants();
+    rightController.retrieveDashboardConstants();
     this.log();
   }
 
@@ -174,8 +226,8 @@ public class Drivetrain extends SubsystemBase {
   public void initSendable(SendableBuilder builder) {
     super.initSendable(builder);
     // Publish encoder distances to telemetry.
-    builder.addDoubleProperty("Left Travel", m_leftEncoder::getPosition, null);
-    builder.addDoubleProperty("Right Travel", m_rightEncoder::getPosition, null);
+    builder.addDoubleProperty("Left Travel", Drivetrain.leftEncoder::getPosition, null);
+    builder.addDoubleProperty("Right Travel", Drivetrain.rightEncoder::getPosition, null);
   }
 
 }

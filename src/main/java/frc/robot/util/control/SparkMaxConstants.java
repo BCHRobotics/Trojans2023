@@ -9,6 +9,7 @@ public class SparkMaxConstants extends PIDConstants {
     public double kFF;
     public double minOut;
     public double maxOut;
+    public String name;
 
     /**
      * Control gain values for Spark MAX Controller
@@ -36,6 +37,7 @@ public class SparkMaxConstants extends PIDConstants {
         SmartDashboard.putNumber(name + " I Zone", kIz);
         SmartDashboard.putNumber(name + " Min Output", minOut);
         SmartDashboard.putNumber(name + " Max Output", maxOut);
+        this.name = name;
     }
 
     @Override

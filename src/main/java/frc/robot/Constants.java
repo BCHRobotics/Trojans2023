@@ -60,16 +60,22 @@ public final class Constants {
     // input diameter = Δd inches between center wheels ~~v~~
     public static final double TURNING_CONVERSION = ((16) * (Math.PI / 4)) / 90; // Arc length through 90° turn,
 
+    // Gyro constants
+    public static final SerialPort.Port GYRO_PORT = SerialPort.Port.kUSB;
+    public static final boolean GYRO_OUTPUT_INVERTED = true;
+
+    // Drive PID Constants
+    public static final SparkMaxConstants LEFT_PID_CONSTANTS = new SparkMaxConstants(0.00005, 0, 0, 0, 0.000185, -1,
+        1);
+    public static final SparkMaxConstants RIGHT_PID_CONSTANTS = new SparkMaxConstants(0.00005, 0, 0, 0, 0.000185, -1,
+        1);
+
   }
 
   // Controller deadzones
   public static final double CONTROLLER_DEADZONE = 0.1;
   public static final int DRIVER_PORT = 0;
   public static final int OPERATOR_PORT = 1;
-
-  // Gyro constants
-  public static final SerialPort.Port GYRO_PORT = SerialPort.Port.kUSB;
-  public static final boolean GYRO_OUTPUT_INVERTED = true;
 
   // Robot dimensions (inches) TODO: Correct Dimensions
   public static final class Dimensions {
@@ -125,12 +131,6 @@ public final class Constants {
 
   // Autonomous directory
   public static final String ROOT_DIRECTORY = "csv/";
-
-  // Drive PID Constants
-  public static final SparkMaxConstants DRIVEL1_CONSTANTS = new SparkMaxConstants(0.00005, 0, 0, 0, 0.000185, -1,
-      1);
-  public static final SparkMaxConstants DRIVER1_CONSTANTS = new SparkMaxConstants(0.00005, 0, 0, 0, 0.000185, -1,
-      1);
 
   // Mechanism PID Constants
   public static final FeedForwardConstants SHOULDER_FF_CONSTANTS = new FeedForwardConstants(0, 0, 0, 0);
