@@ -2,13 +2,17 @@ package frc.util.control;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
-public class SparkMaxConstants extends PIDConstants {
+public class SparkMaxConstants {
 
-    // Additional coefficients
+    // PID coefficients
+    public double kP;
+    public double kI;
+    public double kD;
     public double kIz;
     public double kFF;
     public double minOut;
     public double maxOut;
+    public String name;
 
     /**
      * Control gain values for Spark MAX Controller
@@ -22,40 +26,44 @@ public class SparkMaxConstants extends PIDConstants {
      * @param kMaxOutput
      */
     public SparkMaxConstants(double kP, double kI, double kD, double kIz, double kFF, double minOut, double maxOut) {
-        super(kP, kI, kD);
+        this.kP = kP;
+        this.kI = kI;
+        this.kD = kD;
         this.kIz = kIz;
         this.kFF = kFF;
         this.minOut = minOut;
         this.maxOut = maxOut;
     }
 
-    @Override
     public void pushToDashboard(String name) {
-        super.pushToDashboard(name);
-        SmartDashboard.putNumber(name + " Feed Forward", kFF);
-        SmartDashboard.putNumber(name + " I Zone", kIz);
-        SmartDashboard.putNumber(name + " Min Output", minOut);
-        SmartDashboard.putNumber(name + " Max Output", maxOut);
+        this.name = name;
+        SmartDashboard.putNumber(this.name + " P Gain", kP);
+        SmartDashboard.putNumber(this.name + " I Gain", kI);
+        SmartDashboard.putNumber(this.name + " D Gain", kD);
+        SmartDashboard.putNumber(this.name + " Feed Forward", kFF);
+        SmartDashboard.putNumber(this.name + " I Zone", kIz);
+        SmartDashboard.putNumber(this.name + " Min Output", minOut);
+        SmartDashboard.putNumber(this.name + " Max Output", maxOut);
     }
 
-    @Override
-    public void getFromDashboard(String name) {
-        super.getFromDashboard(name);
-        this.kFF = SmartDashboard.getNumber(name + " Feed Forward", 0);
-        this.kIz = SmartDashboard.getNumber(name + " I Zone", 0);
-        this.minOut = SmartDashboard.getNumber(name + " Min Output", 0);
-        this.maxOut = SmartDashboard.getNumber(name + " Max Output", 0);
+    public void getFromDashboard() {
+        this.kP = SmartDashboard.getNumber(this.name + " P Gain", 0);
+        this.kI = SmartDashboard.getNumber(this.name + " I Gain", 0);
+        this.kD = SmartDashboard.getNumber(this.name + " D Gain", 0);
+        this.kFF = SmartDashboard.getNumber(this.name + " Feed Forward", 0);
+        this.kIz = SmartDashboard.getNumber(this.name + " I Zone", 0);
+        this.minOut = SmartDashboard.getNumber(this.name + " Min Output", 0);
+        this.maxOut = SmartDashboard.getNumber(this.name + " Max Output", 0);
     }
 
-    @Override
-    public boolean valuesChanged(String name) {
-        return (this.kP != SmartDashboard.getNumber(name + " P Gain", 0)
-                || this.kI != SmartDashboard.getNumber(name + " I Gain", 0)
-                || this.kD != SmartDashboard.getNumber(name + " D Gain", 0)
-                || this.kFF != SmartDashboard.getNumber(name + " Feed Forward", 0)
-                || this.kIz != SmartDashboard.getNumber(name + " I Zone", 0)
-                || this.minOut != SmartDashboard.getNumber(name + " Min Output", 0)
-                || this.maxOut != SmartDashboard.getNumber(name + " Max Output", 0));
+    public boolean valuesChanged() {
+        return (this.kP != SmartDashboard.getNumber(this.name + " P Gain", 0)
+                || this.kI != SmartDashboard.getNumber(this.name + " I Gain", 0)
+                || this.kD != SmartDashboard.getNumber(this.name + " D Gain", 0)
+                || this.kFF != SmartDashboard.getNumber(this.name + " Feed Forward", 0)
+                || this.kIz != SmartDashboard.getNumber(this.name + " I Zone", 0)
+                || this.minOut != SmartDashboard.getNumber(this.name + " Min Output", 0)
+                || this.maxOut != SmartDashboard.getNumber(this.name + " Max Output", 0));
     }
 
     @Override

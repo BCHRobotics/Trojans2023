@@ -1,11 +1,12 @@
 package frc.subsystems;
 
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 // Import required classes
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.io.subsystems.DriveIO;
 import frc.robot.Constants;
-import frc.util.control.PIDControl;
+import frc.util.control.SmartControl;
 import frc.util.devices.Gyro;
 
 public class Drivetrain implements Subsystem {
@@ -24,11 +25,11 @@ public class Drivetrain implements Subsystem {
     private DriveIO driveIO;
 
     // Objects for balancing
-    private PIDControl gyroPid;
+    private PIDController gyroPid;
     private Gyro gyro;
 
     // Objects for target seeking
-    private PIDControl seekPID;
+    private PIDController seekPID;
 
     // Motion Profiling
     private final TrapezoidProfile.Constraints constraints = new TrapezoidProfile.Constraints(Constants.CHASIS_MAX_VEL,
@@ -72,12 +73,12 @@ public class Drivetrain implements Subsystem {
 
         if (gyroEnabled) {
             // Objects for balancing
-            this.gyroPid = new PIDControl(Constants.GYRO_CONSTANTS);
+            this.gyroPid = new SmartControl(Constants.GYRO_CONSTANTS).pidController;
             this.gyro = new Gyro(Constants.GYRO_PORT);
         }
 
         // Objects for target seeking
-        this.seekPID = new PIDControl(Constants.SEEK_CONSTANTS);
+        this.seekPID = new SmartControl(Constants.SEEK_CONSTANTS).pidController;
 
         this.firstCycle();
     }
@@ -87,7 +88,7 @@ public class Drivetrain implements Subsystem {
         if (!enabled)
             return;
         if (gyroEnabled)
-            this.gyro.resetGyroPosition();
+            this.gyro.reset();
         this.resetEncoderPosition();
     }
 

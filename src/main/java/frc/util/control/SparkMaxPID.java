@@ -37,6 +37,10 @@ public class SparkMaxPID {
         pidController.setOutputRange(c.minOut, c.maxOut);
     }
 
+    public void setFeedForward(Double f) {
+        pidController.setFF(f);
+    }
+
     public SparkMaxConstants getConstants() {
         return new SparkMaxConstants(
                 pidController.getP(),
@@ -48,9 +52,9 @@ public class SparkMaxPID {
                 pidController.getOutputMax());
     }
 
-    public void retrieveDashboardConstants(SparkMaxConstants constants, String label) {
-        if (constants.valuesChanged(label))
-            constants.getFromDashboard(label);
+    public void retrieveDashboardConstants(SparkMaxConstants constants) {
+        if (constants.valuesChanged())
+            constants.getFromDashboard();
         this.setConstants(constants);
     }
 

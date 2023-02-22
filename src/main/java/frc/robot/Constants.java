@@ -1,10 +1,7 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.SerialPort;
-import frc.util.control.ArmPresets;
-import frc.util.control.FeedForwardConstants;
-import frc.util.control.PIDConstants;
-import frc.util.control.SparkMaxConstants;
+import frc.util.control.*;
 
 public class Constants {
 
@@ -119,17 +116,15 @@ public class Constants {
                         1);
 
         // Mechanism PID Constants
-        public static final FeedForwardConstants SHOULDER_FF_CONSTANTS = new FeedForwardConstants(0, 0, 0, 0);
-        public static final FeedForwardConstants WRIST_FF_CONSTANTS = new FeedForwardConstants(0, 0, 0, 0);
-        public static final PIDConstants SHOULDER_PID_CONSTANTS = new PIDConstants(0, 0, 0);
-        public static final PIDConstants WRIST_PID_CONSTANTS = new PIDConstants(0, 0, 0);
+        public static final SmartConstants SHOULDER_CONTROL_CONSTANTS = new SmartConstants(0, 0, 0, 0, 0, 0, 0);
+        public static final SmartConstants WRIST_CONTROL_CONSTANTS = new SmartConstants(0, 0, 0, 0, 0, 0, 0);
 
         public static final SparkMaxConstants CLAW_CONSTANTS = new SparkMaxConstants(1e-4, 0, 0, 0, 0.000156, -1, 1);
 
         // Gyro PID Constants
-        public static final PIDConstants GYRO_CONSTANTS = new PIDConstants(0.005, 0.001, 0.0);
+        public static final SmartConstants GYRO_CONSTANTS = new SmartConstants(0, 0, 0, 0, 0.005, 0.001, 0);
 
         // Target seek PID Constants
-        public static final PIDConstants SEEK_CONSTANTS = new PIDConstants(0.0, 0.0, 0.0);
+        public static final SmartConstants SEEK_CONSTANTS = new SmartConstants(0, 0, 0, 0, 0, 0, 0);
 
 }

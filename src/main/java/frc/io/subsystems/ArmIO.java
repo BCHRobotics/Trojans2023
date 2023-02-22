@@ -4,11 +4,12 @@ package frc.io.subsystems;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import com.revrobotics.SparkMaxAbsoluteEncoder;
+import com.revrobotics.CANSparkMax.SoftLimitDirection;
 import com.revrobotics.SparkMaxAbsoluteEncoder.Type;
 
 // Import required Classes
 import frc.robot.Constants;
-import frc.util.control.Output;
+import frc.util.control.SmartControl;
 
 public class ArmIO implements IIO {
     private static ArmIO instance;
@@ -22,8 +23,8 @@ public class ArmIO implements IIO {
     private SparkMaxAbsoluteEncoder wristEncoder;
 
     // PID Controllers
-    private Output shoulderPidController;
-    private Output wristPidController;
+    private SmartControl shoulderPidController;
+    private SmartControl wristPidController;
 
     private boolean enabled = Constants.ARM_ENABLED;
 
@@ -47,7 +48,10 @@ public class ArmIO implements IIO {
         this.shoulder = new CANSparkMax(Constants.SHOULDER_ID, MotorType.kBrushless);
         this.wrist = new CANSparkMax(Constants.WRIST_ID, MotorType.kBrushless);
 
-        this.shoulderEncoder = wrist.getAbsoluteEncoder(Type.kDutyCycle);
+        this.shoulder.restoreFactoryDefaults();
+        this.wrist.restoreFactoryDefaults();
+
+        this.shoulderEncoder = shoulder.getAbsoluteEncoder(Type.kDutyCycle);
         this.wristEncoder = wrist.getAbsoluteEncoder(Type.kDutyCycle);
 
         this.shoulderEncoder.setInverted(Constants.SHOULDER_ENCODER_INVERTED);
@@ -56,17 +60,20 @@ public class ArmIO implements IIO {
         this.shoulderEncoder.setZeroOffset(Constants.SHOULDER_ENCODER_OFFSET);
         this.wristEncoder.setZeroOffset(Constants.WRIST_ENCODER_OFFSET);
 
-        this.shoulder.restoreFactoryDefaults();
-        this.wrist.restoreFactoryDefaults();
-
         this.shoulder.setIdleMode(CANSparkMax.IdleMode.kBrake);
         this.wrist.setIdleMode(CANSparkMax.IdleMode.kBrake);
 
-        this.shoulder.setSmartCurrentLimit(60, 10);
-        this.wrist.setSmartCurrentLimit(60, 10);
+        this.shoulder.enableSoftLimit(SoftLimitDirection.kReverse, true);
+        this.wrist.enableSoftLimit(SoftLimitDirection.kReverse, true);
 
-        this.shoulderPidController = new Output(Constants.SHOULDER_FF_CONSTANTS, Constants.SHOULDER_PID_CONSTANTS);
-        this.wristPidController = new Output(Constants.WRIST_FF_CONSTANTS, Constants.WRIST_PID_CONSTANTS);
+        this.shoulder.setSoftLimit(SoftLimitDirection.kReverse, 0);
+        this.wrist.setSoftLimit(SoftLimitDirection.kReverse, 0);
+
+        this.shoulder.setSmartCurrentLimit(80, 20);
+        this.wrist.setSmartCurrentLimit(80, 20);
+
+        this.shoulderPidController = new SmartControl(Constants.SHOULDER_CONTROL_CONSTANTS);
+        this.wristPidController = new SmartControl(Constants.WRIST_CONTROL_CONSTANTS);
 
         this.shoulder.setInverted(false);
         this.wrist.setInverted(false);
