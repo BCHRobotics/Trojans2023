@@ -81,30 +81,19 @@ public class Mechanism implements Subsystem {
     }
 
     /**
-     * Sets end effector height in inches
-     * 
-     * @param position
-     */
-    public void setWristHeight(double height) {
-        this.endHeight = height;
-        this.armPos = Math.acos(-(this.endHeight - Constants.SHOULDER_HEIGHT) / Constants.ARM_LENGTH);
-        this.wristPos = this.armPos + this.wristOffset;
-    }
-
-    /**
-     * @return End effector height in inches
-     */
-    public double getWristHeight() {
-        return this.endHeight;
-    }
-
-    /**
      * Sets wrist angle in degrees from zero position
      * 
      * @param angle
      */
     public void setWristAngle(double angle) {
         this.wristPos = angle;
+    }
+
+    /**
+     * @return Wrist angle in degrees from encoder
+     */
+    public double getWristAngle() {
+        return this.armIO.getWristEncoder().getPosition();
     }
 
     /**
@@ -124,10 +113,21 @@ public class Mechanism implements Subsystem {
     }
 
     /**
-     * @return Wrist angle in degrees from encoder
+     * Sets end effector height in inches
+     * 
+     * @param position
      */
-    public double getWristAngle() {
-        return this.armIO.getWristEncoder().getPosition();
+    public void setWristHeight(double height) {
+        this.endHeight = height;
+        this.armPos = Math.acos(-(this.endHeight - Constants.SHOULDER_HEIGHT) / Constants.ARM_LENGTH);
+        this.wristPos = this.armPos + this.wristOffset;
+    }
+
+    /**
+     * @return End effector height in inches
+     */
+    public double getWristHeight() {
+        return this.endHeight;
     }
 
     /**

@@ -23,8 +23,8 @@ public class ArmIO implements IIO {
     private SparkMaxAbsoluteEncoder wristEncoder;
 
     // PID Controllers
-    private SmartControl shoulderPidController;
-    private SmartControl wristPidController;
+    private SmartControl shoulderController;
+    private SmartControl wristController;
 
     private boolean enabled = Constants.ARM_ENABLED;
 
@@ -51,15 +51,6 @@ public class ArmIO implements IIO {
         this.shoulder.restoreFactoryDefaults();
         this.wrist.restoreFactoryDefaults();
 
-        this.shoulderEncoder = shoulder.getAbsoluteEncoder(Type.kDutyCycle);
-        this.wristEncoder = wrist.getAbsoluteEncoder(Type.kDutyCycle);
-
-        this.shoulderEncoder.setInverted(Constants.SHOULDER_ENCODER_INVERTED);
-        this.wristEncoder.setInverted(Constants.WRIST_ENCODER_INVERTED);
-
-        this.shoulderEncoder.setZeroOffset(Constants.SHOULDER_ENCODER_OFFSET);
-        this.wristEncoder.setZeroOffset(Constants.WRIST_ENCODER_OFFSET);
-
         this.shoulder.setIdleMode(CANSparkMax.IdleMode.kBrake);
         this.wrist.setIdleMode(CANSparkMax.IdleMode.kBrake);
 
@@ -72,14 +63,23 @@ public class ArmIO implements IIO {
         this.shoulder.setSmartCurrentLimit(80, 20);
         this.wrist.setSmartCurrentLimit(80, 20);
 
-        this.shoulderPidController = new SmartControl(Constants.SHOULDER_CONTROL_CONSTANTS);
-        this.wristPidController = new SmartControl(Constants.WRIST_CONTROL_CONSTANTS);
-
         this.shoulder.setInverted(false);
         this.wrist.setInverted(false);
 
+        this.shoulderEncoder = shoulder.getAbsoluteEncoder(Type.kDutyCycle);
+        this.wristEncoder = wrist.getAbsoluteEncoder(Type.kDutyCycle);
+
+        this.shoulderEncoder.setInverted(Constants.SHOULDER_ENCODER_INVERTED);
+        this.wristEncoder.setInverted(Constants.WRIST_ENCODER_INVERTED);
+
+        this.shoulderEncoder.setZeroOffset(Constants.SHOULDER_ENCODER_OFFSET);
+        this.wristEncoder.setZeroOffset(Constants.WRIST_ENCODER_OFFSET);
+
         this.shoulderEncoder.setPositionConversionFactor(Constants.SHOULDER_CONVERSION_FACTOR);
         this.wristEncoder.setPositionConversionFactor(Constants.WRIST_CONVERSION_FACTOR);
+
+        this.shoulderController = new SmartControl(Constants.SHOULDER_CONTROL_CONSTANTS);
+        this.wristController = new SmartControl(Constants.WRIST_CONTROL_CONSTANTS);
     }
 
     /**
@@ -91,7 +91,7 @@ public class ArmIO implements IIO {
         if (!enabled)
             return;
 
-        this.shoulder.set(shoulderPidController.calculate(angle, this.shoulderEncoder.getPosition(), 2));
+        this.shoulder.set(shoulderController.calculate(angle, this.shoulderEncoder.getPosition(), 2));
     }
 
     /**
@@ -103,7 +103,7 @@ public class ArmIO implements IIO {
         if (!enabled)
             return;
 
-        this.wrist.set(wristPidController.calculate(angle, this.wristEncoder.getPosition(), 2));
+        this.wrist.set(wristController.calculate(angle, this.wristEncoder.getPosition(), 2));
     }
 
     /**
@@ -153,10 +153,12 @@ public class ArmIO implements IIO {
             return;
     }
 
-    @Deprecated
+    @Override
     public void updateInputs() {
         if (!enabled)
             return;
+        this.shoulderController.updateConstants();
+        this.wristController.updateConstants();
     }
 
     /**
