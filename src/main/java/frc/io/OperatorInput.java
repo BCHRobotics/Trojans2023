@@ -28,6 +28,15 @@ public class OperatorInput {
     }
 
     /**
+     * Get the test offset in degrees -90° --> 90°
+     * 
+     * @return Test offset
+     */
+    public static double getTestOffset() {
+        return operator.getJoystick(Side.LEFT, Axis.Y) * 90;
+    }
+
+    /**
      * Get the Operator D-Pad input degrees 0°(N) --> 315°(NW)
      * 
      * @return Operator controller D-Pad input

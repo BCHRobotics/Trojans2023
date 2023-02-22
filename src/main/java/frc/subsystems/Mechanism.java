@@ -8,7 +8,7 @@ import java.lang.Math;
 public class Mechanism implements Subsystem {
     private static Mechanism instance;
 
-    private boolean enabled = (Constants.ARM_ENABLED && Constants.CLAW_ENABLED);
+    private boolean enabled = Constants.ARM_ENABLED; // (Constants.ARM_ENABLED && Constants.CLAW_ENABLED);
 
     private ArmIO armIO;
     private ClawIO clawIO;
@@ -55,7 +55,7 @@ public class Mechanism implements Subsystem {
             return;
 
         this.armIO.setShoulderAngle(this.armPos);
-        this.armIO.setWristAngle(this.wristPos + this.wristOffset);
+        this.armIO.setWristAngle(this.wristPos); // wrist offset
         this.clawIO.setClawPos(this.clawPos);
         this.clawIO.setPump(this.pumpMode);
     }

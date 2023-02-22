@@ -47,7 +47,10 @@ public class ArmIO implements IIO {
         this.shoulder = new CANSparkMax(Constants.SHOULDER_ID, MotorType.kBrushless);
         this.wrist = new CANSparkMax(Constants.WRIST_ID, MotorType.kBrushless);
 
-        this.shoulderEncoder = wrist.getAbsoluteEncoder(Type.kDutyCycle);
+        this.shoulder.restoreFactoryDefaults();
+        this.wrist.restoreFactoryDefaults();
+
+        this.shoulderEncoder = shoulder.getAbsoluteEncoder(Type.kDutyCycle);
         this.wristEncoder = wrist.getAbsoluteEncoder(Type.kDutyCycle);
 
         this.shoulderEncoder.setInverted(Constants.SHOULDER_ENCODER_INVERTED);
@@ -55,9 +58,6 @@ public class ArmIO implements IIO {
 
         this.shoulderEncoder.setZeroOffset(Constants.SHOULDER_ENCODER_OFFSET);
         this.wristEncoder.setZeroOffset(Constants.WRIST_ENCODER_OFFSET);
-
-        this.shoulder.restoreFactoryDefaults();
-        this.wrist.restoreFactoryDefaults();
 
         this.shoulder.setIdleMode(CANSparkMax.IdleMode.kBrake);
         this.wrist.setIdleMode(CANSparkMax.IdleMode.kBrake);

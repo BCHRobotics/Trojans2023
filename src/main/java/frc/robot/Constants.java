@@ -8,8 +8,8 @@ import frc.util.control.ArmPresets;
 public class Constants {
         // Subsytems toggle logic
         public static final boolean USING_DASHBOARD = true;
-        public static final boolean DRIVE_ENABLED = true;
-        public static final boolean ARM_ENABLED = false;
+        public static final boolean DRIVE_ENABLED = false;
+        public static final boolean ARM_ENABLED = true;
         public static final boolean CLAW_ENABLED = false;
         public static final boolean GYRO_ENABLED = false;
         public static final boolean MINI_BOT = false;
@@ -20,10 +20,10 @@ public class Constants {
         public static final int OPERATOR_PORT = 1;
 
         // Gyro port
-        public static final SerialPort.Port GYRO_PORT = SerialPort.Port.kUSB;
+        public static final SerialPort.Port GYRO_PORT = SerialPort.Port.kMXP;
 
         // Drive motors inverted
-        public static final boolean DRIVE_INVERTED = true;
+        public static final boolean DRIVE_INVERTED = false;
         public static final boolean DRIVE_OUT_OF_SYNC = false;
 
         // Drive restrictions
@@ -66,8 +66,8 @@ public class Constants {
         public static final boolean WRIST_ENCODER_INVERTED = false;
 
         // Robot arm encoder offset TODO: Correct encoder offsets
-        public static final double SHOULDER_ENCODER_OFFSET = 0;
-        public static final double WRIST_ENCODER_OFFSET = 0;
+        public static final double SHOULDER_ENCODER_OFFSET = 265.5266762;
+        public static final double WRIST_ENCODER_OFFSET = 266.5912771;
 
         // Position Balancing Limits
         public static final double BALANCE_LIMIT = 12;
