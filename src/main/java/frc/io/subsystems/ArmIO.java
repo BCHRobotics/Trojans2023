@@ -65,7 +65,7 @@ public class ArmIO implements IIO {
         this.wrist.setSmartCurrentLimit(80, 20);
 
         this.shoulder.setInverted(false);
-        this.wrist.setInverted(false);
+        this.wrist.setInverted(true);
 
         this.shoulderEncoder = shoulder.getAbsoluteEncoder(Type.kDutyCycle);
         this.wristEncoder = wrist.getAbsoluteEncoder(Type.kDutyCycle);
