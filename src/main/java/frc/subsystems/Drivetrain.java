@@ -5,7 +5,6 @@ import edu.wpi.first.math.trajectory.TrapezoidProfile;
 // Import required classes
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.io.subsystems.DriveIO;
-import frc.robot.Constants;
 import frc.robot.Constants.Chassis;
 import frc.robot.Constants.Features;
 import frc.util.control.SmartControl;
