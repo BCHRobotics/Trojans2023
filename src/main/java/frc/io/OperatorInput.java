@@ -19,12 +19,21 @@ public class OperatorInput {
     }
 
     /**
-     * Get the wrist offset in degrees -90° --> 90°
+     * Get the wrist offset in degrees 0° --> 90°
      * 
      * @return Wrist offset
      */
     public static double getWristOffset() {
-        return operator.getJoystick(Side.RIGHT, Axis.Y) * 90;
+        return Math.abs(operator.getJoystick(Side.RIGHT, Axis.Y) * 90);
+    }
+
+    /**
+     * Get the test offset in degrees 0° --> 90°
+     * 
+     * @return test offset
+     */
+    public static double getTestOffset() {
+        return Math.abs(operator.getJoystick(Side.LEFT, Axis.Y) * 90);
     }
 
     /**

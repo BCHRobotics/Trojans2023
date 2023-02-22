@@ -35,6 +35,9 @@ public class SparkMaxPID {
         pidController.setFF(c.kFF);
         pidController.setIZone(c.kIz);
         pidController.setOutputRange(c.minOut, c.maxOut);
+
+        pidController.setSmartMotionMaxVelocity(1000, 0);
+        pidController.setSmartMotionMaxAccel(2000, 0);
     }
 
     public void setFeedForward(Double f) {
@@ -71,7 +74,7 @@ public class SparkMaxPID {
     }
 
     public void setPosition(double setPoint) {
-        pidController.setReference(setPoint, CANSparkMax.ControlType.kPosition);
+        pidController.setReference(setPoint, CANSparkMax.ControlType.kSmartMotion);
     }
 
     public void setVelocity(double speed) {

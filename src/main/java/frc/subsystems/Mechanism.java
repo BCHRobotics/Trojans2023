@@ -46,7 +46,7 @@ public class Mechanism implements Subsystem {
     @Override
     public void run() {
         this.armIO.setShoulderAngle(this.armPos);
-        this.armIO.setWristAngle(this.wristPos + this.wristOffset);
+        this.armIO.setWristAngle(this.wristPos); // remember wrist offset
         this.clawIO.setClawPos(this.clawPos);
         this.clawIO.setPump(this.pumpMode);
     }

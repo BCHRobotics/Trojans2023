@@ -13,8 +13,8 @@ public class Constants {
 
                 // Subsytems toggle logic
                 public static final boolean USING_DASHBOARD = true;
-                public static final boolean DRIVE_ENABLED = true;
-                public static final boolean ARM_ENABLED = false;
+                public static final boolean DRIVE_ENABLED = false;
+                public static final boolean ARM_ENABLED = true;
                 public static final boolean CLAW_ENABLED = false;
                 public static final boolean GYRO_ENABLED = false;
                 public static final boolean MINI_BOT = false;
@@ -45,14 +45,14 @@ public class Constants {
                                                                                                 // revolutions
                 public static final double RIGHT_POSITION_CONVERSION = 70.5 / 33.904457092285156; // #inches / #revs
 
-                public static final double LEFT_VELOCITY_CONVERSION = LEFT_POSITION_CONVERSION / 60; // inches per
-                                                                                                     // second
-                public static final double RIGHT_VELOCITY_CONVERSION = RIGHT_POSITION_CONVERSION / 60; // #inches /
-                                                                                                       // 1 sec
+                public static final double LEFT_VELOCITY_CONVERSION = LEFT_POSITION_CONVERSION / 60.0; // inches per
+                                                                                                       // second
+                public static final double RIGHT_VELOCITY_CONVERSION = RIGHT_POSITION_CONVERSION / 60.0; // #inches /
+                                                                                                         // 1 sec
 
                 // input diameter = Δd inches between center wheels ~~v~~
-                public static final double TURNING_CONVERSION = ((TRACK_LENGTH) * (Math.PI / 4)) / 90; // Arc length
-                                                                                                       // through
+                public static final double TURNING_CONVERSION = ((TRACK_LENGTH) * (Math.PI / 4)) / 90.0; // Arc length
+                                                                                                         // through
                 // 90° turn,
                 // Drive PID Constants
                 public static final SparkMaxConstants LEFT_DRIVE_CONSTANTS = new SparkMaxConstants(0.00005, 0, 0, 0,
@@ -93,12 +93,21 @@ public class Constants {
                 public static final boolean WRIST_ENCODER_INVERTED = false;
 
                 // Robot arm ABSOLUTE encoder offset TODO: Correct encoder offsets
-                public static final double SHOULDER_ENCODER_OFFSET = 0;
-                public static final double WRIST_ENCODER_OFFSET = 0;
+                public static final double SHOULDER_ENCODER_OFFSET = 265.8371902;
+                public static final double WRIST_ENCODER_OFFSET = 172.0870650;
 
                 // Mechanism PID Constants
-                public static final SmartConstants SHOULDER_CONTROL_CONSTANTS = new SmartConstants(0, 0, 0, 0, 0, 0, 0);
-                public static final SmartConstants WRIST_CONTROL_CONSTANTS = new SmartConstants(0, 0, 0, 0, 0, 0, 0);
+                public static final SmartConstants SHOULDER_CONTROL_CONSTANTS = new SmartConstants(0, 0, 1, 1,
+                                7.1028E-05,
+                                0,
+                                5.1398E-05);
+                public static final SmartConstants WRIST_CONTROL_CONSTANTS = new SmartConstants(0, 0, 1, 1, 7.1028E-05,
+                                0,
+                                5.1398E-05);
+
+                public static final SparkMaxConstants TEST_CONTROL_CONSTANTS = new SparkMaxConstants(7.1028E-05, 0,
+                                5.1398E-05, 0, 0, -1,
+                                1);
 
         }
 
