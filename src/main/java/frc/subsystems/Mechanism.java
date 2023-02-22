@@ -2,7 +2,8 @@ package frc.subsystems;
 
 import frc.io.subsystems.ArmIO;
 import frc.io.subsystems.ClawIO;
-import frc.robot.Constants;
+import frc.robot.Constants.Arm;
+
 import java.lang.Math;
 
 public class Mechanism implements Subsystem {
@@ -119,7 +120,7 @@ public class Mechanism implements Subsystem {
      */
     public void setWristHeight(double height) {
         this.endHeight = height;
-        this.armPos = Math.acos(-(this.endHeight - Constants.SHOULDER_HEIGHT) / Constants.ARM_LENGTH);
+        this.armPos = Math.acos(-(this.endHeight - Arm.SHOULDER_HEIGHT) / Arm.ARM_LENGTH);
         this.wristPos = this.armPos + this.wristOffset;
     }
 

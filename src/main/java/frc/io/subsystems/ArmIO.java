@@ -8,7 +8,8 @@ import com.revrobotics.CANSparkMax.SoftLimitDirection;
 import com.revrobotics.SparkMaxAbsoluteEncoder.Type;
 
 // Import required Classes
-import frc.robot.Constants;
+import frc.robot.Constants.Arm;
+import frc.robot.Constants.Features;
 import frc.util.control.SmartControl;
 
 public class ArmIO implements IIO {
@@ -26,7 +27,7 @@ public class ArmIO implements IIO {
     private SmartControl shoulderController;
     private SmartControl wristController;
 
-    private boolean enabled = Constants.ARM_ENABLED;
+    private boolean enabled = Features.ARM_ENABLED;
 
     public static ArmIO getInstance() {
         if (instance == null) {
@@ -45,8 +46,8 @@ public class ArmIO implements IIO {
      * Initializes arm motors
      */
     private void initMotors() {
-        this.shoulder = new CANSparkMax(Constants.SHOULDER_ID, MotorType.kBrushless);
-        this.wrist = new CANSparkMax(Constants.WRIST_ID, MotorType.kBrushless);
+        this.shoulder = new CANSparkMax(Arm.SHOULDER_ID, MotorType.kBrushless);
+        this.wrist = new CANSparkMax(Arm.WRIST_ID, MotorType.kBrushless);
 
         this.shoulder.restoreFactoryDefaults();
         this.wrist.restoreFactoryDefaults();
@@ -69,17 +70,17 @@ public class ArmIO implements IIO {
         this.shoulderEncoder = shoulder.getAbsoluteEncoder(Type.kDutyCycle);
         this.wristEncoder = wrist.getAbsoluteEncoder(Type.kDutyCycle);
 
-        this.shoulderEncoder.setInverted(Constants.SHOULDER_ENCODER_INVERTED);
-        this.wristEncoder.setInverted(Constants.WRIST_ENCODER_INVERTED);
+        this.shoulderEncoder.setInverted(Arm.SHOULDER_ENCODER_INVERTED);
+        this.wristEncoder.setInverted(Arm.WRIST_ENCODER_INVERTED);
 
-        this.shoulderEncoder.setZeroOffset(Constants.SHOULDER_ENCODER_OFFSET);
-        this.wristEncoder.setZeroOffset(Constants.WRIST_ENCODER_OFFSET);
+        this.shoulderEncoder.setZeroOffset(Arm.SHOULDER_ENCODER_OFFSET);
+        this.wristEncoder.setZeroOffset(Arm.WRIST_ENCODER_OFFSET);
 
-        this.shoulderEncoder.setPositionConversionFactor(Constants.SHOULDER_CONVERSION_FACTOR);
-        this.wristEncoder.setPositionConversionFactor(Constants.WRIST_CONVERSION_FACTOR);
+        this.shoulderEncoder.setPositionConversionFactor(Arm.SHOULDER_CONVERSION_FACTOR);
+        this.wristEncoder.setPositionConversionFactor(Arm.WRIST_CONVERSION_FACTOR);
 
-        this.shoulderController = new SmartControl(Constants.SHOULDER_CONTROL_CONSTANTS);
-        this.wristController = new SmartControl(Constants.WRIST_CONTROL_CONSTANTS);
+        this.shoulderController = new SmartControl(Arm.SHOULDER_CONTROL_CONSTANTS);
+        this.wristController = new SmartControl(Arm.WRIST_CONTROL_CONSTANTS);
     }
 
     /**

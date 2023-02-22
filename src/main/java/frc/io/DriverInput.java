@@ -1,13 +1,14 @@
 package frc.io;
 
-import frc.robot.Constants;
+import frc.robot.Constants.Misc;
+import frc.robot.Constants.Chassis;
 import frc.util.devices.Controller;
 import frc.util.devices.Controller.Axis;
 import frc.util.devices.Controller.Side;
 
 public class DriverInput {
 
-	private static Controller driver = new Controller(Constants.DRIVER_PORT);
+	private static Controller driver = new Controller(Misc.DRIVER_PORT);
 
 	/**
 	 * Get the driver controller
@@ -24,8 +25,8 @@ public class DriverInput {
 	 * @return Max drive speed
 	 */
 	public static double getDriveMaxSpeed() {
-		return Constants.MAX_OUTPUT - (driver.getLeftTriggerAxis() * Constants.MAX_INTERVAL)
-				+ (driver.getRightTriggerAxis() * Constants.MAX_INTERVAL);
+		return Chassis.MAX_OUTPUT - (driver.getLeftTriggerAxis() * Chassis.MAX_INTERVAL)
+				+ (driver.getRightTriggerAxis() * Chassis.MAX_INTERVAL);
 	}
 
 	/**

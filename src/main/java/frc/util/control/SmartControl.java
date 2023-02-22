@@ -20,6 +20,10 @@ public class SmartControl {
         this.pidController = new PIDController(constants.kP, constants.kI, constants.kD);
     }
 
+    public SmartConstants getConstants() {
+        return this.constants;
+    }
+
     public double calculate(double setPoint, double feedback, double velFF) {
         return this.ffController.calculate(setPoint, velFF) + this.pidController.calculate(feedback, setPoint);
     }

@@ -4,7 +4,8 @@ import com.kauailabs.navx.frc.AHRS;
 
 import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.SerialPort;
-import frc.robot.Constants;
+import frc.robot.Constants.Chassis;
+import frc.robot.Constants.Features;
 
 public class Gyro extends AHRS {
 
@@ -29,10 +30,10 @@ public class Gyro extends AHRS {
      */
     @Override
     public float getPitch() {
-        if (!Constants.GYRO_ENABLED)
+        if (!Features.GYRO_ENABLED)
             return 0;
         // Inverts and Rounds pitch angle to 1 decimal
-        return (float) Math.round((super.getPitch() * (Constants.GYRO_OUTPUT_INVERTED ? -1 : 1) * 10) / 10);
+        return (float) Math.round((super.getPitch() * (Chassis.GYRO_OUTPUT_INVERTED ? -1 : 1) * 10) / 10);
     }
 
 }

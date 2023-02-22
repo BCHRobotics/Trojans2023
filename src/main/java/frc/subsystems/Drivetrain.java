@@ -6,6 +6,8 @@ import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.io.subsystems.DriveIO;
 import frc.robot.Constants;
+import frc.robot.Constants.Chassis;
+import frc.robot.Constants.Features;
 import frc.util.control.SmartControl;
 import frc.util.devices.Gyro;
 
@@ -13,8 +15,8 @@ public class Drivetrain implements Subsystem {
 
     private static Drivetrain instance;
 
-    private boolean enabled = Constants.DRIVE_ENABLED;
-    private boolean gyroEnabled = Constants.GYRO_ENABLED;
+    private boolean enabled = Features.DRIVE_ENABLED;
+    private boolean gyroEnabled = Features.GYRO_ENABLED;
 
     private enum DriveState {
         OUTPUT,
@@ -32,8 +34,8 @@ public class Drivetrain implements Subsystem {
     private PIDController seekPID;
 
     // Motion Profiling
-    private final TrapezoidProfile.Constraints constraints = new TrapezoidProfile.Constraints(Constants.CHASIS_MAX_VEL,
-            Constants.CHASIS_MAX_ACCEL);
+    private final TrapezoidProfile.Constraints constraints = new TrapezoidProfile.Constraints(Chassis.MAX_VEL,
+            Chassis.MAX_ACCEL);
     private TrapezoidProfile.State leftGoal = new TrapezoidProfile.State();
     private TrapezoidProfile.State leftSetpoint = new TrapezoidProfile.State();
     private TrapezoidProfile.State rightGoal = new TrapezoidProfile.State();
@@ -73,12 +75,12 @@ public class Drivetrain implements Subsystem {
 
         if (gyroEnabled) {
             // Objects for balancing
-            this.gyroPid = new SmartControl(Constants.GYRO_CONSTANTS).pidController;
-            this.gyro = new Gyro(Constants.GYRO_PORT);
+            this.gyroPid = new SmartControl(Chassis.GYRO_CONSTANTS).pidController;
+            this.gyro = new Gyro(Chassis.GYRO_PORT);
         }
 
         // Objects for target seeking
-        this.seekPID = new SmartControl(Constants.SEEK_CONSTANTS).pidController;
+        this.seekPID = new SmartControl(Chassis.SEEK_CONSTANTS).pidController;
 
         this.firstCycle();
     }
@@ -89,6 +91,10 @@ public class Drivetrain implements Subsystem {
             return;
         if (gyroEnabled)
             this.gyro.reset();
+
+        Chassis.LEFT_DRIVE_CONSTANTS.pushToDashboard("Drive Left");
+        Chassis.RIGHT_DRIVE_CONSTANTS.pushToDashboard("Drive Right");
+
         this.resetEncoderPosition();
     }
 
@@ -105,8 +111,8 @@ public class Drivetrain implements Subsystem {
         var leftProfile = new TrapezoidProfile(this.constraints, this.leftGoal, this.leftSetpoint);
         var rightProfile = new TrapezoidProfile(this.constraints, this.rightGoal, this.righttSetpoint);
 
-        this.leftSetpoint = leftProfile.calculate(Constants.LOOP_TIME);
-        this.righttSetpoint = rightProfile.calculate(Constants.LOOP_TIME);
+        this.leftSetpoint = leftProfile.calculate(Features.LOOP_TIME);
+        this.righttSetpoint = rightProfile.calculate(Features.LOOP_TIME);
 
         this.posLeft = this.leftSetpoint.position;
         this.posRight = this.righttSetpoint.position;
@@ -296,8 +302,8 @@ public class Drivetrain implements Subsystem {
 
         this.currentState = DriveState.POSITION;
 
-        this.setPosition(this.getLeftPosition() + (angle * Constants.CHASIS_TURN_CONVERSION),
-                this.getRightPosition() - (angle * Constants.CHASIS_TURN_CONVERSION));
+        this.setPosition(this.getLeftPosition() + (angle * Chassis.TURNING_CONVERSION),
+                this.getRightPosition() - (angle * Chassis.TURNING_CONVERSION));
     }
 
     /**

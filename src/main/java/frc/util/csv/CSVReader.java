@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
-import frc.robot.Constants;
+import frc.robot.Constants.Misc;
 
 public final class CSVReader {
 
@@ -16,7 +16,7 @@ public final class CSVReader {
 
     public static List<List<Double>> convertToArrayList(String fileName) throws FileNotFoundException {
         List<List<Double>> records = new ArrayList<>();
-        path = new String(path = Constants.ROOT_DIRECTORY + fileName + fileType);
+        path = new String(path = Misc.ROOT_DIRECTORY + fileName + fileType);
         System.out.println(path);
         try (Scanner scanner = new Scanner(new File(path));) {
             scanner.nextLine();
