@@ -3,6 +3,7 @@ package frc.subsystems;
 import frc.io.subsystems.ArmIO;
 import frc.io.subsystems.ClawIO;
 import frc.robot.Constants.Arm;
+import frc.robot.Constants.Misc;
 
 import java.lang.Math;
 
@@ -17,8 +18,11 @@ public class Mechanism implements Subsystem {
 
     private double armPos;
     private double wristPos;
-    private double clawPos;
+    private double clawAngle;
     private boolean pumpMode;
+
+    private boolean coneLED, cubeLED, blinkCone, blinkCube;
+    private long previousTime, currentTime;
 
     /**
      * Get the instance of the Mechanism, if none create a new instance
@@ -47,8 +51,24 @@ public class Mechanism implements Subsystem {
     public void run() {
         this.armIO.setShoulderAngle(this.armPos);
         this.armIO.setWristAngle(this.wristPos); // remember wrist offset
-        this.clawIO.setClawPos(this.clawPos);
-        this.clawIO.setPump(this.pumpMode);
+        this.clawIO.setClawAngle(this.clawAngle);
+        this.clawIO.setLeftPump(this.pumpMode);
+        this.clawIO.setMidPump(this.pumpMode);
+        this.clawIO.setRightPump(this.pumpMode);
+        this.clawIO.setLeftValve(this.pumpMode);
+        this.clawIO.setRightValve(this.pumpMode);
+
+        this.currentTime = System.currentTimeMillis();
+
+        if ((this.currentTime >= this.previousTime + Misc.BLINK_INTERVAL)) {
+            if (this.blinkCone)
+                this.coneLED = !this.coneLED;
+            if (this.blinkCube)
+                this.cubeLED = !this.cubeLED;
+            this.previousTime = this.currentTime;
+        }
+
+        this.clawIO.setStatusLED(this.coneLED, this.cubeLED);
     }
 
     @Override
@@ -132,18 +152,18 @@ public class Mechanism implements Subsystem {
     }
 
     /**
-     * Sets Claw position in actuator inches
+     * Sets Claw position in actuator degrees
      * 
-     * @param position
+     * @param angle
      */
-    public void setClawPos(double position) {
-        this.clawPos = position;
+    public void setClawAngle(double angle) {
+        this.clawAngle = angle;
     }
 
     /**
-     * @return Claw open vs closed distance
+     * @return Claw open vs closed angle
      */
-    public double getClawPos() {
+    public double getClawAngle() {
         return this.clawIO.getClawEncoder().getPosition();
     }
 
@@ -163,5 +183,40 @@ public class Mechanism implements Subsystem {
      */
     public boolean getSuctionMode() {
         return this.pumpMode;
+    }
+
+    /**
+     * Set status led state
+     * 
+     * @param state
+     */
+    public void setStatusLED(Misc.StatusLED state) {
+        resetStatusLED();
+
+        switch (state) {
+            case CONE:
+                this.coneLED = true;
+                break;
+            case CUBE:
+                this.cubeLED = true;
+                break;
+            case CONE_BLINK:
+                this.blinkCone = true;
+                break;
+            case CUBE_BLINK:
+                this.blinkCube = true;
+                break;
+            default:
+                resetStatusLED();
+                break;
+        }
+
+    }
+
+    private void resetStatusLED() {
+        this.coneLED = false;
+        this.cubeLED = false;
+        this.blinkCone = false;
+        this.blinkCube = false;
     }
 }

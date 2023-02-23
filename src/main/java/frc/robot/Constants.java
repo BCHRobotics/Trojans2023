@@ -1,6 +1,5 @@
 package frc.robot;
 
-import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.SerialPort;
 import frc.util.control.*;
 
@@ -81,7 +80,7 @@ public class Constants {
                 // Robot dimensions (inches) TODO: Correct Dimensions
                 public static final double SHOULDER_HEIGHT = 40;
                 public static final double ARM_LENGTH = 36;
-                public static final double WRIST_LENGTH = 12;
+                public static final double FOREARM_LENGTH = 12;
 
                 // Robot arm conversion factors
                 public static final double SHOULDER_CONVERSION_FACTOR = 360; // Convert revs to degrees
@@ -105,10 +104,15 @@ public class Constants {
 
         public static final class Claw {
                 // CAN ID(s) for End Effector
-                public static final int CLAW_ID = 30;
-                public static final int PUMP_ID = 31;
+                public static final int MOTOR_ID = 30;
+                public static final int LEFT_PUMP_ID = 31;
+                public static final int MID_PUMP_ID = 32;
+                public static final int RIGHT_PUMP_ID = 33;
 
-                public static final double CLAW_CONVERSION_FACTOR = 1 / 1; // #inches / #revs
+                public static final int LEFT_BLEED_VALVE = 0;
+                public static final int RIGHT_BLEED_VALVE = 1;
+
+                public static final double CLAW_CONVERSION_FACTOR = 1 / 1; // #degrees / #revs
 
                 public static final SparkMaxConstants CLAW_CONSTANTS = new SparkMaxConstants(
                                 1e-4, 0, 0, 0, 0.000156, -1, 1, 0, 0, 0, 0, 0);
@@ -120,9 +124,22 @@ public class Constants {
                 public static final int DRIVER_PORT = 0;
                 public static final int OPERATOR_PORT = 1;
 
-                // Game piece actuator presets in inches
-                public static final double CUBE_PRESET = 7;
-                public static final double CONE_PRESET = 1;
+                // Game piece actuator presets in degrees
+                public static final double CUBE_PRESET = 80;
+                public static final double CONE_PRESET = 22;
+
+                public static final int CUBE_LED_PORT = 0;
+                public static final int CONE_LED_PORT = 1;
+
+                public static final int BLINK_INTERVAL = 1000; // milliseconds
+
+                public static enum StatusLED {
+                        CONE,
+                        CUBE,
+                        CONE_BLINK,
+                        CUBE_BLINK,
+                        OFF
+                }
 
                 // Arm preset profiles
                 public static final ArmPresets GROUND_PICKUP = new ArmPresets(0, 0);

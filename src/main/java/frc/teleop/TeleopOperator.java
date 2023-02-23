@@ -36,12 +36,12 @@ public class TeleopOperator implements TeleopComponent {
 
         SmartDashboard.putNumber("Max Drive Speed %", 100);
 
-        // if (OperatorInput.getGamePiece() == 0)
-        // this.mech.setClawPos(Misc.CONE_PRESET);
-        // else if (OperatorInput.getGamePiece() == 270)
-        // this.mech.setClawPos(Misc.CUBE_PRESET);
-        // else
-        // this.mech.resetPosition();
+        if (OperatorInput.getGamePiece() == 0)
+            this.mech.setClawAngle(Misc.CONE_PRESET);
+        else if (OperatorInput.getGamePiece() == 270)
+            this.mech.setClawAngle(Misc.CUBE_PRESET);
+        else if (OperatorInput.getGamePiece() == 180)
+            this.mech.resetPosition();
 
         // this.mech.setWristOffset(OperatorInput.getWristOffset());
 

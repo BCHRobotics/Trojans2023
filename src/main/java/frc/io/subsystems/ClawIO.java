@@ -5,9 +5,13 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
+import edu.wpi.first.wpilibj.DigitalOutput;
+import edu.wpi.first.wpilibj.PneumaticsModuleType;
+import edu.wpi.first.wpilibj.Solenoid;
 // Import required Classes
 import frc.robot.Constants.Claw;
 import frc.robot.Constants.Features;
+import frc.robot.Constants.Misc;
 import frc.util.control.SparkMaxConstants;
 import frc.util.control.SparkMaxPID;
 
@@ -15,8 +19,18 @@ public class ClawIO implements IIO {
     private static ClawIO instance;
 
     // Claw motors
-    private CANSparkMax claw;
-    private CANSparkMax pump;
+    private CANSparkMax grip;
+    private CANSparkMax leftPump;
+    private CANSparkMax midPump;
+    private CANSparkMax rightPump;
+
+    // Claw solenoids
+    private Solenoid leftBleedValve;
+    private Solenoid rightBleedValve;
+
+    // Claw Status LEDs
+    private DigitalOutput coneLED;
+    private DigitalOutput cubeLED;
 
     // Claw encoders
     private RelativeEncoder clawEncoder;
@@ -46,36 +60,44 @@ public class ClawIO implements IIO {
      * Initializes claw motors
      */
     private void initMotors() {
-        this.claw = new CANSparkMax(Claw.CLAW_ID, MotorType.kBrushless);
-        this.pump = new CANSparkMax(Claw.PUMP_ID, MotorType.kBrushed);
+        this.grip = new CANSparkMax(Claw.MOTOR_ID, MotorType.kBrushless);
+        this.leftPump = new CANSparkMax(Claw.LEFT_PUMP_ID, MotorType.kBrushed);
+        this.midPump = new CANSparkMax(Claw.MID_PUMP_ID, MotorType.kBrushed);
+        this.rightPump = new CANSparkMax(Claw.RIGHT_PUMP_ID, MotorType.kBrushed);
 
-        this.clawEncoder = claw.getEncoder();
+        this.leftBleedValve = new Solenoid(PneumaticsModuleType.CTREPCM, Claw.LEFT_BLEED_VALVE);
+        this.rightBleedValve = new Solenoid(PneumaticsModuleType.CTREPCM, Claw.RIGHT_BLEED_VALVE);
 
-        this.claw.restoreFactoryDefaults();
+        this.coneLED = new DigitalOutput(Misc.CONE_LED_PORT);
+        this.cubeLED = new DigitalOutput(Misc.CUBE_LED_PORT);
 
-        this.claw.setIdleMode(CANSparkMax.IdleMode.kBrake);
+        this.clawEncoder = grip.getEncoder();
 
-        this.claw.setSmartCurrentLimit(60, 10);
+        this.grip.restoreFactoryDefaults();
 
-        this.clawPidController = new SparkMaxPID(this.claw, this.clawConstants);
+        this.grip.setIdleMode(CANSparkMax.IdleMode.kBrake);
+
+        this.grip.setSmartCurrentLimit(60, 10);
+
+        this.clawPidController = new SparkMaxPID(this.grip, this.clawConstants);
 
         this.clawPidController.setFeedbackDevice(clawEncoder);
 
-        this.claw.setInverted(false);
+        this.grip.setInverted(false);
 
         this.clawEncoder.setPositionConversionFactor(Claw.CLAW_CONVERSION_FACTOR);
     }
 
     /**
-     * Sets claw opening in inches
+     * Sets claw opening in degrees
      * 
      * @param position
      */
-    public void setClawPos(double position) {
+    public void setClawAngle(double angle) {
         if (!enabled)
             return;
 
-        this.clawPidController.setPosition(position);
+        this.clawPidController.setSmartPosition(angle);
     }
 
     /**
@@ -83,11 +105,73 @@ public class ClawIO implements IIO {
      * 
      * @param state
      */
-    public void setPump(boolean state) {
+    public void setLeftPump(boolean state) {
         if (!enabled)
             return;
 
-        this.pump.set(state ? 1 : 0);
+        this.leftPump.set(state ? 1 : 0);
+    }
+
+    /**
+     * Sets pneumatic suction state boolean
+     * 
+     * @param state
+     */
+    public void setMidPump(boolean state) {
+        if (!enabled)
+            return;
+
+        this.midPump.set(state ? 1 : 0);
+    }
+
+    /**
+     * Sets pneumatic suction state boolean
+     * 
+     * @param state
+     */
+    public void setRightPump(boolean state) {
+        if (!enabled)
+            return;
+
+        this.rightPump.set(state ? 1 : 0);
+    }
+
+    /**
+     * Sets pneumatic bleed valve state boolean
+     * 
+     * @param state
+     */
+    public void setLeftValve(boolean state) {
+        if (!enabled)
+            return;
+
+        this.leftBleedValve.set(!state);
+    }
+
+    /**
+     * Sets pneumatic bleed valve state boolean
+     * 
+     * @param state
+     */
+    public void setRightValve(boolean state) {
+        if (!enabled)
+            return;
+
+        this.rightBleedValve.set(!state);
+    }
+
+    /**
+     * Sets status LED
+     * 
+     * @param cone
+     * @param cube
+     */
+    public void setStatusLED(boolean cone, boolean cube) {
+        if (!enabled)
+            return;
+
+        this.coneLED.set(cone);
+        this.cubeLED.set(cube);
     }
 
     /**
@@ -109,7 +193,12 @@ public class ClawIO implements IIO {
         if (!enabled)
             return;
 
-        this.clawPidController.setPosition(0);
+        this.setClawAngle(0);
+        this.setLeftPump(false);
+        this.setMidPump(false);
+        this.setRightPump(false);
+        this.setLeftValve(false);
+        this.setRightValve(false);
     }
 
     /**
@@ -140,7 +229,9 @@ public class ClawIO implements IIO {
         if (!enabled)
             return;
 
-        this.claw.disable();
-        this.pump.disable();
+        this.grip.disable();
+        this.leftPump.disable();
+        this.midPump.disable();
+        this.rightPump.disable();
     }
 }
