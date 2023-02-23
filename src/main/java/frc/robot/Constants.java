@@ -1,5 +1,6 @@
 package frc.robot;
 
+import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.SerialPort;
 import frc.util.control.*;
 
@@ -55,12 +56,10 @@ public class Constants {
                                                                                                          // through
                 // 90° turn,
                 // Drive PID Constants
-                public static final SparkMaxConstants LEFT_DRIVE_CONSTANTS = new SparkMaxConstants(0.00005, 0, 0, 0,
-                                0.000185, -1,
-                                1);
-                public static final SparkMaxConstants RIGHT_DRIVE_CONSTANTS = new SparkMaxConstants(0.00005, 0, 0, 0,
-                                0.000185, -1,
-                                1);
+                public static final SparkMaxConstants LEFT_DRIVE_CONSTANTS = new SparkMaxConstants(
+                                0.00005, 0, 0, 0, 0.000185, -1, 1, 0, 0, 0, 0, 0);
+                public static final SparkMaxConstants RIGHT_DRIVE_CONSTANTS = new SparkMaxConstants(
+                                0.00005, 0, 0, 0, 0.000185, -1, 1, 0, 0, 0, 0, 0);
 
                 // Gyro constants
                 public static final SerialPort.Port GYRO_PORT = SerialPort.Port.kMXP;
@@ -81,7 +80,7 @@ public class Constants {
 
                 // Robot dimensions (inches) TODO: Correct Dimensions
                 public static final double SHOULDER_HEIGHT = 40;
-                public static final double ARM_LENGTH = 30;
+                public static final double ARM_LENGTH = 36;
                 public static final double WRIST_LENGTH = 12;
 
                 // Robot arm conversion factors
@@ -97,17 +96,10 @@ public class Constants {
                 public static final double WRIST_ENCODER_OFFSET = 172.0870650;
 
                 // Mechanism PID Constants
-                public static final SmartConstants SHOULDER_CONTROL_CONSTANTS = new SmartConstants(0, 0, 1, 1,
-                                7.1028E-05,
-                                0,
-                                5.1398E-05);
-                public static final SmartConstants WRIST_CONTROL_CONSTANTS = new SmartConstants(0, 0, 1, 1, 7.1028E-05,
-                                0,
-                                5.1398E-05);
-
-                public static final SparkMaxConstants TEST_CONTROL_CONSTANTS = new SparkMaxConstants(7.1028E-05, 0,
-                                5.1398E-05, 0, 0, -1,
-                                1);
+                public static final SparkMaxConstants SHOULDER_CONTROL_CONSTANTS = new SparkMaxConstants(
+                                7.1028E-05, 0, 5.1398E-05, 0, 0.000185, -1, 1, 0, 0, 2000, 4000, 0.1);
+                public static final SparkMaxConstants WRIST_CONTROL_CONSTANTS = new SparkMaxConstants(
+                                7.1028E-05, 0, 5.1398E-05, 0, 0.000185, -1, 1, 0, 0, 2000, 4000, 0.1);
 
         }
 
@@ -118,8 +110,8 @@ public class Constants {
 
                 public static final double CLAW_CONVERSION_FACTOR = 1 / 1; // #inches / #revs
 
-                public static final SparkMaxConstants CLAW_CONSTANTS = new SparkMaxConstants(1e-4, 0, 0, 0, 0.000156,
-                                -1, 1);
+                public static final SparkMaxConstants CLAW_CONSTANTS = new SparkMaxConstants(
+                                1e-4, 0, 0, 0, 0.000156, -1, 1, 0, 0, 0, 0, 0);
         }
 
         public static final class Misc {
@@ -149,7 +141,7 @@ public class Constants {
                 public static final String TEACH_MODE_FILE_NAME = "LIVE_RECORD" + "_" + VERSION;
 
                 // Autonomous directory
-                public static final String ROOT_DIRECTORY = "csv/";
+                public static final String ROOT_DIRECTORY = "/home/lvuser/deploy/";// "csv/";
         }
 
 }
