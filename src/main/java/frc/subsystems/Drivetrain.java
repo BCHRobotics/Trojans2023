@@ -2,10 +2,10 @@ package frc.subsystems;
 
 // Import required classes
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import frc.Constants.Chassis;
-import frc.Constants.Features;
 import frc.peripherals.robot.DriveIO;
 import frc.peripherals.robot.Gyro;
+import frc.robot.Constants.Chassis;
+import frc.robot.Constants.Features;
 import frc.util.control.SmartControl;
 
 public class Drivetrain implements Subsystem {

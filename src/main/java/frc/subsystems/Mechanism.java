@@ -1,9 +1,9 @@
 package frc.subsystems;
 
-import frc.Constants.Arm;
-import frc.Constants.Misc;
 import frc.peripherals.robot.ArmIO;
 import frc.peripherals.robot.ClawIO;
+import frc.robot.Constants.Arm;
+import frc.robot.Constants.Misc;
 import frc.util.control.ArmPresets;
 
 import java.lang.Math;

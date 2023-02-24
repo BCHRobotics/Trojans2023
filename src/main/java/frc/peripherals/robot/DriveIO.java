@@ -6,8 +6,8 @@ import com.revrobotics.RelativeEncoder;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import frc.Constants.Chassis;
-import frc.Constants.Features;
+import frc.robot.Constants.Chassis;
+import frc.robot.Constants.Features;
 import frc.util.control.SparkMaxPID;
 
 public class DriveIO implements IIO {

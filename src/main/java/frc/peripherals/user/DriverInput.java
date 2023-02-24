@@ -1,10 +1,10 @@
 package frc.peripherals.user;
 
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
-import frc.Constants.Chassis;
-import frc.Constants.Misc;
 import frc.peripherals.user.Controller.Axis;
 import frc.peripherals.user.Controller.Side;
+import frc.robot.Constants.Chassis;
+import frc.robot.Constants.Misc;
 
 public final class DriverInput {
 

@@ -3,7 +3,7 @@ package frc.util.imaging;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import frc.Constants.Misc;
+import frc.robot.Constants.Misc;
 
 public class Limelight {
     private static Limelight instance;

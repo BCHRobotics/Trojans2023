@@ -2,8 +2,8 @@ package frc.teleop;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.subsystems.Mechanism;
-import frc.Constants.Misc;
 import frc.peripherals.user.OperatorInput;
+import frc.robot.Constants.Misc;
 
 public class TeleopOperator implements TeleopComponent {
     private static TeleopOperator instance;

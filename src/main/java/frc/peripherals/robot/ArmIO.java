@@ -6,8 +6,8 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import com.revrobotics.SparkMaxAbsoluteEncoder;
 import com.revrobotics.SparkMaxAbsoluteEncoder.Type;
 
-import frc.Constants.Arm;
-import frc.Constants.Features;
+import frc.robot.Constants.Arm;
+import frc.robot.Constants.Features;
 import frc.util.control.SparkMaxPID;
 
 public class ArmIO implements IIO {
