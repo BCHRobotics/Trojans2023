@@ -1,8 +1,8 @@
 package frc.teleop;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.peripherals.user.DriverInput;
 import frc.subsystems.Drivetrain;
-import frc.io.DriverInput;
 
 public class TeleopDriver implements TeleopComponent {
     private static TeleopDriver instance;
@@ -43,7 +43,7 @@ public class TeleopDriver implements TeleopComponent {
 
         // this.drive.balancePID(DriverInput.getBalanceMode());
         if (DriverInput.getBalanceMode()) {
-            this.drive.setPosition(141, 141);
+            this.drive.setPosition(140, 140);
         } else if (!DriverInput.getBalanceMode()) {
             this.frwd = DriverInput.getDriveFrwd();
             this.turn = DriverInput.getDriveTurn();

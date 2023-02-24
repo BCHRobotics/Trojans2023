@@ -1,9 +1,10 @@
 package frc.subsystems;
 
-import frc.io.subsystems.ArmIO;
-import frc.io.subsystems.ClawIO;
-import frc.robot.Constants.Arm;
-import frc.robot.Constants.Misc;
+import frc.Constants.Arm;
+import frc.Constants.Misc;
+import frc.peripherals.robot.ArmIO;
+import frc.peripherals.robot.ClawIO;
+import frc.util.control.ArmPresets;
 
 import java.lang.Math;
 
@@ -13,8 +14,8 @@ public class Mechanism implements Subsystem {
     private ArmIO armIO;
     private ClawIO clawIO;
 
-    private double endHeight;
-    private double wristOffset;
+    private double endEffectorHeight;
+    private double wristOffset = Arm.WRIST_DEFAULT_OFFSET;
 
     private double armPos;
     private double wristPos;
@@ -55,8 +56,8 @@ public class Mechanism implements Subsystem {
         this.clawIO.setLeftPump(this.pumpMode);
         this.clawIO.setMidPump(this.pumpMode);
         this.clawIO.setRightPump(this.pumpMode);
-        this.clawIO.setLeftValve(this.pumpMode);
-        this.clawIO.setRightValve(this.pumpMode);
+        this.clawIO.setLeftValve(!this.pumpMode);
+        this.clawIO.setRightValve(!this.pumpMode);
 
         this.currentTime = System.currentTimeMillis();
 
@@ -123,7 +124,7 @@ public class Mechanism implements Subsystem {
      * @param angle
      */
     public void setWristOffset(double angle) {
-        this.wristOffset = angle;
+        this.wristOffset = Arm.WRIST_DEFAULT_OFFSET + angle;
     }
 
     /**
@@ -139,8 +140,8 @@ public class Mechanism implements Subsystem {
      * @param position
      */
     public void setWristHeight(double height) {
-        this.endHeight = height;
-        this.armPos = Math.acos(-(this.endHeight - Arm.SHOULDER_HEIGHT) / Arm.ARM_LENGTH);
+        this.endEffectorHeight = height;
+        this.armPos = Math.acos(Math.toRadians((Arm.SHOULDER_HEIGHT - this.endEffectorHeight) / Arm.ARM_LENGTH));
         this.wristPos = this.armPos + this.wristOffset;
     }
 
@@ -148,7 +149,7 @@ public class Mechanism implements Subsystem {
      * @return End effector height in inches
      */
     public double getWristHeight() {
-        return this.endHeight;
+        return this.endEffectorHeight;
     }
 
     /**
@@ -158,6 +159,8 @@ public class Mechanism implements Subsystem {
      */
     public void setClawAngle(double angle) {
         this.clawAngle = angle;
+        this.pumpMode = angle != 0;
+
     }
 
     /**
@@ -183,6 +186,16 @@ public class Mechanism implements Subsystem {
      */
     public boolean getSuctionMode() {
         return this.pumpMode;
+    }
+
+    /**
+     * Sets arm to preset position
+     * 
+     * @param preset
+     */
+    public void goToPreset(ArmPresets preset) {
+        this.setWristHeight(preset.wristHeight);
+        this.setWristOffset(preset.wristOffset);
     }
 
     /**

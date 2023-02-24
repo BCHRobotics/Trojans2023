@@ -8,8 +8,8 @@ import frc.subsystems.Drivetrain;
 import frc.subsystems.Mechanism;
 import frc.util.csv.CSVReader;
 
-public class AutoOperate extends AutoComponent {
-    private static AutoOperate instance;
+public class AutoExecute extends AutoComponent {
+    private static AutoExecute instance;
     private static List<List<Double>> data = new ArrayList<>();
     private static long startTime;
     private static long currentTime;
@@ -21,14 +21,14 @@ public class AutoOperate extends AutoComponent {
      * 
      * @return instance of the AutoOperator
      */
-    public static AutoOperate getInstance() {
+    public static AutoExecute getInstance() {
         if (instance == null) {
-            instance = new AutoOperate();
+            instance = new AutoExecute();
         }
         return instance;
     }
 
-    private AutoOperate() {
+    private AutoExecute() {
         this.drive = Drivetrain.getInstance();
         this.mech = Mechanism.getInstance();
     }

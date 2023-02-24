@@ -1,4 +1,4 @@
-package frc.io.subsystems;
+package frc.peripherals.robot;
 
 // Import required Libraries
 import com.revrobotics.CANSparkMax;
@@ -6,9 +6,8 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import com.revrobotics.SparkMaxAbsoluteEncoder;
 import com.revrobotics.SparkMaxAbsoluteEncoder.Type;
 
-// Import required Classes
-import frc.robot.Constants.Arm;
-import frc.robot.Constants.Features;
+import frc.Constants.Arm;
+import frc.Constants.Features;
 import frc.util.control.SparkMaxPID;
 
 public class ArmIO implements IIO {

@@ -1,27 +1,27 @@
-package frc.util.devices;
+package frc.peripherals.user;
 
 import edu.wpi.first.wpilibj.XboxController;
-import frc.robot.Constants.Misc;
+import frc.Constants.Misc;
 
-public class Controller extends XboxController {
+public final class Controller extends XboxController {
 
-    public enum Side {
+    protected enum Side {
         LEFT, RIGHT
     }
 
-    public enum Axis {
+    protected enum Axis {
         X, Y
     }
 
-    public Controller(int port) {
+    protected Controller(int port) {
         super(port);
     }
 
-    public boolean getModeSwitchButtonsPressed() {
+    protected boolean getModeSwitchButtonsPressed() {
         return this.getStartButtonPressed() || this.getBackButtonPressed();
     }
 
-    public double getJoystick(Side side, Axis axis) {
+    protected double getJoystick(Side side, Axis axis) {
         double deadzone = Misc.CONTROLLER_DEADZONE;
 
         boolean left = side == Side.LEFT;

@@ -2,8 +2,8 @@ package frc.teleop;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.subsystems.Mechanism;
-import frc.io.OperatorInput;
-import frc.robot.Constants.Misc;
+import frc.Constants.Misc;
+import frc.peripherals.user.OperatorInput;
 
 public class TeleopOperator implements TeleopComponent {
     private static TeleopOperator instance;
@@ -41,12 +41,13 @@ public class TeleopOperator implements TeleopComponent {
         else if (OperatorInput.getGamePiece() == 270)
             this.mech.setClawAngle(Misc.CUBE_PRESET);
         else if (OperatorInput.getGamePiece() == 180)
-            this.mech.resetPosition();
+            this.mech.setClawAngle(0);
 
-        // this.mech.setWristOffset(OperatorInput.getWristOffset());
+        this.mech.setWristOffset(OperatorInput.getWristOffset());
+        this.mech.setWristHeight(OperatorInput.getTestOffset());
 
-        this.mech.setShoulderAngle(OperatorInput.getTestOffset());
-        this.mech.setWristAngle(OperatorInput.getWristOffset());
+        // this.mech.setShoulderAngle(OperatorInput.getTestOffset());
+        // this.mech.setWristAngle(OperatorInput.getWristOffset());
 
         this.mech.run();
 

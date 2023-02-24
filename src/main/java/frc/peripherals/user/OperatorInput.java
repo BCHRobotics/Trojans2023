@@ -1,11 +1,11 @@
-package frc.io;
+package frc.peripherals.user;
 
-import frc.robot.Constants.Misc;
-import frc.util.devices.Controller;
-import frc.util.devices.Controller.Axis;
-import frc.util.devices.Controller.Side;
+import edu.wpi.first.wpilibj.GenericHID.RumbleType;
+import frc.Constants.Misc;
+import frc.peripherals.user.Controller.Axis;
+import frc.peripherals.user.Controller.Side;
 
-public class OperatorInput {
+public final class OperatorInput {
 
     private static Controller operator = new Controller(Misc.OPERATOR_PORT);
 
@@ -28,6 +28,15 @@ public class OperatorInput {
     }
 
     /**
+     * Get the wrist height in inches 0" --> 60"
+     * 
+     * @return Wrist height
+     */
+    public static double getWristHeight() {
+        return Math.abs(operator.getJoystick(Side.LEFT, Axis.Y) * 60);
+    }
+
+    /**
      * Get the test offset in degrees 0° --> 90°
      * 
      * @return test offset
@@ -43,6 +52,16 @@ public class OperatorInput {
      */
     public static int getGamePiece() {
         return operator.getPOV();
+    }
+
+    /**
+     * Set operator controller rumble mode
+     * 
+     * @param type      Left, Right, Both
+     * @param intensity 0 --> 1
+     */
+    public static void setRumble(RumbleType type, double intensity) {
+        operator.setRumble(type, intensity);
     }
 
 }

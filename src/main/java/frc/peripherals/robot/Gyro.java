@@ -1,11 +1,11 @@
-package frc.util.devices;
+package frc.peripherals.robot;
 
 import com.kauailabs.navx.frc.AHRS;
 
 import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.SerialPort;
-import frc.robot.Constants.Chassis;
-import frc.robot.Constants.Features;
+import frc.Constants.Chassis;
+import frc.Constants.Features;
 
 public class Gyro extends AHRS {
 

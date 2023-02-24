@@ -1,4 +1,4 @@
-package frc.io.subsystems;
+package frc.peripherals.robot;
 
 // Import required Libraries
 import com.revrobotics.CANSparkMax;
@@ -8,10 +8,9 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import edu.wpi.first.wpilibj.DigitalOutput;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.Solenoid;
-// Import required Classes
-import frc.robot.Constants.Claw;
-import frc.robot.Constants.Features;
-import frc.robot.Constants.Misc;
+import frc.Constants.Claw;
+import frc.Constants.Features;
+import frc.Constants.Misc;
 import frc.util.control.SparkMaxConstants;
 import frc.util.control.SparkMaxPID;
 
@@ -145,7 +144,7 @@ public class ClawIO implements IIO {
         if (!enabled)
             return;
 
-        this.leftBleedValve.set(!state);
+        this.leftBleedValve.set(state); // TODO: Check Normal solenoid state
     }
 
     /**
@@ -157,7 +156,7 @@ public class ClawIO implements IIO {
         if (!enabled)
             return;
 
-        this.rightBleedValve.set(!state);
+        this.rightBleedValve.set(state);
     }
 
     /**

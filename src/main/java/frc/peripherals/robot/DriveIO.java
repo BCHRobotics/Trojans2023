@@ -1,4 +1,4 @@
-package frc.io.subsystems;
+package frc.peripherals.robot;
 
 // Import required Libraries
 import com.revrobotics.CANSparkMax;
@@ -6,10 +6,8 @@ import com.revrobotics.RelativeEncoder;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-
-// Import required Classes
-import frc.robot.Constants.Chassis;
-import frc.robot.Constants.Features;
+import frc.Constants.Chassis;
+import frc.Constants.Features;
 import frc.util.control.SparkMaxPID;
 
 public class DriveIO implements IIO {

@@ -1,4 +1,4 @@
-package frc.robot;
+package frc;
 
 import edu.wpi.first.wpilibj.SerialPort;
 import frc.util.control.*;
@@ -41,9 +41,9 @@ public class Constants {
                 public static final double TRACK_LENGTH = 16;
 
                 // Chasis conversion factors TODO: Collect conversion data
-                public static final double LEFT_POSITION_CONVERSION = 70.5 / 33.35684585571289; // inches per
-                                                                                                // revolutions
-                public static final double RIGHT_POSITION_CONVERSION = 70.5 / 33.904457092285156; // #inches / #revs
+                public static final double LEFT_POSITION_CONVERSION = 70 / 33.35684585571289; // inches per
+                                                                                              // revolutions
+                public static final double RIGHT_POSITION_CONVERSION = 70 / 33.904457092285156; // #inches / #revs
 
                 public static final double LEFT_VELOCITY_CONVERSION = LEFT_POSITION_CONVERSION / 60.0; // inches per
                                                                                                        // second
@@ -85,6 +85,7 @@ public class Constants {
                 // Robot arm conversion factors
                 public static final double SHOULDER_CONVERSION_FACTOR = 360; // Convert revs to degrees
                 public static final double WRIST_CONVERSION_FACTOR = 360; // Convert revs to degrees
+                public static final double WRIST_DEFAULT_OFFSET = 90;
 
                 // Robot arm ABSOLUTE encoder inversions TODO: Correct encoder inversions
                 public static final boolean SHOULDER_ENCODER_INVERTED = false;
@@ -158,7 +159,7 @@ public class Constants {
                 public static final String TEACH_MODE_FILE_NAME = "LIVE_RECORD" + "_" + VERSION;
 
                 // Autonomous directory
-                public static final String ROOT_DIRECTORY = "/home/lvuser/deploy/";// "csv/";
+                public static final String ROOT_DIRECTORY = "/home/lvuser/deploy/"; // "csv/";
         }
 
 }

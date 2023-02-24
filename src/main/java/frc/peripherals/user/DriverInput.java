@@ -1,12 +1,12 @@
-package frc.io;
+package frc.peripherals.user;
 
-import frc.robot.Constants.Misc;
-import frc.robot.Constants.Chassis;
-import frc.util.devices.Controller;
-import frc.util.devices.Controller.Axis;
-import frc.util.devices.Controller.Side;
+import edu.wpi.first.wpilibj.GenericHID.RumbleType;
+import frc.Constants.Chassis;
+import frc.Constants.Misc;
+import frc.peripherals.user.Controller.Axis;
+import frc.peripherals.user.Controller.Side;
 
-public class DriverInput {
+public final class DriverInput {
 
 	private static Controller driver = new Controller(Misc.DRIVER_PORT);
 
@@ -25,8 +25,8 @@ public class DriverInput {
 	 * @return Max drive speed
 	 */
 	public static double getDriveMaxSpeed() {
-		return Chassis.MAX_OUTPUT - (driver.getLeftTriggerAxis() * Chassis.MAX_INTERVAL)
-				+ (driver.getRightTriggerAxis() * Chassis.MAX_INTERVAL);
+		return Chassis.MAX_OUTPUT + (-(driver.getLeftTriggerAxis() * Chassis.MAX_INTERVAL)
+				+ (driver.getRightTriggerAxis() * Chassis.MAX_INTERVAL));
 	}
 
 	/**
@@ -63,6 +63,16 @@ public class DriverInput {
 	 */
 	public static boolean getBalanceMode() {
 		return driver.getYButton();
+	}
+
+	/**
+	 * Set driver controller rumble mode
+	 * 
+	 * @param type      Left, Right, Both
+	 * @param intensity 0 --> 1
+	 */
+	public static void setRumble(RumbleType type, double intensity) {
+		driver.setRumble(type, intensity);
 	}
 
 }

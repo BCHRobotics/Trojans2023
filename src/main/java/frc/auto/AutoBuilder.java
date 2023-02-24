@@ -3,7 +3,7 @@ package frc.auto;
 import java.util.ArrayList;
 import java.util.List;
 
-import frc.robot.Constants.Misc;
+import frc.Constants.Misc;
 import frc.subsystems.Drivetrain;
 import frc.subsystems.Mechanism;
 import frc.util.csv.CSVWriter;

@@ -1,4 +1,4 @@
-package frc.io.subsystems;
+package frc.peripherals.robot;
 
 public interface IIO {
 
