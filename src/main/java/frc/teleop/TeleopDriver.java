@@ -59,7 +59,7 @@ public class TeleopDriver implements TeleopComponent {
         }
 
         if(DriverInput.getController().getLeftBumper()) {
-            limelight.GoToApril();
+            limelight.goToApril();
         }
 
         this.drive.run();

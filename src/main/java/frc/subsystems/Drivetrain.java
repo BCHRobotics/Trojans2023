@@ -272,7 +272,7 @@ public class Drivetrain implements Subsystem {
 
         SmartDashboard.putNumber("Drive Heading θ", angle);
 
-        this.currentState = DriveState.POSITION;
+        /*this.currentState = DriveState.POSITION;*/
 
         instance.setPosition(instance.getLeftPosition() + (angle * Constants.CHASIS_TURN_CONVERSION),
                 instance.getRightPosition() - (angle * Constants.CHASIS_TURN_CONVERSION));

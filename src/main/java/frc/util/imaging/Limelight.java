@@ -11,7 +11,7 @@ public class Limelight {
 
     private NetworkTable networkTable;
     private LimelightTargetType currentTarget;
-    private Drivetrain dt;
+    private Drivetrain drive;
 
     public static Limelight getInstance() {
         if (instance == null) {
@@ -25,8 +25,8 @@ public class Limelight {
     }
 
     public Limelight() {
-        this.dt = Drivetrain.getInstance();
-        this.networkTable = NetworkTableInstance.getDefault().getTable("limelight");
+        drive = Drivetrain.getInstance();
+        networkTable = NetworkTableInstance.getDefault().getTable("limelight");
     }
 
     public void setPipeline(int pipeline) {
@@ -89,15 +89,14 @@ public class Limelight {
         return this.networkTable.getEntry("ta").getDouble(0);
     }
 
-    public void GoToApril(){ //goes to april tag
-        if(this.getTargetX()<=-0.5||this.getTargetX()>=0.5) 
-            this.dt.setYaw(this.getTargetX());//turns to april tag
-
-        else{
+    public void goToApril(){ //goes to april tag
+        if(this.getTargetX()<=-0.5||this.getTargetX()>=0.5){
+            drive.setYaw(this.getTargetX());//turns to april tag
+        } else{
             if(this.getTargetDistance()>=4) 
-                this.dt.setOutput(0.2,0);
+                drive.setOutput(0.2,0);
             else 
-                this.dt.setOutput(0, 0);
+                drive.setOutput(0, 0);
         }
         //drive to april tag but leave some space to prevent ramming the april tag
         //2 is a placeholder
