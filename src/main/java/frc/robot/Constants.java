@@ -19,7 +19,7 @@ public class Constants {
         public static final boolean ARM_ENABLED = false;
         public static final boolean CLAW_ENABLED = false;
         public static final boolean GYRO_ENABLED = false;
-        public static final boolean MINI_BOT = false;
+        public static final boolean MINI_BOT = true;
 
         // Controller deadzones
         public static final double CONTROLLER_DEADZONE = 0.1;
@@ -62,7 +62,7 @@ public class Constants {
 
         // Chasis conversion factors
         public static final double CHASIS_LEFT_POS_CONVERSION = 70.5 / 33.35684585571289; // inches per revolutions
-        public static final double CHASIS_RIGHT_POS_CONVERSION = 70.5 / 33.904457092285156; // #inches / #revs
+        public static final double CHASIS_RIGHT_POS_CONVERSION = 70.5 / 33.35684585571289; // #inches / #revs
 
         public static final double CHASIS_LEFT_VEL_CONVERSION = CHASIS_LEFT_POS_CONVERSION / 60; // inches per second
         public static final double CHASIS_RIGHT_VEL_CONVERSION = CHASIS_RIGHT_POS_CONVERSION / 60; // #inches / 1 sec
@@ -101,9 +101,9 @@ public class Constants {
         public static final ArmPresets TOP_DROPOFF = new ArmPresets(0, 0);
 
         // Limelight vision constants
-        public static final double LIMELIGHT_ANGLE = -20; // degrees
-        public static final double LIMELIGHT_HEIGHT = 120; // inches TODO: Correct limelight height
-        public static final double TARGET_HEIGHT = 4.75; // inches
+        public static final double LIMELIGHT_ANGLE = 0; // degrees
+        public static final double LIMELIGHT_HEIGHT = 9.5; // inches TODO: Correct limelight height
+        public static final double TARGET_HEIGHT = 21; // inches
 
         // CSV Test version
         public static final int VERSION = 1;

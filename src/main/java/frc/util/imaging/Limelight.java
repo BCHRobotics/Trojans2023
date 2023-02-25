@@ -28,6 +28,14 @@ public class Limelight {
         this.networkTable = NetworkTableInstance.getDefault().getTable("limelight");
     }
 
+    public void setPipeline(int pipeline) {
+        this.networkTable.getEntry("pipeline").setNumber(pipeline);
+    }
+
+    public double getPipeline() {
+        return this.networkTable.getEntry("getpipe").getDouble(0);
+    }
+
     public void setDesiredTarget(LimelightTargetType target) {
         this.currentTarget = target;
     }
@@ -99,9 +107,9 @@ public class Limelight {
         double h1 = Constants.LIMELIGHT_HEIGHT; // Limelight lens Height;
         double h2 = Constants.TARGET_HEIGHT; // Known Height of Target
 
-        double distance = (h1 - h2) / Math.tan(aR);
+        double distance = (Math.max(h1, h2) - Math.min(h1, h2)) / Math.tan(aR);
 
-        distance = -Math.round(distance * 100.0) / 100.0;
+        distance = Math.round(distance * 100.0) / 100.0;
         SmartDashboard.putNumber(" Distance", distance);
         return distance;
     }

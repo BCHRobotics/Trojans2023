@@ -2,12 +2,14 @@ package frc.teleop;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.subsystems.Drivetrain;
+import frc.util.imaging.Limelight;
 import frc.io.DriverInput;
 
 public class TeleopDriver implements TeleopComponent {
     private static TeleopDriver instance;
 
     private Drivetrain drive;
+    private Limelight limelight = Limelight.getInstance();
 
     private double frwd = 0;
     private double turn = 0;
@@ -37,6 +39,10 @@ public class TeleopDriver implements TeleopComponent {
     public void run() {
 
         SmartDashboard.putNumber("Max Drive Speed %", DriverInput.getDriveMaxSpeed() * 100);
+        SmartDashboard.putNumber("tX", limelight.getTargetX());
+        SmartDashboard.putNumber("tY", limelight.getTargetY());
+        SmartDashboard.putBoolean("tV", limelight.getTargetExists());
+        SmartDashboard.putNumber("pipeline", limelight.getPipeline());
 
         if (DriverInput.getController().getBButton())
             this.drive.resetEncoderPosition();
@@ -49,6 +55,10 @@ public class TeleopDriver implements TeleopComponent {
             this.turn = DriverInput.getDriveTurn();
             this.drive.setBrakes(DriverInput.getDriveBrakes());
             this.drive.setOutput(frwd, turn);
+        }
+
+        if(DriverInput.getController().getLeftBumperPressed()) {
+            limelight.GoToApril();
         }
 
         this.drive.run();
