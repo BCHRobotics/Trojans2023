@@ -51,9 +51,9 @@ public class Limelight {
 
         if (currentTarget == LimelightTargetType.CONE || currentTarget == LimelightTargetType.CUBE) {
 
-            desiredTarget.setX(getTargetDistance());
+            desiredTarget.setX(getTargetDistance(20));
 
-            desiredTarget.setY(getTargetDistance());
+            desiredTarget.setY(getTargetDistance(20));
 
             desiredTarget.setTargetFound(getTargetExists());
 
@@ -107,17 +107,40 @@ public class Limelight {
      * 
      * @return distance to target
      */
+      /**
+     * Calculates the distance to a target on the ground using trigonometry
+     * It is impossible to calculate the distance to a target above the limelight
+     * 
+     * @return Distance to target in inches (-1 if target >= limelight)
+     */
     public double getTargetDistance() {
-        double a1 = Constants.LIMELIGHT_ANGLE; // Limelight mount angle
-        double a2 = this.getTargetY(); // Limelight measured angle to target
-        double aR = (a1 + a2) * (Math.PI / 180); // Total anlge in Radians
-        double h1 = Constants.LIMELIGHT_HEIGHT; // Limelight lens Height;
-        double h2 = Constants.TARGET_HEIGHT; // Known Height of Target
+        // If the target is above the limelight, return -1
+        if (this.getTargetY() > 0) return -1;
 
-        double distance = (Math.max(h1, h2) - Math.min(h1, h2)) / Math.tan(aR);
+        double theta = this.getTargetY() + 90;
+        double height = Constants.LIMELIGHT_HEIGHT;
+        double distance = height * Math.tan(Math.toRadians(theta));
 
-        distance = Math.round(distance * 100.0) / 100.0;
-        SmartDashboard.putNumber(" Distance", distance);
+        return distance;
+    }
+
+    /**
+     * Calculatues the distance to a target on the ground using trigonometry
+     * Distance is calculated using the height of the target and the limelight angle
+     * 
+     * @param targetHeight Inches from the ground to the target
+     * @return Distance to target in inches (-1 if target is the same height as the limelight)
+     */
+    public double getTargetDistance(double targetHeight) {
+        double theta = this.getTargetY();
+        // If the target is the same height as the limelight, return -1
+        if (theta == 0) return -1;
+
+        // If the target is below the limelight, add 90 degrees to the angle
+        if (theta < 0) theta += 90;
+
+        double height = Math.max(Constants.LIMELIGHT_HEIGHT, targetHeight) - Math.min(Constants.LIMELIGHT_HEIGHT, targetHeight);
+        double distance = height * Math.tan(Math.toRadians(theta));
         return distance;
     }
 
