@@ -4,8 +4,8 @@ import com.kauailabs.navx.frc.AHRS;
 
 import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.SerialPort;
-import frc.Constants.Chassis;
-import frc.Constants.Features;
+import frc.robot.Constants.Chassis;
+import frc.robot.Constants.Features;
 
 public class Gyro extends AHRS {
 

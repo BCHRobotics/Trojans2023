@@ -5,6 +5,7 @@ import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkMaxAbsoluteEncoder;
 import com.revrobotics.SparkMaxAlternateEncoder;
 import com.revrobotics.SparkMaxPIDController;
+import com.revrobotics.SparkMaxPIDController.AccelStrategy;
 
 public class SparkMaxPID {
 
@@ -36,11 +37,11 @@ public class SparkMaxPID {
         this.pidController.setFF(c.kFF, c.slot);
         this.pidController.setIZone(c.kIz, c.slot);
         this.pidController.setOutputRange(c.kMinOutput, c.kMaxOutput, c.slot);
-        this.constants.slot = c.slot;
         this.pidController.setSmartMotionMinOutputVelocity(c.minVel, c.slot);
         this.pidController.setSmartMotionMaxVelocity(c.maxVel, c.slot);
         this.pidController.setSmartMotionMaxAccel(c.maxAcc, c.slot);
         this.pidController.setSmartMotionAllowedClosedLoopError(c.allowedErr, c.slot);
+        this.constants = c;
     }
 
     public SparkMaxConstants getRawConstants(int slot) {
@@ -88,6 +89,16 @@ public class SparkMaxPID {
 
     public void setFeedbackDevice(SparkMaxAlternateEncoder device) {
         this.pidController.setFeedbackDevice(device);
+    }
+
+    public void setPIDWrapping(boolean state) {
+        this.pidController.setPositionPIDWrappingEnabled(state);
+        this.pidController.setPositionPIDWrappingMinInput(0);
+        this.pidController.setPositionPIDWrappingMaxInput(360);
+    }
+
+    public void setMotionProfileType(AccelStrategy strategy) {
+        this.pidController.setSmartMotionAccelStrategy(strategy, this.constants.slot);
     }
 
     public void setSmartPosition(double setPoint) {

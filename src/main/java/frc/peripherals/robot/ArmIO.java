@@ -4,10 +4,12 @@ package frc.peripherals.robot;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import com.revrobotics.SparkMaxAbsoluteEncoder;
+import com.revrobotics.CANSparkMax.SoftLimitDirection;
 import com.revrobotics.SparkMaxAbsoluteEncoder.Type;
+import com.revrobotics.SparkMaxPIDController.AccelStrategy;
 
-import frc.Constants.Arm;
-import frc.Constants.Features;
+import frc.robot.Constants.Arm;
+import frc.robot.Constants.Features;
 import frc.util.control.SparkMaxPID;
 
 public class ArmIO implements IIO {
@@ -53,8 +55,8 @@ public class ArmIO implements IIO {
         this.shoulder.setIdleMode(CANSparkMax.IdleMode.kBrake);
         this.wrist.setIdleMode(CANSparkMax.IdleMode.kBrake);
 
-        this.shoulder.setSmartCurrentLimit(80, 20);
-        this.wrist.setSmartCurrentLimit(80, 20);
+        this.shoulder.setSmartCurrentLimit(60, 20);
+        this.wrist.setSmartCurrentLimit(40, 15);
 
         this.shoulder.setInverted(false);
         this.wrist.setInverted(false);
@@ -65,17 +67,35 @@ public class ArmIO implements IIO {
         this.shoulderEncoder.setInverted(Arm.SHOULDER_ENCODER_INVERTED);
         this.wristEncoder.setInverted(Arm.WRIST_ENCODER_INVERTED);
 
+        this.shoulderEncoder.setPositionConversionFactor(Arm.SHOULDER_CONVERSION_FACTOR);
+        this.wristEncoder.setPositionConversionFactor(Arm.WRIST_CONVERSION_FACTOR);
+
         this.shoulderEncoder.setZeroOffset(Arm.SHOULDER_ENCODER_OFFSET);
         this.wristEncoder.setZeroOffset(Arm.WRIST_ENCODER_OFFSET);
 
-        this.shoulderEncoder.setPositionConversionFactor(Arm.SHOULDER_CONVERSION_FACTOR);
-        this.wristEncoder.setPositionConversionFactor(Arm.WRIST_CONVERSION_FACTOR);
+        this.shoulder.enableSoftLimit(SoftLimitDirection.kForward, true);
+        this.shoulder.enableSoftLimit(SoftLimitDirection.kReverse, true);
+
+        this.shoulder.setSoftLimit(SoftLimitDirection.kForward, 110);
+        this.shoulder.setSoftLimit(SoftLimitDirection.kReverse, -5);
+
+        this.wrist.enableSoftLimit(SoftLimitDirection.kForward, true);
+        this.wrist.enableSoftLimit(SoftLimitDirection.kReverse, true);
+
+        this.wrist.setSoftLimit(SoftLimitDirection.kForward, 110);
+        this.wrist.setSoftLimit(SoftLimitDirection.kReverse, -5);
 
         this.shoulderController = new SparkMaxPID(this.shoulder, Arm.SHOULDER_CONTROL_CONSTANTS);
         this.wristController = new SparkMaxPID(this.wrist, Arm.WRIST_CONTROL_CONSTANTS);
 
         this.shoulderController.setFeedbackDevice(shoulderEncoder);
         this.wristController.setFeedbackDevice(wristEncoder);
+
+        this.shoulderController.setPIDWrapping(true);
+        this.wristController.setPIDWrapping(true);
+
+        this.shoulderController.setMotionProfileType(AccelStrategy.kSCurve);
+        this.wristController.setMotionProfileType(AccelStrategy.kSCurve);
     }
 
     /**
@@ -87,7 +107,8 @@ public class ArmIO implements IIO {
         if (!enabled)
             return;
 
-        this.shoulderController.setPosition(angle);
+        angle %= Arm.SHOULDER_CONVERSION_FACTOR;
+        this.shoulderController.setSmartPosition(angle);
     }
 
     /**
@@ -99,7 +120,8 @@ public class ArmIO implements IIO {
         if (!enabled)
             return;
 
-        this.wristController.setPosition(angle);
+        angle %= Arm.WRIST_CONVERSION_FACTOR;
+        this.wristController.setSmartPosition(angle);
     }
 
     /**
@@ -153,8 +175,6 @@ public class ArmIO implements IIO {
     public void updateInputs() {
         if (!enabled)
             return;
-        // this.shoulderController.updateConstants();
-        // this.wristController.updateConstants();
     }
 
     /**

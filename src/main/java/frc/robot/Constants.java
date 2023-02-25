@@ -1,4 +1,4 @@
-package frc;
+package frc.robot;
 
 import edu.wpi.first.wpilibj.SerialPort;
 import frc.util.control.*;
@@ -38,7 +38,7 @@ public class Constants {
 
                 // Chassis dimensions needed
                 public static final double WHEEL_DIAMETER = 6;
-                public static final double TRACK_LENGTH = 16;
+                public static final double TRACK_WIDTH = 19;
 
                 // Chasis conversion factors TODO: Collect conversion data
                 public static final double LEFT_POSITION_CONVERSION = 70 / 33.35684585571289; // inches per
@@ -51,14 +51,14 @@ public class Constants {
                                                                                                          // 1 sec
 
                 // input diameter = Δd inches between center wheels ~~v~~
-                public static final double TURNING_CONVERSION = ((TRACK_LENGTH) * (Math.PI / 4)) / 90.0; // Arc length
-                                                                                                         // through
+                public static final double TURNING_CONVERSION = ((TRACK_WIDTH) * (Math.PI / 4)) / 90.0; // Arc length
+                                                                                                        // through
                 // 90° turn,
                 // Drive PID Constants
                 public static final SparkMaxConstants LEFT_DRIVE_CONSTANTS = new SparkMaxConstants(
-                                0.00005, 0, 0, 0, 0.000185, -1, 1, 0, 0, 0, 0, 0);
+                                0.00005, 0, 0, 0, 0.000185, -1, 1, 0, 0, 2000, 1500, 0);
                 public static final SparkMaxConstants RIGHT_DRIVE_CONSTANTS = new SparkMaxConstants(
-                                0.00005, 0, 0, 0, 0.000185, -1, 1, 0, 0, 0, 0, 0);
+                                0.00005, 0, 0, 0, 0.000185, -1, 1, 0, 0, 2000, 1500, 0);
 
                 // Gyro constants
                 public static final SerialPort.Port GYRO_PORT = SerialPort.Port.kMXP;
@@ -78,14 +78,15 @@ public class Constants {
                 public static final int WRIST_ID = 21;
 
                 // Robot dimensions (inches) TODO: Correct Dimensions
-                public static final double SHOULDER_HEIGHT = 40;
+                public static final double SHOULDER_HEIGHT = 37;
                 public static final double ARM_LENGTH = 36;
-                public static final double FOREARM_LENGTH = 12;
+                public static final double FOREARM_LENGTH = 15;
 
                 // Robot arm conversion factors
                 public static final double SHOULDER_CONVERSION_FACTOR = 360; // Convert revs to degrees
                 public static final double WRIST_CONVERSION_FACTOR = 360; // Convert revs to degrees
                 public static final double WRIST_DEFAULT_OFFSET = 90;
+                public static final double SHOULDER_DEFAULT_OFFSET = 16;
 
                 // Robot arm ABSOLUTE encoder inversions TODO: Correct encoder inversions
                 public static final boolean SHOULDER_ENCODER_INVERTED = false;
@@ -97,9 +98,9 @@ public class Constants {
 
                 // Mechanism PID Constants
                 public static final SparkMaxConstants SHOULDER_CONTROL_CONSTANTS = new SparkMaxConstants(
-                                7.1028E-05, 0, 5.1398E-05, 0, 0.000185, -1, 1, 0, 0, 2000, 4000, 0.1);
+                                7.1028E-05, 0, 5.1398E-05, 0, 0, -1, 1, 0, 0, 2000, 1500, 0);
                 public static final SparkMaxConstants WRIST_CONTROL_CONSTANTS = new SparkMaxConstants(
-                                7.1028E-05, 0, 5.1398E-05, 0, 0.000185, -1, 1, 0, 0, 2000, 4000, 0.1);
+                                7.1028E-05, 0, 5.1398E-05, 0, 0, -1, 1, 0, 0, 2000, 1500, 0);
 
         }
 
@@ -126,8 +127,8 @@ public class Constants {
                 public static final int OPERATOR_PORT = 1;
 
                 // Game piece actuator presets in degrees
-                public static final double CUBE_PRESET = 80;
-                public static final double CONE_PRESET = 22;
+                public static final double CUBE_PRESET = 22;
+                public static final double CONE_PRESET = 80;
 
                 public static final int CUBE_LED_PORT = 0;
                 public static final int CONE_LED_PORT = 1;
@@ -150,8 +151,8 @@ public class Constants {
                 public static final ArmPresets TOP_DROPOFF = new ArmPresets(0, 0);
 
                 // Limelight vision constants
-                public static final double LIMELIGHT_ANGLE = -20; // degrees
-                public static final double LIMELIGHT_HEIGHT = 120; // inches TODO: Correct limelight height
+                public static final double LIMELIGHT_ANGLE = -22; // degrees
+                public static final double LIMELIGHT_HEIGHT = 91.25; // inches TODO: Correct limelight height
                 public static final double TARGET_HEIGHT = 4.75; // inches
 
                 // CSV Test version

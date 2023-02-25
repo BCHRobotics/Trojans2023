@@ -1,7 +1,7 @@
 package frc.peripherals.user;
 
 import edu.wpi.first.wpilibj.XboxController;
-import frc.Constants.Misc;
+import frc.robot.Constants.Misc;
 
 public final class Controller extends XboxController {
 

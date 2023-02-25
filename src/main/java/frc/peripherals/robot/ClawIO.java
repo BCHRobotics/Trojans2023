@@ -8,9 +8,9 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import edu.wpi.first.wpilibj.DigitalOutput;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.Solenoid;
-import frc.Constants.Claw;
-import frc.Constants.Features;
-import frc.Constants.Misc;
+import frc.robot.Constants.Claw;
+import frc.robot.Constants.Features;
+import frc.robot.Constants.Misc;
 import frc.util.control.SparkMaxConstants;
 import frc.util.control.SparkMaxPID;
 

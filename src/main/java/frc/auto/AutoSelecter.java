@@ -2,7 +2,7 @@ package frc.auto;
 
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import frc.Constants.Misc;
+import frc.robot.Constants.Misc;
 
 public class AutoSelecter {
     private static AutoSelecter instance;
