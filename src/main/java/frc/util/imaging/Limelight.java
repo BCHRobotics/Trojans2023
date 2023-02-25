@@ -90,14 +90,14 @@ public class Limelight {
     }
 
     public void goToApril(){ //goes to april tag
-        if(this.getTargetX()<=-0.5||this.getTargetX()>=0.5){
+       /*  if(this.getTargetX()<=-0.5||this.getTargetX()>=0.5){*/
             drive.setYawPID(this.getTargetX());//turns to april tag
-        } else{
+        /* } else{
             if(this.getTargetDistance()>=4) 
                 drive.setOutput(0.2,0);
             else 
                 drive.setOutput(0, 0);
-        }
+        }*/
         //drive to april tag but leave some space to prevent ramming the april tag
         //2 is a placeholder
     }

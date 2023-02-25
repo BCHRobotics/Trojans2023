@@ -59,7 +59,11 @@ public class TeleopDriver implements TeleopComponent {
         }
 
         if(DriverInput.getController().getAButton()) {
-            limelight.goToApril();
+            //limelight.goToApril();
+
+            //temp code
+            double angle = limelight.getTargetX();
+            this.drive.setOutput(0.05, (angle/100));
         }
 
         this.drive.run();
