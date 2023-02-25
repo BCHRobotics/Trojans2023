@@ -4,12 +4,14 @@ import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants.Misc;
+import frc.subsystems.Drivetrain;
 
 public class Limelight {
     private static Limelight instance;
 
     private NetworkTable networkTable;
     private LimelightTargetType currentTarget;
+    private Drivetrain dt = Drivetrain.getInstance();
 
     public static Limelight getInstance() {
         if (instance == null) {
@@ -97,4 +99,13 @@ public class Limelight {
         return distance;
     }
 
+    public void GoToApril(){ //goes to april tag
+        if(this.getTargetX()<=-0.5||this.getTargetX()>=0.5) this.dt.setYawPID(this.getTargetX());//turns to april tag
+        else{
+            if(this.getTargetDistance()>=4) this.dt.setOutput(0.2,0);
+            else this.dt.setOutput(0, 0);
+        }
+        //drive to april tag but leave some space to prevent ramming the april tag
+        //2 is a placeholder
+    }
 }

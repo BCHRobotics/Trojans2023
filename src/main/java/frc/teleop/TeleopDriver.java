@@ -3,11 +3,13 @@ package frc.teleop;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.peripherals.user.DriverInput;
 import frc.subsystems.Drivetrain;
+import frc.util.imaging.Limelight;
 
 public class TeleopDriver implements TeleopComponent {
     private static TeleopDriver instance;
 
     private Drivetrain drive;
+    private Limelight limelight = Limelight.getInstance();
 
     private double frwd = 0;
     private double turn = 0;
@@ -49,6 +51,10 @@ public class TeleopDriver implements TeleopComponent {
             this.turn = DriverInput.getDriveTurn();
             this.drive.setBrakes(DriverInput.getDriveBrakes());
             this.drive.setOutput(frwd, turn);
+        }
+
+        if(DriverInput.getController().getLeftBumper()) {
+            limelight.GoToApril();
         }
 
         this.drive.run();
