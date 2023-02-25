@@ -290,7 +290,7 @@ public class Drivetrain implements Subsystem {
         this.seekPID.setSetpoint(-angle);
         this.currentState = DriveState.OUTPUT;
     
-        this.setOutput(0, this.seekPID.calculate(0));
+        this.setOutput(0, this.seekPID.calculate(0, this.seekPID.getSetpoint()));
     }
 
     /**
