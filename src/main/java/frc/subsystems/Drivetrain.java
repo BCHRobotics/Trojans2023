@@ -286,8 +286,10 @@ public class Drivetrain implements Subsystem {
     public void setYawPID(double angle) {
         SmartDashboard.putNumber("Drive Heading Φ", angle);
 
-        this.seekPID.setSetpoint(0);
-        this.setOutput(0, this.seekPID.calculate(angle));
+        this.seekPID.setSetpoint(-angle);
+        this.currentState = DriveState.OUTPUT;
+    
+        this.setOutput(0, this.seekPID.calculate(0));
     }
 
     /**
