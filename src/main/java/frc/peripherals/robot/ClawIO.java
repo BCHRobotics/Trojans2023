@@ -3,7 +3,10 @@ package frc.peripherals.robot;
 // Import required Libraries
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
+import com.revrobotics.CANSparkMax.SoftLimitDirection;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+import com.revrobotics.SparkMaxLimitSwitch.Type;
+import com.revrobotics.SparkMaxPIDController.AccelStrategy;
 
 import edu.wpi.first.wpilibj.DigitalOutput;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
@@ -76,27 +79,35 @@ public class ClawIO implements IIO {
 
         this.grip.setIdleMode(CANSparkMax.IdleMode.kBrake);
 
-        this.grip.setSmartCurrentLimit(60, 10);
+        this.grip.setSmartCurrentLimit(40, 15);
+
+        this.grip.setInverted(true);
+
+        this.grip.enableSoftLimit(SoftLimitDirection.kForward, true);
+        this.grip.enableSoftLimit(SoftLimitDirection.kReverse, true);
+
+        this.grip.setSoftLimit(SoftLimitDirection.kForward, (float) Claw.CLAW_DEFAULT_OFFSET);
+        this.grip.setSoftLimit(SoftLimitDirection.kReverse, Claw.CLAW_LIMIT);
 
         this.clawPidController = new SparkMaxPID(this.grip, this.clawConstants);
 
         this.clawPidController.setFeedbackDevice(clawEncoder);
 
-        this.grip.setInverted(false);
-
         this.clawEncoder.setPositionConversionFactor(Claw.CLAW_CONVERSION_FACTOR);
+
+        this.clawPidController.setMotionProfileType(AccelStrategy.kSCurve);
     }
 
     /**
-     * Sets claw opening in degrees
+     * Sets claw travel in inches
      * 
      * @param position
      */
-    public void setClawAngle(double angle) {
+    public void setClawPosition(double position) {
         if (!enabled)
             return;
 
-        this.clawPidController.setSmartPosition(angle);
+        this.clawPidController.setSmartPosition(position, Claw.CLAW_DEFAULT_OFFSET, Claw.CLAW_DEFAULT_OFFSET);
     }
 
     /**
@@ -192,7 +203,7 @@ public class ClawIO implements IIO {
         if (!enabled)
             return;
 
-        this.setClawAngle(0);
+        this.setClawPosition(0);
         this.setLeftPump(false);
         this.setMidPump(false);
         this.setRightPump(false);
@@ -211,7 +222,11 @@ public class ClawIO implements IIO {
         if (!enabled)
             return;
 
-        this.clawEncoder.setPosition(0);
+        if (this.grip.getForwardLimitSwitch(Type.kNormallyClosed).isPressed()) {
+            this.clawEncoder.setPosition(0);
+            this.grip.set(0);
+        } else
+            this.grip.set(1);
     }
 
     @Deprecated

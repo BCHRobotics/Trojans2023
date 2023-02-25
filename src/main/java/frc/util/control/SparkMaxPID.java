@@ -7,6 +7,8 @@ import com.revrobotics.SparkMaxAlternateEncoder;
 import com.revrobotics.SparkMaxPIDController;
 import com.revrobotics.SparkMaxPIDController.AccelStrategy;
 
+import frc.robot.Constants.Misc;
+
 public class SparkMaxPID {
 
     private SparkMaxPIDController pidController;
@@ -37,11 +39,11 @@ public class SparkMaxPID {
         this.pidController.setFF(c.kFF, c.slot);
         this.pidController.setIZone(c.kIz, c.slot);
         this.pidController.setOutputRange(c.kMinOutput, c.kMaxOutput, c.slot);
+        this.constants.slot = c.slot;
         this.pidController.setSmartMotionMinOutputVelocity(c.minVel, c.slot);
         this.pidController.setSmartMotionMaxVelocity(c.maxVel, c.slot);
         this.pidController.setSmartMotionMaxAccel(c.maxAcc, c.slot);
         this.pidController.setSmartMotionAllowedClosedLoopError(c.allowedErr, c.slot);
-        this.constants = c;
     }
 
     public SparkMaxConstants getRawConstants(int slot) {
@@ -105,12 +107,20 @@ public class SparkMaxPID {
         this.pidController.setReference(setPoint, CANSparkMax.ControlType.kSmartMotion, this.constants.slot);
     }
 
+    public void setSmartPosition(double setPoint, double min, double max) {
+        this.setSmartPosition(Misc.ENSURE_RANGE(setPoint, min, max));
+    }
+
     public void setSmartVelocity(double setPoint) {
         this.pidController.setReference(setPoint, CANSparkMax.ControlType.kSmartVelocity, this.constants.slot);
     }
 
     public void setPosition(double setPoint) {
         this.pidController.setReference(setPoint, CANSparkMax.ControlType.kPosition, this.constants.slot);
+    }
+
+    public void setPosition(double setPoint, double min, double max) {
+        this.setSmartPosition(Misc.ENSURE_RANGE(setPoint, min, max));
     }
 
     public void setVelocity(double speed) {

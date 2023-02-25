@@ -46,6 +46,15 @@ public final class OperatorInput {
     }
 
     /**
+     * Get the test button boolean state
+     * 
+     * @return test offset
+     */
+    public static boolean getTestButton() {
+        return operator.getYButton();
+    }
+
+    /**
      * Get the Operator D-Pad input degrees 0°(N) --> 315°(NW)
      * 
      * @return Operator controller D-Pad input

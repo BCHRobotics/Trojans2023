@@ -85,16 +85,19 @@ public class Constants {
                 // Robot arm conversion factors
                 public static final double SHOULDER_CONVERSION_FACTOR = 360; // Convert revs to degrees
                 public static final double WRIST_CONVERSION_FACTOR = 360; // Convert revs to degrees
-                public static final double WRIST_DEFAULT_OFFSET = 90;
+                public static final double WRIST_PARALLEL_OFFSET = 90;
                 public static final double SHOULDER_DEFAULT_OFFSET = 16;
+                public static final double WRIST_DEFAULT_OFFSET = 16;
+                public static final float SHOULDER_LIMIT = 110 + (float) Arm.SHOULDER_DEFAULT_OFFSET;
+                public static final float WRIST_LIMIT = 200 + (float) Arm.WRIST_DEFAULT_OFFSET;
 
                 // Robot arm ABSOLUTE encoder inversions TODO: Correct encoder inversions
                 public static final boolean SHOULDER_ENCODER_INVERTED = false;
                 public static final boolean WRIST_ENCODER_INVERTED = false;
 
                 // Robot arm ABSOLUTE encoder offset TODO: Correct encoder offsets
-                public static final double SHOULDER_ENCODER_OFFSET = 265.8371902;
-                public static final double WRIST_ENCODER_OFFSET = 172.0870650;
+                public static final double SHOULDER_ENCODER_OFFSET = (265.8371902) - Arm.SHOULDER_DEFAULT_OFFSET;
+                public static final double WRIST_ENCODER_OFFSET = (172.0870650) - Arm.WRIST_DEFAULT_OFFSET;
 
                 // Mechanism PID Constants
                 public static final SparkMaxConstants SHOULDER_CONTROL_CONSTANTS = new SparkMaxConstants(
@@ -114,7 +117,10 @@ public class Constants {
                 public static final int LEFT_BLEED_VALVE = 0;
                 public static final int RIGHT_BLEED_VALVE = 1;
 
-                public static final double CLAW_CONVERSION_FACTOR = 1 / 1; // #degrees / #revs
+                public static final float CLAW_LIMIT = 1;
+                public static final double CLAW_DEFAULT_OFFSET = 0;
+
+                public static final double CLAW_CONVERSION_FACTOR = 1 / 35; // #inches / #revs
 
                 public static final SparkMaxConstants CLAW_CONSTANTS = new SparkMaxConstants(
                                 1e-4, 0, 0, 0, 0.000156, -1, 1, 0, 0, 0, 0, 0);
@@ -127,8 +133,8 @@ public class Constants {
                 public static final int OPERATOR_PORT = 1;
 
                 // Game piece actuator presets in degrees
-                public static final double CUBE_PRESET = 22;
-                public static final double CONE_PRESET = 80;
+                public static final double CUBE_PRESET = 0.5;
+                public static final double CONE_PRESET = 1;
 
                 public static final int CUBE_LED_PORT = 0;
                 public static final int CONE_LED_PORT = 1;
@@ -161,6 +167,14 @@ public class Constants {
 
                 // Autonomous directory
                 public static final String ROOT_DIRECTORY = "/home/lvuser/deploy/"; // "csv/";
+
+                public static final double ENSURE_RANGE(double value, double min, double max) {
+                        return Math.min(Math.max(value, min), max);
+                }
+
+                public static final boolean IN_RANGE(double value, double min, double max) {
+                        return (value >= min) && (value <= max);
+                }
         }
 
 }

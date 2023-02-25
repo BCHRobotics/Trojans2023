@@ -15,11 +15,11 @@ public class Mechanism implements Subsystem {
     private ClawIO clawIO;
 
     private double endEffectorHeight;
-    private double wristOffset = Arm.WRIST_DEFAULT_OFFSET;
+    private double wristOffset = Arm.WRIST_PARALLEL_OFFSET;
 
     private double armPos;
     private double wristPos;
-    private double clawAngle;
+    private double clawPos;
     private boolean pumpMode;
 
     private boolean coneLED, cubeLED, blinkCone, blinkCube;
@@ -52,7 +52,7 @@ public class Mechanism implements Subsystem {
     public void run() {
         this.armIO.setShoulderAngle(this.armPos);
         this.armIO.setWristAngle(this.wristPos); // remember wrist offset
-        this.clawIO.setClawAngle(this.clawAngle);
+        this.clawIO.setClawPosition(this.clawPos);
         this.clawIO.setLeftPump(this.pumpMode);
         this.clawIO.setMidPump(this.pumpMode);
         this.clawIO.setRightPump(this.pumpMode);
@@ -124,7 +124,7 @@ public class Mechanism implements Subsystem {
      * @param angle
      */
     public void setWristOffset(double angle) {
-        this.wristOffset = Arm.WRIST_DEFAULT_OFFSET + angle;
+        this.wristOffset = Arm.WRIST_PARALLEL_OFFSET + angle;
     }
 
     /**
@@ -157,16 +157,16 @@ public class Mechanism implements Subsystem {
      * 
      * @param angle
      */
-    public void setClawAngle(double angle) {
-        this.clawAngle = angle;
-        this.pumpMode = angle != 0;
+    public void setClawPos(double angle) {
+        this.clawPos = angle;
+        // this.pumpMode = angle != 0;
 
     }
 
     /**
      * @return Claw open vs closed angle
      */
-    public double getClawAngle() {
+    public double getClawPos() {
         return this.clawIO.getClawEncoder().getPosition();
     }
 

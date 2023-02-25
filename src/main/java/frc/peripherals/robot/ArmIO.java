@@ -76,14 +76,14 @@ public class ArmIO implements IIO {
         this.shoulder.enableSoftLimit(SoftLimitDirection.kForward, true);
         this.shoulder.enableSoftLimit(SoftLimitDirection.kReverse, true);
 
-        this.shoulder.setSoftLimit(SoftLimitDirection.kForward, 110);
-        this.shoulder.setSoftLimit(SoftLimitDirection.kReverse, -5);
+        this.shoulder.setSoftLimit(SoftLimitDirection.kForward, Arm.SHOULDER_LIMIT);
+        this.shoulder.setSoftLimit(SoftLimitDirection.kReverse, (float) Arm.SHOULDER_DEFAULT_OFFSET);
 
         this.wrist.enableSoftLimit(SoftLimitDirection.kForward, true);
         this.wrist.enableSoftLimit(SoftLimitDirection.kReverse, true);
 
-        this.wrist.setSoftLimit(SoftLimitDirection.kForward, 110);
-        this.wrist.setSoftLimit(SoftLimitDirection.kReverse, -5);
+        this.wrist.setSoftLimit(SoftLimitDirection.kForward, Arm.WRIST_LIMIT);
+        this.wrist.setSoftLimit(SoftLimitDirection.kReverse, (float) Arm.WRIST_DEFAULT_OFFSET);
 
         this.shoulderController = new SparkMaxPID(this.shoulder, Arm.SHOULDER_CONTROL_CONSTANTS);
         this.wristController = new SparkMaxPID(this.wrist, Arm.WRIST_CONTROL_CONSTANTS);
@@ -91,8 +91,8 @@ public class ArmIO implements IIO {
         this.shoulderController.setFeedbackDevice(shoulderEncoder);
         this.wristController.setFeedbackDevice(wristEncoder);
 
-        this.shoulderController.setPIDWrapping(true);
-        this.wristController.setPIDWrapping(true);
+        this.shoulderController.setPIDWrapping(false);
+        this.wristController.setPIDWrapping(false);
 
         this.shoulderController.setMotionProfileType(AccelStrategy.kSCurve);
         this.wristController.setMotionProfileType(AccelStrategy.kSCurve);
@@ -107,8 +107,7 @@ public class ArmIO implements IIO {
         if (!enabled)
             return;
 
-        angle %= Arm.SHOULDER_CONVERSION_FACTOR;
-        this.shoulderController.setSmartPosition(angle);
+        this.shoulderController.setSmartPosition(angle, Arm.SHOULDER_DEFAULT_OFFSET, Arm.SHOULDER_LIMIT);
     }
 
     /**
@@ -121,7 +120,7 @@ public class ArmIO implements IIO {
             return;
 
         angle %= Arm.WRIST_CONVERSION_FACTOR;
-        this.wristController.setSmartPosition(angle);
+        this.wristController.setSmartPosition(angle, Arm.WRIST_DEFAULT_OFFSET, Arm.WRIST_LIMIT);
     }
 
     /**
