@@ -274,8 +274,8 @@ public class Drivetrain implements Subsystem {
 
         this.currentState = DriveState.POSITION;
 
-        this.setPosition(this.getLeftPosition() + (angle * Constants.CHASIS_TURN_CONVERSION),
-                this.getRightPosition() - (angle * Constants.CHASIS_TURN_CONVERSION));
+        instance.setPosition(instance.getLeftPosition() + (angle * Constants.CHASIS_TURN_CONVERSION),
+                instance.getRightPosition() - (angle * Constants.CHASIS_TURN_CONVERSION));
     }
 
     /**
@@ -287,7 +287,7 @@ public class Drivetrain implements Subsystem {
         SmartDashboard.putNumber("Drive Heading Φ", angle);
 
         this.seekPID.setSetpoint(0);
-        this.setOutput(this.seekPID.calculate(angle), 0);
+        this.setOutput(0, this.seekPID.calculate(angle));
     }
 
     /**
