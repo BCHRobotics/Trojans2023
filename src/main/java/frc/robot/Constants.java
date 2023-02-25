@@ -130,6 +130,6 @@ public class Constants {
         public static final PIDConstants GYRO_CONSTANTS = new PIDConstants(0.005, 0.001, 0.0);
 
         // Target seek PID Constants
-        public static final PIDConstants SEEK_CONSTANTS = new PIDConstants(0.01, 0.001, 0.1);
+        public static final PIDConstants SEEK_CONSTANTS = new PIDConstants(0.00012, 0.0, 0.0);
 
 }
