@@ -271,6 +271,7 @@ public class Drivetrain implements Subsystem {
             return;
 
         SmartDashboard.putNumber("Drive Heading θ", angle);
+        SmartDashboard.putBoolean("Did it work?", true);
 
         this.currentState = DriveState.POSITION;
 

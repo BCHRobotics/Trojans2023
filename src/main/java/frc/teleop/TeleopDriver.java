@@ -58,7 +58,7 @@ public class TeleopDriver implements TeleopComponent {
             this.drive.setOutput(frwd, turn);
         }
 
-        if(DriverInput.getController().getLeftBumper()) {
+        if(DriverInput.getController().getAButton()) {
             limelight.goToApril();
         }
 
