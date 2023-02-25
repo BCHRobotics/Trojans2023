@@ -102,12 +102,7 @@ public class Limelight {
         //2 is a placeholder
     }
 
-    /*
-     * Get the distance to the target using Trigonometry
-     * 
-     * @return distance to target
-     */
-      /**
+    /**
      * Calculates the distance to a target on the ground using trigonometry
      * It is impossible to calculate the distance to a target above the limelight
      * 
@@ -121,6 +116,7 @@ public class Limelight {
         double height = Constants.LIMELIGHT_HEIGHT;
         double distance = height * Math.tan(Math.toRadians(theta));
 
+        SmartDashboard.putNumber(" Distance", distance);
         return distance;
     }
 
@@ -141,6 +137,8 @@ public class Limelight {
 
         double height = Math.max(Constants.LIMELIGHT_HEIGHT, targetHeight) - Math.min(Constants.LIMELIGHT_HEIGHT, targetHeight);
         double distance = height * Math.tan(Math.toRadians(theta));
+        
+        SmartDashboard.putNumber(" Distance", distance);
         return distance;
     }
 
