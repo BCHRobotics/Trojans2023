@@ -9,7 +9,7 @@ public class TeleopDriver implements TeleopComponent {
     private static TeleopDriver instance;
 
     private Drivetrain drive;
-    private Limelight limelight = Limelight.getInstance();
+    private Limelight limelight;
 
     private double frwd = 0;
     private double turn = 0;
@@ -27,6 +27,7 @@ public class TeleopDriver implements TeleopComponent {
     }
 
     private TeleopDriver() {
+        this.limelight = Limelight.getInstance();
         this.drive = Drivetrain.getInstance();
     }
 
@@ -39,10 +40,10 @@ public class TeleopDriver implements TeleopComponent {
     public void run() {
 
         SmartDashboard.putNumber("Max Drive Speed %", DriverInput.getDriveMaxSpeed() * 100);
-        SmartDashboard.putNumber("tX", limelight.getTargetX());
-        SmartDashboard.putNumber("tY", limelight.getTargetY());
-        SmartDashboard.putBoolean("tV", limelight.getTargetExists());
-        SmartDashboard.putNumber("pipeline", limelight.getPipeline());
+        SmartDashboard.putNumber("tX", this.limelight.getTargetX());
+        SmartDashboard.putNumber("tY", this.limelight.getTargetY());
+        SmartDashboard.putBoolean("tV", this.limelight.getTargetExists());
+        SmartDashboard.putNumber("pipeline", this.limelight.getPipeline());
 
         if (DriverInput.getController().getBButton())
             this.drive.resetEncoderPosition();

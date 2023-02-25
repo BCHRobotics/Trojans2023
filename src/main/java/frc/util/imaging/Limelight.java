@@ -4,14 +4,14 @@ import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants;
-import frc.subsystems.Drivetrain;;
+import frc.subsystems.Drivetrain;
 
 public class Limelight {
     private static Limelight instance;
 
     private NetworkTable networkTable;
     private LimelightTargetType currentTarget;
-    private Drivetrain dt = Drivetrain.getInstance();
+    private Drivetrain dt;
 
     public static Limelight getInstance() {
         if (instance == null) {
@@ -25,6 +25,7 @@ public class Limelight {
     }
 
     public Limelight() {
+        this.dt=Drivetrain.getInstance();
         this.networkTable = NetworkTableInstance.getDefault().getTable("limelight");
     }
 
@@ -45,7 +46,7 @@ public class Limelight {
     }
 
     public LimelightTarget getTargetInfo() {
-
+       
         LimelightTarget desiredTarget = new LimelightTarget(this.currentTarget);
 
         if (currentTarget == LimelightTargetType.CONE || currentTarget == LimelightTargetType.CUBE) {
@@ -89,13 +90,13 @@ public class Limelight {
     }
 
     public void GoToApril(){ //goes to april tag
-        dt.setYaw(getTargetX());//turns to april tag
-        dt.setPosition(getTargetDistance()-2,getTargetDistance()-2);
+        this.dt.setYaw(this.getTargetX());//turns to april tag
+        this.dt.setPosition(this.getTargetDistance()-2,this.getTargetDistance()-2);
         //drive to april tag but leave some space to prevent ramming the april tag
         //2 is a placeholder
     }
 
-    /**
+    /*
      * Get the distance to the target using Trigonometry
      * 
      * @return distance to target
