@@ -1,6 +1,5 @@
 package frc.subsystems;
 
-import edu.wpi.first.math.trajectory.TrapezoidProfile;
 // Import required classes
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.io.subsystems.DriveIO;
@@ -29,14 +28,6 @@ public class Drivetrain implements Subsystem {
 
     // Objects for target seeking
     private PIDControl seekPID;
-
-    // Motion Profiling
-    private final TrapezoidProfile.Constraints constraints = new TrapezoidProfile.Constraints(Constants.CHASIS_MAX_VEL,
-            Constants.CHASIS_MAX_ACCEL);
-    private TrapezoidProfile.State leftGoal = new TrapezoidProfile.State();
-    private TrapezoidProfile.State leftSetpoint = new TrapezoidProfile.State();
-    private TrapezoidProfile.State rightGoal = new TrapezoidProfile.State();
-    private TrapezoidProfile.State righttSetpoint = new TrapezoidProfile.State();
 
     // Drive states
     private DriveState currentState = DriveState.POSITION;
@@ -100,15 +91,6 @@ public class Drivetrain implements Subsystem {
 
         SmartDashboard.putNumber("DriveL Pos", this.getLeftPosition());
         SmartDashboard.putNumber("DriveR Pos", this.getRightPosition());
-
-        var leftProfile = new TrapezoidProfile(this.constraints, this.leftGoal, this.leftSetpoint);
-        var rightProfile = new TrapezoidProfile(this.constraints, this.rightGoal, this.righttSetpoint);
-
-        this.leftSetpoint = leftProfile.calculate(Constants.LOOP_TIME);
-        this.righttSetpoint = rightProfile.calculate(Constants.LOOP_TIME);
-
-        this.posLeft = this.leftSetpoint.position;
-        this.posRight = this.righttSetpoint.position;
 
         switch (currentState) {
             case OUTPUT:
@@ -204,9 +186,6 @@ public class Drivetrain implements Subsystem {
             return;
 
         this.currentState = DriveState.POSITION;
-
-        this.leftGoal = new TrapezoidProfile.State(left, 0);
-        this.rightGoal = new TrapezoidProfile.State(right, 0);
 
         this.posLeft = left;
         this.posRight = right;
