@@ -13,6 +13,7 @@ public class TeleopDriver implements TeleopComponent {
 
     private double frwd = 0;
     private double turn = 0;
+    private double angle = 0;
 
     /**
      * Get the instance of the TeleopDriver, if none create a new instance
@@ -62,8 +63,17 @@ public class TeleopDriver implements TeleopComponent {
             //limelight.goToApril();
 
             //temp code
-            double angle = limelight.getTargetX();
-            this.drive.setOutput(0.05, (angle/100));
+            this.angle = limelight.getTargetX();
+
+            if(angle >= 0.5){
+
+                this.drive.setOutput(0.0, 0.2);
+
+            } else if(angle <= -0.5){
+
+                this.drive.setOutput(0.0, -0.2);
+
+            }
         }
 
         this.drive.run();
