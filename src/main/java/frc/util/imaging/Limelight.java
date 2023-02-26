@@ -11,7 +11,6 @@ public class Limelight {
 
     private NetworkTable networkTable;
     private LimelightTargetType currentTarget;
-    private Drivetrain dt = Drivetrain.getInstance();
 
     public static Limelight getInstance() {
         if (instance == null) {
@@ -21,7 +20,7 @@ public class Limelight {
     }
 
     public enum LimelightTargetType {
-        CONE, CUBE
+        CONE, CUBE, APRILTAG, NOTHING
     }
 
     public Limelight() {
@@ -40,7 +39,8 @@ public class Limelight {
 
         LimelightTarget desiredTarget = new LimelightTarget(this.currentTarget);
 
-        if (currentTarget == LimelightTargetType.CONE || currentTarget == LimelightTargetType.CUBE) {
+        if (currentTarget == LimelightTargetType.CONE || currentTarget == LimelightTargetType.CUBE
+                || currentTarget == LimelightTargetType.APRILTAG) {
 
             desiredTarget.setX(getTargetDistance());
 
@@ -87,25 +87,25 @@ public class Limelight {
      */
     public double getTargetDistance() {
         double a1 = Misc.LIMELIGHT_ANGLE; // Limelight mount angle
-        double a2 = this.getTargetY(); // Limelight measured angle to target
-        double aR = a1 + a2; // Total anlge in degrees
-        double h1 = Misc.LIMELIGHT_HEIGHT; // Limelight lens Height;
-        double h2 = Misc.TARGET_HEIGHT; // Known Height of Target
+        double a2 = Math.abs(this.getTargetY()); // Limelight measured angle to target
+        double aT = a1 + a2; // Total anlge in degrees
+        double h1 = Misc.LIMELIGHT_HEIGHT; // Limelight lens Height in inches
+        double h2 = Misc.APRILTAG_HEIGHT; // Known Height of Target in inches
 
-        double distance = (h1 - h2) / Math.tan(Math.toRadians(aR));
+        double distance = (h1 - h2) / Math.tan(Math.toRadians(aT));
 
         distance = Math.abs(Math.round(distance * 100.0) / 100.0);
-        SmartDashboard.putNumber(" Distance", distance);
-        return distance;
+        SmartDashboard.putNumber("Distance", distance);
+        return distance; // in inches
     }
 
-    public void GoToApril(){ //goes to april tag
-        if(this.getTargetX()<=-0.5||this.getTargetX()>=0.5) this.dt.setYawPID(this.getTargetX());//turns to april tag
-        else{
-            if(this.getTargetDistance()>=4) this.dt.setOutput(0.2,0);
-            else this.dt.setOutput(0, 0);
-        }
-        //drive to april tag but leave some space to prevent ramming the april tag
-        //2 is a placeholder
+    /**
+     * Checks if limelight reached target x angle
+     * 
+     * @return reached target
+     */
+    public boolean reachedTargetX() {
+        return (Misc.WITHIN_TOLERANCE(getTargetX(), Misc.LIMELIGHT_TOLERANCE));
     }
+
 }

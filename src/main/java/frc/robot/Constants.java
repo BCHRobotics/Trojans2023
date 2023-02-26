@@ -39,6 +39,7 @@ public class Constants {
                 // Chassis dimensions needed
                 public static final double WHEEL_DIAMETER = 6;
                 public static final double TRACK_WIDTH = 19;
+                public static final double MINI_TRACK_WIDTH = 0;
 
                 // Chasis conversion factors TODO: Collect conversion data
                 public static final double LEFT_POSITION_CONVERSION = 70 / 33.35684585571289; // inches per
@@ -50,10 +51,12 @@ public class Constants {
                 public static final double RIGHT_VELOCITY_CONVERSION = RIGHT_POSITION_CONVERSION / 60.0; // #inches /
                                                                                                          // 1 sec
 
-                // input diameter = Δd inches between center wheels ~~v~~
-                public static final double TURNING_CONVERSION = ((TRACK_WIDTH) * (Math.PI / 4)) / 90.0; // Arc length
-                                                                                                        // through
-                // 90° turn,
+                // input diameter = Δd inches between center wheels ~~v~~ for <90 degree turn>
+                public static final double TURNING_CONVERSION = ((TRACK_WIDTH) * (Math.PI / 4)) / 90.0;
+
+                // input diameter = Δd inches between center wheels ~~v~~ for <90 degree turn>
+                public static final double MINI_TURNING_CONVERSION = ((MINI_TRACK_WIDTH) * (Math.PI / 4)) / 90.0;
+
                 // Drive PID Constants
                 public static final SparkMaxConstants LEFT_DRIVE_CONSTANTS = new SparkMaxConstants(
                                 0.00005, 0, 0, 0, 0.000185, -1, 1, 0, 0, 2000, 1500, 0);
@@ -157,9 +160,11 @@ public class Constants {
                 public static final ArmPresets TOP_DROPOFF = new ArmPresets(0, 0);
 
                 // Limelight vision constants
-                public static final double LIMELIGHT_ANGLE = -22; // degrees
+                public static final double LIMELIGHT_ANGLE = 22; // degrees
                 public static final double LIMELIGHT_HEIGHT = 91.25; // inches TODO: Correct limelight height
+                public static final double LIMELIGHT_TOLERANCE = 0.5; // degrees (x axis)
                 public static final double TARGET_HEIGHT = 4.75; // inches
+                public static final double APRILTAG_HEIGHT = 18.125; // inches
 
                 // CSV Test version
                 public static final int VERSION = 1;
@@ -174,6 +179,10 @@ public class Constants {
 
                 public static final boolean IN_RANGE(double value, double min, double max) {
                         return (value >= min) && (value <= max);
+                }
+
+                public static final boolean WITHIN_TOLERANCE(double value, double tolerance) {
+                        return (value >= -tolerance) && (value <= tolerance);
                 }
         }
 

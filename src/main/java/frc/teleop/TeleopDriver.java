@@ -14,6 +14,8 @@ public class TeleopDriver implements TeleopComponent {
     private double frwd = 0;
     private double turn = 0;
 
+    private double distance = 0;
+
     /**
      * Get the instance of the TeleopDriver, if none create a new instance
      * 
@@ -53,8 +55,8 @@ public class TeleopDriver implements TeleopComponent {
             this.drive.setOutput(frwd, turn);
         }
 
-        if(DriverInput.getController().getLeftBumper()) {
-            limelight.GoToApril();
+        if (DriverInput.getController().getXButtonReleased()) {
+            this.drive.goToTarget();
         }
 
         this.drive.run();

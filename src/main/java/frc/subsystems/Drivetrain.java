@@ -7,6 +7,8 @@ import frc.peripherals.robot.Gyro;
 import frc.robot.Constants.Chassis;
 import frc.robot.Constants.Features;
 import frc.util.control.SmartControl;
+import frc.util.imaging.Limelight;
+import frc.util.imaging.Limelight.LimelightTargetType;
 
 public class Drivetrain implements Subsystem {
 
@@ -29,6 +31,9 @@ public class Drivetrain implements Subsystem {
 
     // Objects for target seeking
     private SmartControl seekPID;
+
+    // Limelight Objects needed
+    private Limelight limelight;
 
     // Drive states
     private DriveState currentState = DriveState.POSITION;
@@ -71,6 +76,8 @@ public class Drivetrain implements Subsystem {
         // Objects for target seeking
         this.seekPID = new SmartControl(Chassis.SEEK_CONSTANTS);
 
+        this.limelight = new Limelight();
+
         this.firstCycle();
     }
 
@@ -80,6 +87,8 @@ public class Drivetrain implements Subsystem {
             return;
         if (gyroEnabled)
             this.gyro.reset();
+
+        this.limelight.setDesiredTarget(LimelightTargetType.APRILTAG);
 
         Chassis.LEFT_DRIVE_CONSTANTS.pushToDashboard("Drive Left");
         Chassis.RIGHT_DRIVE_CONSTANTS.pushToDashboard("Drive Right");
@@ -334,6 +343,20 @@ public class Drivetrain implements Subsystem {
             return;
         this.gyroPid.disableContinuousInput();
         this.gyroPid.reset();
+    }
+
+    public void goToTarget() { // goes to april tag
+        double angle = this.limelight.getTargetX();
+        double distance = this.limelight.getTargetDistance();
+
+        if (!this.limelight.reachedTargetX())
+            this.setYaw(-angle); // turns to april tag
+        else {
+            this.resetEncoderPosition();
+            this.setPosition(distance, distance);
+        }
+        // drive to april tag but leave some space to prevent ramming the april tag
+        // 2 is a placeholder
     }
 
 }
