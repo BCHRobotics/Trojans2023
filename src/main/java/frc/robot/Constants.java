@@ -118,7 +118,6 @@ public class Constants {
 
                 public static final double DEFAULT_OFFSET = 0;
                 public static final float LIMIT = 1;
-                public static final int LIMIT_SWTICH_PORT = 2;
 
                 public static final double CONVERSION_FACTOR = 1 / 35; // #inches / #revs
 

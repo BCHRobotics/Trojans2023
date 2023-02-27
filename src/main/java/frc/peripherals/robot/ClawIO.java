@@ -8,7 +8,6 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import com.revrobotics.SparkMaxLimitSwitch.Type;
 import com.revrobotics.SparkMaxPIDController.AccelStrategy;
 
-import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DigitalOutput;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.Solenoid;
@@ -43,9 +42,6 @@ public class ClawIO implements IIO {
 
     // PID Constants
     private SparkMaxConstants clawConstants = Claw.CONSTANTS;
-
-    // Limit switch port
-    private DigitalInput limitSwitch;
 
     private boolean enabled = Features.CLAW_ENABLED;
     private boolean calibrated = false;
@@ -86,13 +82,13 @@ public class ClawIO implements IIO {
 
         this.grip.setSmartCurrentLimit(40, 15);
 
-        this.grip.setInverted(true);
+        this.grip.setInverted(false);
 
         this.grip.enableSoftLimit(SoftLimitDirection.kForward, true);
         this.grip.enableSoftLimit(SoftLimitDirection.kReverse, true);
 
-        this.grip.setSoftLimit(SoftLimitDirection.kForward, (float) Claw.DEFAULT_OFFSET);
-        this.grip.setSoftLimit(SoftLimitDirection.kReverse, Claw.LIMIT);
+        this.grip.setSoftLimit(SoftLimitDirection.kForward, Claw.LIMIT);
+        this.grip.setSoftLimit(SoftLimitDirection.kReverse, (float) Claw.DEFAULT_OFFSET);
 
         this.clawPidController = new SparkMaxPID(this.grip, this.clawConstants);
 
@@ -101,8 +97,6 @@ public class ClawIO implements IIO {
         this.clawEncoder.setPositionConversionFactor(Claw.CONVERSION_FACTOR);
 
         this.clawPidController.setMotionProfileType(AccelStrategy.kSCurve);
-
-        this.limitSwitch = new DigitalInput(Claw.LIMIT_SWTICH_PORT);
     }
 
     /**
@@ -235,12 +229,12 @@ public class ClawIO implements IIO {
         if (!enabled || this.calibrated)
             return;
 
-        if (this.grip.getForwardLimitSwitch(Type.kNormallyClosed).isPressed()) {
+        if (this.grip.getReverseLimitSwitch(Type.kNormallyClosed).isPressed()) {
             this.grip.set(0);
             this.clawEncoder.setPosition(0);
             this.calibrated = true;
         } else
-            this.grip.set(1);
+            this.grip.set(-1);
     }
 
     /**
