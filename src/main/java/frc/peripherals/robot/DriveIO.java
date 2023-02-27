@@ -5,6 +5,8 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+import com.revrobotics.SparkMaxPIDController.AccelStrategy;
+
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants.Chassis;
 import frc.robot.Constants.Features;
@@ -71,12 +73,6 @@ public class DriveIO implements IIO {
         this.driveL1.setSmartCurrentLimit(60, 20);
         this.driveR1.setSmartCurrentLimit(60, 20);
 
-        this.driveL1PidController = new SparkMaxPID(this.driveL1, Chassis.LEFT_DRIVE_CONSTANTS);
-        this.driveR1PidController = new SparkMaxPID(this.driveR1, Chassis.RIGHT_DRIVE_CONSTANTS);
-
-        this.driveL1PidController.setFeedbackDevice(driveL1Encoder);
-        this.driveR1PidController.setFeedbackDevice(driveR1Encoder);
-
         this.driveL1.setInverted(Chassis.INVERTED);
         this.driveR1.setInverted(!Chassis.INVERTED);
 
@@ -85,6 +81,15 @@ public class DriveIO implements IIO {
 
         this.driveL1Encoder.setVelocityConversionFactor(Chassis.LEFT_VELOCITY_CONVERSION);
         this.driveR1Encoder.setVelocityConversionFactor(Chassis.RIGHT_VELOCITY_CONVERSION);
+
+        this.driveL1PidController = new SparkMaxPID(this.driveL1, Chassis.LEFT_DRIVE_CONSTANTS);
+        this.driveR1PidController = new SparkMaxPID(this.driveR1, Chassis.RIGHT_DRIVE_CONSTANTS);
+
+        this.driveL1PidController.setFeedbackDevice(driveL1Encoder);
+        this.driveR1PidController.setFeedbackDevice(driveR1Encoder);
+
+        this.driveL1PidController.setMotionProfileType(AccelStrategy.kTrapezoidal);
+        this.driveR1PidController.setMotionProfileType(AccelStrategy.kTrapezoidal);
     }
 
     /**
@@ -146,7 +151,7 @@ public class DriveIO implements IIO {
     public void setDriveLeftPos(double position) {
         if (!enabled)
             return;
-        this.driveL1PidController.retrieveDashboardConstants(Chassis.LEFT_DRIVE_CONSTANTS);
+        this.driveL1PidController.retrieveDashboardConstants();
         this.driveL1PidController.setSmartPosition(position);
     }
 
@@ -158,7 +163,7 @@ public class DriveIO implements IIO {
     public void setDriveRightPos(double position) {
         if (!enabled)
             return;
-        this.driveR1PidController.retrieveDashboardConstants(Chassis.RIGHT_DRIVE_CONSTANTS);
+        this.driveR1PidController.retrieveDashboardConstants();
         this.driveR1PidController.setSmartPosition(position);
     }
 

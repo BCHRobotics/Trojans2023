@@ -8,6 +8,7 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import com.revrobotics.SparkMaxLimitSwitch.Type;
 import com.revrobotics.SparkMaxPIDController.AccelStrategy;
 
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DigitalOutput;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.Solenoid;
@@ -41,9 +42,13 @@ public class ClawIO implements IIO {
     private SparkMaxPID clawPidController;
 
     // PID Constants
-    private SparkMaxConstants clawConstants = Claw.CLAW_CONSTANTS;
+    private SparkMaxConstants clawConstants = Claw.CONSTANTS;
+
+    // Limit switch port
+    private DigitalInput limitSwitch;
 
     private boolean enabled = Features.CLAW_ENABLED;
+    private boolean calibrated = false;
 
     public static ClawIO getInstance() {
         if (instance == null) {
@@ -86,16 +91,18 @@ public class ClawIO implements IIO {
         this.grip.enableSoftLimit(SoftLimitDirection.kForward, true);
         this.grip.enableSoftLimit(SoftLimitDirection.kReverse, true);
 
-        this.grip.setSoftLimit(SoftLimitDirection.kForward, (float) Claw.CLAW_DEFAULT_OFFSET);
-        this.grip.setSoftLimit(SoftLimitDirection.kReverse, Claw.CLAW_LIMIT);
+        this.grip.setSoftLimit(SoftLimitDirection.kForward, (float) Claw.DEFAULT_OFFSET);
+        this.grip.setSoftLimit(SoftLimitDirection.kReverse, Claw.LIMIT);
 
         this.clawPidController = new SparkMaxPID(this.grip, this.clawConstants);
 
         this.clawPidController.setFeedbackDevice(clawEncoder);
 
-        this.clawEncoder.setPositionConversionFactor(Claw.CLAW_CONVERSION_FACTOR);
+        this.clawEncoder.setPositionConversionFactor(Claw.CONVERSION_FACTOR);
 
         this.clawPidController.setMotionProfileType(AccelStrategy.kSCurve);
+
+        this.limitSwitch = new DigitalInput(Claw.LIMIT_SWTICH_PORT);
     }
 
     /**
@@ -104,10 +111,10 @@ public class ClawIO implements IIO {
      * @param position
      */
     public void setClawPosition(double position) {
-        if (!enabled)
+        if (!enabled || !this.calibrated)
             return;
 
-        this.clawPidController.setSmartPosition(position, Claw.CLAW_DEFAULT_OFFSET, Claw.CLAW_DEFAULT_OFFSET);
+        this.clawPidController.setSmartPosition(position, Claw.DEFAULT_OFFSET, Claw.DEFAULT_OFFSET);
     }
 
     /**
@@ -215,24 +222,25 @@ public class ClawIO implements IIO {
      * Resets claw encoder to zero position
      * 
      * <p>
-     * Deprecated since claw encoders should not be reset through code
+     * Deprecated since claw encoders should not be reset outside of class
      */
     @Deprecated
     public void resetInputs() {
         if (!enabled)
             return;
-
-        if (this.grip.getForwardLimitSwitch(Type.kNormallyClosed).isPressed()) {
-            this.clawEncoder.setPosition(0);
-            this.grip.set(0);
-        } else
-            this.grip.set(1);
     }
 
-    @Deprecated
+    @Override
     public void updateInputs() {
-        if (!enabled)
+        if (!enabled || this.calibrated)
             return;
+
+        if (this.grip.getForwardLimitSwitch(Type.kNormallyClosed).isPressed()) {
+            this.grip.set(0);
+            this.clawEncoder.setPosition(0);
+            this.calibrated = true;
+        } else
+            this.grip.set(1);
     }
 
     /**
@@ -248,4 +256,5 @@ public class ClawIO implements IIO {
         this.midPump.disable();
         this.rightPump.disable();
     }
+
 }

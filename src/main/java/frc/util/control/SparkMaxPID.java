@@ -75,9 +75,9 @@ public class SparkMaxPID {
         this.setConstants(this.constants);
     }
 
-    public void retrieveDashboardConstants(SparkMaxConstants constants) {
-        if (constants.valuesChanged())
-            constants.getFromDashboard();
+    public void retrieveDashboardConstants() {
+        if (this.constants.valuesChanged())
+            this.constants.getFromDashboard();
         this.setConstants(constants);
     }
 

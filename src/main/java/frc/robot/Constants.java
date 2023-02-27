@@ -39,7 +39,6 @@ public class Constants {
                 // Chassis dimensions needed
                 public static final double WHEEL_DIAMETER = 6;
                 public static final double TRACK_WIDTH = 19;
-                public static final double MINI_TRACK_WIDTH = 0;
 
                 // Chasis conversion factors TODO: Collect conversion data
                 public static final double LEFT_POSITION_CONVERSION = 70 / 33.35684585571289; // inches per
@@ -51,11 +50,8 @@ public class Constants {
                 public static final double RIGHT_VELOCITY_CONVERSION = RIGHT_POSITION_CONVERSION / 60.0; // #inches /
                                                                                                          // 1 sec
 
-                // input diameter = Δd inches between center wheels ~~v~~ for <90 degree turn>
-                public static final double TURNING_CONVERSION = ((TRACK_WIDTH) * (Math.PI / 4)) / 90.0;
-
-                // input diameter = Δd inches between center wheels ~~v~~ for <90 degree turn>
-                public static final double MINI_TURNING_CONVERSION = ((MINI_TRACK_WIDTH) * (Math.PI / 4)) / 90.0;
+                // input diameter = Δd inches between center wheels ~~v~~ in inches / degree
+                public static final double TURNING_CONVERSION = (TRACK_WIDTH * Math.PI) / 360.0;
 
                 // Drive PID Constants
                 public static final SparkMaxConstants LEFT_DRIVE_CONSTANTS = new SparkMaxConstants(
@@ -120,12 +116,13 @@ public class Constants {
                 public static final int LEFT_BLEED_VALVE = 0;
                 public static final int RIGHT_BLEED_VALVE = 1;
 
-                public static final float CLAW_LIMIT = 1;
-                public static final double CLAW_DEFAULT_OFFSET = 0;
+                public static final double DEFAULT_OFFSET = 0;
+                public static final float LIMIT = 1;
+                public static final int LIMIT_SWTICH_PORT = 2;
 
-                public static final double CLAW_CONVERSION_FACTOR = 1 / 35; // #inches / #revs
+                public static final double CONVERSION_FACTOR = 1 / 35; // #inches / #revs
 
-                public static final SparkMaxConstants CLAW_CONSTANTS = new SparkMaxConstants(
+                public static final SparkMaxConstants CONSTANTS = new SparkMaxConstants(
                                 1e-4, 0, 0, 0, 0.000156, -1, 1, 0, 0, 0, 0, 0);
         }
 
