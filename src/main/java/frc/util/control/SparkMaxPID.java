@@ -39,7 +39,7 @@ public class SparkMaxPID {
         this.pidController.setFF(c.kFF, c.slot);
         this.pidController.setIZone(c.kIz, c.slot);
         this.pidController.setOutputRange(c.kMinOutput, c.kMaxOutput, c.slot);
-        this.constants.slot = c.slot;
+        this.constants = c;
         this.pidController.setSmartMotionMinOutputVelocity(c.minVel, c.slot);
         this.pidController.setSmartMotionMaxVelocity(c.maxVel, c.slot);
         this.pidController.setSmartMotionMaxAccel(c.maxAcc, c.slot);

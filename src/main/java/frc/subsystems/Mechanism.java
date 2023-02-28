@@ -21,6 +21,7 @@ public class Mechanism implements Subsystem {
     private double wristPos;
     private double clawPos;
     private boolean pumpMode;
+    private boolean bleed;
 
     private boolean coneLED, cubeLED, blinkCone, blinkCube;
     private long previousTime, currentTime;
@@ -56,8 +57,8 @@ public class Mechanism implements Subsystem {
         this.clawIO.setLeftPump(this.pumpMode);
         this.clawIO.setMidPump(this.pumpMode);
         this.clawIO.setRightPump(this.pumpMode);
-        this.clawIO.setLeftValve(!this.pumpMode);
-        this.clawIO.setRightValve(!this.pumpMode);
+        this.clawIO.setLeftValve(this.bleed);
+        this.clawIO.setRightValve(this.bleed);
 
         this.currentTime = System.currentTimeMillis();
 
@@ -155,10 +156,10 @@ public class Mechanism implements Subsystem {
     /**
      * Sets Claw position in actuator degrees
      * 
-     * @param angle
+     * @param position
      */
-    public void setClawPos(double angle) {
-        this.clawPos = angle;
+    public void setClawPos(double position) {
+        this.clawPos = position;
         // this.pumpMode = angle != 0;
 
     }
@@ -186,6 +187,24 @@ public class Mechanism implements Subsystem {
      */
     public boolean getSuctionMode() {
         return this.pumpMode;
+    }
+
+    /**
+     * Set bleed state
+     * 
+     * @param state
+     */
+    public void setBleedMode(boolean state) {
+        this.bleed = state;
+    }
+
+    /**
+     * Get bleed state
+     * 
+     * @return
+     */
+    public boolean getBleedMode() {
+        return this.bleed;
     }
 
     /**

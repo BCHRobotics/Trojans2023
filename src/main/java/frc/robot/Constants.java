@@ -15,7 +15,7 @@ public class Constants {
                 public static final boolean USING_DASHBOARD = true;
                 public static final boolean DRIVE_ENABLED = false;
                 public static final boolean ARM_ENABLED = true;
-                public static final boolean CLAW_ENABLED = false;
+                public static final boolean CLAW_ENABLED = true;
                 public static final boolean GYRO_ENABLED = false;
                 public static final boolean MINI_BOT = false;
         }
@@ -95,8 +95,8 @@ public class Constants {
                 public static final boolean WRIST_ENCODER_INVERTED = false;
 
                 // Robot arm ABSOLUTE encoder offset TODO: Correct encoder offsets
-                public static final double SHOULDER_ENCODER_OFFSET = (265.8371902) - Arm.SHOULDER_DEFAULT_OFFSET;
-                public static final double WRIST_ENCODER_OFFSET = (172.0870650) - Arm.WRIST_DEFAULT_OFFSET;
+                public static final double SHOULDER_ENCODER_OFFSET = (204.3725681) - Arm.SHOULDER_DEFAULT_OFFSET;
+                public static final double WRIST_ENCODER_OFFSET = (172.7600527) - Arm.WRIST_DEFAULT_OFFSET;
 
                 // Mechanism PID Constants
                 public static final SparkMaxConstants SHOULDER_CONTROL_CONSTANTS = new SparkMaxConstants(
@@ -118,11 +118,12 @@ public class Constants {
 
                 public static final double DEFAULT_OFFSET = 0;
                 public static final float LIMIT = 1;
+                public static final int LIMIT_SWITCH_PORT = 2;
 
-                public static final double CONVERSION_FACTOR = 1 / 35; // #inches / #revs
+                public static final double CONVERSION_FACTOR = (1.0 / 55.0); // #inches / #revs
 
                 public static final SparkMaxConstants CONSTANTS = new SparkMaxConstants(
-                                1e-4, 0, 0, 0, 0.000156, -1, 1, 0, 0, 0, 0, 0);
+                                1e-4, 0, 0, 0, 0.00256, -1, 1, 0, 0, 5700, 4500, 0);
         }
 
         public static final class Misc {
@@ -135,8 +136,8 @@ public class Constants {
                 public static final double CUBE_PRESET = 0.5;
                 public static final double CONE_PRESET = 1;
 
-                public static final int CUBE_LED_PORT = 0;
-                public static final int CONE_LED_PORT = 1;
+                public static final int CUBE_LED_PORT = 1;
+                public static final int CONE_LED_PORT = 0;
 
                 public static final int BLINK_INTERVAL = 1000; // milliseconds
 

@@ -24,7 +24,7 @@ public final class OperatorInput {
      * @return Wrist offset
      */
     public static double getWristOffset() {
-        return Math.abs(operator.getJoystick(Side.RIGHT, Axis.Y) * 90);
+        return operator.getJoystick(Side.RIGHT, Axis.Y) * 180;
     }
 
     /**

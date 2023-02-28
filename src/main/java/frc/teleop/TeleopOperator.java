@@ -35,22 +35,29 @@ public class TeleopOperator implements TeleopComponent {
     @Override
     public void run() {
 
-        SmartDashboard.putNumber("Max Drive Speed %", 100);
-
-        if (OperatorInput.getGamePiece() == 0)
-            this.mech.setClawPos(Misc.CONE_PRESET);
-        else if (OperatorInput.getGamePiece() == 270)
-            this.mech.setClawPos(Misc.CUBE_PRESET);
-        else if (OperatorInput.getGamePiece() == 180)
-            this.mech.setClawPos(0);
+        // if (OperatorInput.getGamePiece() == 0)
+        // this.mech.setClawPos(Misc.CONE_PRESET);
+        // else if (OperatorInput.getGamePiece() == 270)
+        // this.mech.setClawPos(Misc.CUBE_PRESET);
+        // else if (OperatorInput.getGamePiece() == 180)
+        // this.mech.setClawPos(0);
 
         // this.mech.setWristOffset(OperatorInput.getWristOffset());
         // this.mech.setWristHeight(OperatorInput.getTestOffset());
 
-        if (OperatorInput.getTestButton())
+        if (OperatorInput.getTestButton()) {
             this.mech.setStatusLED(StatusLED.CONE);
-        else
+            this.mech.setClawPos(0.8);
+            this.mech.setSuctionMode(false);
+            this.mech.setBleedMode(false);
+        } else {
             this.mech.setStatusLED(StatusLED.CUBE);
+            this.mech.setClawPos(0);
+            this.mech.setSuctionMode(false);
+        }
+
+        if (OperatorInput.getController().getAButton())
+            this.mech.setBleedMode(true);
 
         this.mech.setShoulderAngle(OperatorInput.getTestOffset());
         this.mech.setWristAngle(OperatorInput.getWristOffset());
