@@ -62,6 +62,7 @@ public class Robot extends TimedRobot {
     @Override
     public void robotPeriodic() {
         SmartDashboard.updateValues();
+        SmartDashboard.putNumber("Arm Revolutions", Mechanism.getInstance().getShoulderAngle());
         SmartDashboard.putNumber("Claw Revolutions", Mechanism.getInstance().getClawPos());
     }
 

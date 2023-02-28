@@ -85,8 +85,8 @@ public class Constants {
                 public static final double SHOULDER_CONVERSION_FACTOR = 360; // Convert revs to degrees
                 public static final double WRIST_CONVERSION_FACTOR = 360; // Convert revs to degrees
                 public static final double WRIST_PARALLEL_OFFSET = 90;
-                public static final double SHOULDER_DEFAULT_OFFSET = 16;
-                public static final double WRIST_DEFAULT_OFFSET = 16;
+                public static final double SHOULDER_DEFAULT_OFFSET = 17;
+                public static final double WRIST_DEFAULT_OFFSET = 17;
                 public static final float SHOULDER_LIMIT = 110 + (float) Arm.SHOULDER_DEFAULT_OFFSET;
                 public static final float WRIST_LIMIT = 200 + (float) Arm.WRIST_DEFAULT_OFFSET;
 
@@ -95,12 +95,12 @@ public class Constants {
                 public static final boolean WRIST_ENCODER_INVERTED = false;
 
                 // Robot arm ABSOLUTE encoder offset TODO: Correct encoder offsets
-                public static final double SHOULDER_ENCODER_OFFSET = (204.3725681) - Arm.SHOULDER_DEFAULT_OFFSET;
-                public static final double WRIST_ENCODER_OFFSET = (172.7600527) - Arm.WRIST_DEFAULT_OFFSET;
+                public static final double SHOULDER_ENCODER_OFFSET = (204.7660160) - Arm.SHOULDER_DEFAULT_OFFSET;
+                public static final double WRIST_ENCODER_OFFSET = (172.0870650) - Arm.WRIST_DEFAULT_OFFSET;
 
                 // Mechanism PID Constants
                 public static final SparkMaxConstants SHOULDER_CONTROL_CONSTANTS = new SparkMaxConstants(
-                                7.1028E-05, 0, 5.1398E-05, 0, 0, -1, 1, 0, 0, 2000, 1500, 0);
+                                0.00014028, 0, 0.00071398, 0, 2e-5, -0.4, 1, 0, 0, 5700, 3000, 0);
                 public static final SparkMaxConstants WRIST_CONTROL_CONSTANTS = new SparkMaxConstants(
                                 7.1028E-05, 0, 5.1398E-05, 0, 0, -1, 1, 0, 0, 2000, 1500, 0);
 
@@ -157,7 +157,7 @@ public class Constants {
                 public static final ArmPresets TOP_DROPOFF = new ArmPresets(0, 0);
 
                 // Limelight vision constants
-                public static final double LIMELIGHT_ANGLE = 22; // degrees
+                public static final double LIMELIGHT_ANGLE = 21.5; // degrees
                 public static final double LIMELIGHT_HEIGHT = 91.25; // inches TODO: Correct limelight height
                 public static final double LIMELIGHT_TOLERANCE = 0.5; // degrees (x axis)
                 public static final double TARGET_HEIGHT = 4.75; // inches

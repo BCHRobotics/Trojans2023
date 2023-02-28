@@ -64,6 +64,8 @@ public class TeleopOperator implements TeleopComponent {
 
         this.mech.run();
 
+        SmartDashboard.putNumber("Arm Setpoint", OperatorInput.getTestOffset());
+
     }
 
     @Override

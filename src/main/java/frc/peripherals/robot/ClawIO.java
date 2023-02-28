@@ -238,6 +238,7 @@ public class ClawIO implements IIO {
     public void resetInputs() {
         if (!enabled)
             return;
+        this.calibrated = false;
     }
 
     @Override

@@ -47,6 +47,8 @@ public class Mechanism implements Subsystem {
         this.armIO = ArmIO.getInstance();
         this.clawIO = ClawIO.getInstance();
         this.resetPosition();
+
+        this.armIO.pushToDashboard();
     }
 
     @Override

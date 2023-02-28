@@ -75,10 +75,19 @@ public class SparkMaxPID {
         this.setConstants(this.constants);
     }
 
+    public void pushConstantsToDashboard(String label) {
+        this.constants.pushToDashboard(label);
+    }
+
     public void retrieveDashboardConstants() {
-        if (this.constants.valuesChanged())
+        if (this.constants.valuesChanged()) {
             this.constants.getFromDashboard();
-        this.setConstants(constants);
+            this.setConstants(constants);
+        }
+    }
+
+    public boolean constantsChanged() {
+        return this.constants.valuesChanged();
     }
 
     public void setFeedbackDevice(RelativeEncoder device) {

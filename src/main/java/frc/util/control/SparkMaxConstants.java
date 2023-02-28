@@ -56,45 +56,45 @@ public class SparkMaxConstants {
 
     public void pushToDashboard(String name) {
         this.name = name;
-        SmartDashboard.putNumber(this.name + "P Gain", kP);
-        SmartDashboard.putNumber(this.name + "I Gain", kI);
-        SmartDashboard.putNumber(this.name + "D Gain", kD);
-        SmartDashboard.putNumber(this.name + "Feed Forward", kFF);
-        SmartDashboard.putNumber(this.name + "I Zone", kIz);
-        SmartDashboard.putNumber(this.name + "Max Output", kMaxOutput);
-        SmartDashboard.putNumber(this.name + "Min Output", kMinOutput);
-        SmartDashboard.putNumber(this.name + "Min Velocity", minVel);
-        SmartDashboard.putNumber(this.name + "Max Velocity", maxVel);
-        SmartDashboard.putNumber(this.name + "Max Acceleration", maxAcc);
-        SmartDashboard.putNumber(this.name + "Allowed Closed Loop Error", allowedErr);
+        SmartDashboard.putNumber(this.name + " P Gain", kP);
+        SmartDashboard.putNumber(this.name + " I Gain", kI);
+        SmartDashboard.putNumber(this.name + " D Gain", kD);
+        SmartDashboard.putNumber(this.name + " Feed Forward", kFF);
+        SmartDashboard.putNumber(this.name + " I Zone", kIz);
+        SmartDashboard.putNumber(this.name + " Max Output", kMaxOutput);
+        SmartDashboard.putNumber(this.name + " Min Output", kMinOutput);
+        SmartDashboard.putNumber(this.name + " Min Velocity", minVel);
+        SmartDashboard.putNumber(this.name + " Max Velocity", maxVel);
+        SmartDashboard.putNumber(this.name + " Max Acceleration", maxAcc);
+        SmartDashboard.putNumber(this.name + " Allowed Closed Loop Error", allowedErr);
     }
 
     public void getFromDashboard() {
-        kP = SmartDashboard.getNumber(this.name + "P Gain", 0);
-        kI = SmartDashboard.getNumber(this.name + "I Gain", 0);
-        kD = SmartDashboard.getNumber(this.name + "D Gain", 0);
-        kFF = SmartDashboard.getNumber(this.name + "Feed Forward", 0);
-        kIz = SmartDashboard.getNumber(this.name + "I Zone", 0);
-        kMinOutput = SmartDashboard.getNumber(this.name + "Min Output", 0);
-        kMaxOutput = SmartDashboard.getNumber(this.name + "Max Output", 0);
-        minVel = SmartDashboard.getNumber(this.name + "Min Velocity", 0);
-        maxVel = SmartDashboard.getNumber(this.name + "Max Velocity", 0);
-        maxAcc = SmartDashboard.getNumber(this.name + "Max Acceleration", 0);
-        allowedErr = SmartDashboard.getNumber(this.name + "Allowed Closed Loop Error", 0);
+        kP = SmartDashboard.getNumber(this.name + " P Gain", 0);
+        kI = SmartDashboard.getNumber(this.name + " I Gain", 0);
+        kD = SmartDashboard.getNumber(this.name + " D Gain", 0);
+        kFF = SmartDashboard.getNumber(this.name + " Feed Forward", 0);
+        kIz = SmartDashboard.getNumber(this.name + " I Zone", 0);
+        kMinOutput = SmartDashboard.getNumber(this.name + " Min Output", 0);
+        kMaxOutput = SmartDashboard.getNumber(this.name + " Max Output", 0);
+        minVel = SmartDashboard.getNumber(this.name + " Min Velocity", 0);
+        maxVel = SmartDashboard.getNumber(this.name + " Max Velocity", 0);
+        maxAcc = SmartDashboard.getNumber(this.name + " Max Acceleration", 0);
+        allowedErr = SmartDashboard.getNumber(this.name + " Allowed Closed Loop Error", 0);
     }
 
     public boolean valuesChanged() {
-        return (this.kP != SmartDashboard.getNumber(this.name + "P Gain", 0)
-                || this.kI != SmartDashboard.getNumber(this.name + "I Gain", 0)
-                || this.kD != SmartDashboard.getNumber(this.name + "D Gain", 0)
-                || this.kFF != SmartDashboard.getNumber(this.name + "Feed Forward", 0)
-                || this.kIz != SmartDashboard.getNumber(this.name + "I Zone", 0)
-                || this.kMinOutput != SmartDashboard.getNumber(this.name + "Min Output", 0)
-                || this.kMaxOutput != SmartDashboard.getNumber(this.name + "Max Output", 0)
-                || this.minVel != SmartDashboard.getNumber(this.name + "Min Velocity", 0)
-                || this.maxVel != SmartDashboard.getNumber(this.name + "Max Velocity", 0)
-                || this.maxAcc != SmartDashboard.getNumber(this.name + "Max Acceleration", 0)
-                || this.allowedErr != SmartDashboard.getNumber(this.name + "Allowed Closed Loop Error", 0));
+        return (this.kP != SmartDashboard.getNumber(this.name + " P Gain", 0)
+                || this.kI != SmartDashboard.getNumber(this.name + " I Gain", 0)
+                || this.kD != SmartDashboard.getNumber(this.name + " D Gain", 0)
+                || this.kFF != SmartDashboard.getNumber(this.name + " Feed Forward", 0)
+                || this.kIz != SmartDashboard.getNumber(this.name + " I Zone", 0)
+                || this.kMinOutput != SmartDashboard.getNumber(this.name + " Min Output", 0)
+                || this.kMaxOutput != SmartDashboard.getNumber(this.name + " Max Output", 0)
+                || this.minVel != SmartDashboard.getNumber(this.name + " Min Velocity", 0)
+                || this.maxVel != SmartDashboard.getNumber(this.name + " Max Velocity", 0)
+                || this.maxAcc != SmartDashboard.getNumber(this.name + " Max Acceleration", 0)
+                || this.allowedErr != SmartDashboard.getNumber(this.name + " Allowed Closed Loop Error", 0));
     }
 
     @Override

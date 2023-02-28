@@ -8,6 +8,7 @@ import com.revrobotics.CANSparkMax.SoftLimitDirection;
 import com.revrobotics.SparkMaxAbsoluteEncoder.Type;
 import com.revrobotics.SparkMaxPIDController.AccelStrategy;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants.Arm;
 import frc.robot.Constants.Features;
 import frc.util.control.SparkMaxPID;
@@ -62,7 +63,7 @@ public class ArmIO implements IIO {
         this.wrist.setInverted(false);
 
         this.shoulderEncoder = shoulder.getAbsoluteEncoder(Type.kDutyCycle);
-        this.wristEncoder = wrist.getAbsoluteEncoder(Type.kDutyCycle);
+        this.wristEncoder = this.wrist.getAbsoluteEncoder(Type.kDutyCycle);
 
         this.shoulderEncoder.setInverted(Arm.SHOULDER_ENCODER_INVERTED);
         this.wristEncoder.setInverted(Arm.WRIST_ENCODER_INVERTED);
@@ -170,10 +171,16 @@ public class ArmIO implements IIO {
             return;
     }
 
+    public void pushToDashboard() {
+        this.shoulderController.pushConstantsToDashboard("Arm");
+    }
+
     @Override
     public void updateInputs() {
         if (!enabled)
             return;
+
+        this.shoulderController.retrieveDashboardConstants();
     }
 
     /**
