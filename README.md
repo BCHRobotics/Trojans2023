@@ -6,12 +6,12 @@ This is the 2023 robot code for Rapid React.
 
 ### Installation
 
-To run edit the code you must have the following items on your computer:
+To edit the code you must have the following on your computer:
 * VSCode: (https://code.visualstudio.com/)
 * WPILib Extension: (https://marketplace.visualstudio.com/items?itemName=wpilibsuite.vscode-wpilib)
 * Java Tools: (https://code.visualstudio.com/docs/languages/java)
 
-To drive the code you must have:
+To drive the robot and run the code you must have:
 * FRC tools (Windows only, for driving): (https://www.ni.com/en-us/support/downloads/drivers/download.frc-game-tools.html)
 
 ### Vendor Libraries
