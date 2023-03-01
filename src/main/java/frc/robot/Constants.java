@@ -77,7 +77,7 @@ public class Constants {
                 public static final int WRIST_ID = 21;
 
                 // Robot dimensions (inches) TODO: Correct Dimensions
-                public static final double SHOULDER_HEIGHT = 37;
+                public static final double SHOULDER_HEIGHT = 34.75;
                 public static final double ARM_LENGTH = 36;
                 public static final double FOREARM_LENGTH = 15;
 
@@ -86,9 +86,10 @@ public class Constants {
                 public static final double WRIST_CONVERSION_FACTOR = 360; // Convert revs to degrees
                 public static final double WRIST_PARALLEL_OFFSET = 90;
                 public static final double SHOULDER_DEFAULT_OFFSET = 17;
-                public static final double WRIST_DEFAULT_OFFSET = 17;
+                public static final double WRIST_DEFAULT_OFFSET = 10;
                 public static final float SHOULDER_LIMIT = 110 + (float) Arm.SHOULDER_DEFAULT_OFFSET;
                 public static final float WRIST_LIMIT = 200 + (float) Arm.WRIST_DEFAULT_OFFSET;
+                public static final double SHOUDLER_MAX_EXTENSION_LIMIT = 55;
 
                 // Robot arm ABSOLUTE encoder inversions TODO: Correct encoder inversions
                 public static final boolean SHOULDER_ENCODER_INVERTED = false;
@@ -100,9 +101,9 @@ public class Constants {
 
                 // Mechanism PID Constants
                 public static final SparkMaxConstants SHOULDER_CONTROL_CONSTANTS = new SparkMaxConstants(
-                                0.00014028, 0, 0.00071398, 0, 2e-5, -0.4, 1, 0, 0, 5700, 3000, 0);
+                                0.00014028, 0, 0.00051398, 0, 2e-6, -0.4, 1, 0, 0, 5700, 3500, 0.1);
                 public static final SparkMaxConstants WRIST_CONTROL_CONSTANTS = new SparkMaxConstants(
-                                7.1028E-05, 0, 5.1398E-05, 0, 0, -1, 1, 0, 0, 2000, 1500, 0);
+                                2.1028E-05, 0, 5.1398E-05, 0, 0.00004, -1, 1, 0, 0, 5700, 5700, 0.1);
 
         }
 
@@ -120,10 +121,10 @@ public class Constants {
                 public static final float LIMIT = 1;
                 public static final int LIMIT_SWITCH_PORT = 2;
 
-                public static final double CONVERSION_FACTOR = (1.0 / 55.0); // #inches / #revs
+                public static final double CONVERSION_FACTOR = (1.0 / 50.0); // #inches / #revs
 
                 public static final SparkMaxConstants CONSTANTS = new SparkMaxConstants(
-                                1e-4, 0, 0, 0, 0.00256, -1, 1, 0, 0, 5700, 4500, 0);
+                                0, 0, 0, 0, 0.0028, -1, 1, 0, 0, 5700, 4500, 0.01);
         }
 
         public static final class Misc {
@@ -133,13 +134,13 @@ public class Constants {
                 public static final int OPERATOR_PORT = 1;
 
                 // Game piece actuator presets in degrees
-                public static final double CUBE_PRESET = 0.5;
+                public static final double CUBE_PRESET = 0.7;
                 public static final double CONE_PRESET = 1;
 
                 public static final int CUBE_LED_PORT = 1;
                 public static final int CONE_LED_PORT = 0;
 
-                public static final int BLINK_INTERVAL = 1000; // milliseconds
+                public static final int BLINK_INTERVAL = 500; // milliseconds
 
                 public static enum StatusLED {
                         CONE,
@@ -180,6 +181,10 @@ public class Constants {
 
                 public static final boolean WITHIN_TOLERANCE(double value, double tolerance) {
                         return (value >= -tolerance) && (value <= tolerance);
+                }
+
+                public static final boolean WITHIN_TOLERANCE(double setpoint, double target, double tolerance) {
+                        return (setpoint >= (target - tolerance)) && (setpoint <= (target + tolerance));
                 }
         }
 

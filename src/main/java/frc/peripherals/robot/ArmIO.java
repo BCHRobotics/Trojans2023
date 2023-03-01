@@ -120,8 +120,10 @@ public class ArmIO implements IIO {
         if (!enabled)
             return;
 
-        angle %= Arm.WRIST_CONVERSION_FACTOR;
-        this.wristController.setSmartPosition(angle, Arm.WRIST_DEFAULT_OFFSET, Arm.WRIST_LIMIT);
+        this.wristController.setSmartPosition(angle, Arm.WRIST_DEFAULT_OFFSET,
+                this.getShoulderEncoder().getPosition() < Arm.SHOUDLER_MAX_EXTENSION_LIMIT
+                        ? (Arm.WRIST_DEFAULT_OFFSET + Arm.WRIST_PARALLEL_OFFSET)
+                        : Arm.WRIST_LIMIT);
     }
 
     /**
@@ -171,16 +173,10 @@ public class ArmIO implements IIO {
             return;
     }
 
-    public void pushToDashboard() {
-        this.shoulderController.pushConstantsToDashboard("Arm");
-    }
-
     @Override
     public void updateInputs() {
         if (!enabled)
             return;
-
-        this.shoulderController.retrieveDashboardConstants();
     }
 
     /**

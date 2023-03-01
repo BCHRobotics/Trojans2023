@@ -28,12 +28,12 @@ public final class OperatorInput {
     }
 
     /**
-     * Get the wrist height in inches 0" --> 60"
+     * Get the wrist height in inches 0" --> 40"
      * 
      * @return Wrist height
      */
     public static double getWristHeight() {
-        return Math.abs(operator.getJoystick(Side.LEFT, Axis.Y) * 60);
+        return Math.abs(operator.getJoystick(Side.LEFT, Axis.Y) * 40);
     }
 
     /**

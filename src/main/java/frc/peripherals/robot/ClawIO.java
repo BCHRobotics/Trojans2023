@@ -88,12 +88,9 @@ public class ClawIO implements IIO {
         this.grip.setInverted(false);
 
         this.grip.enableSoftLimit(SoftLimitDirection.kForward, false);
-        this.grip.enableSoftLimit(SoftLimitDirection.kReverse, false);
         this.grip.getReverseLimitSwitch(Type.kNormallyOpen).enableLimitSwitch(true);
 
-        // this.grip.setSoftLimit(SoftLimitDirection.kForward, Claw.LIMIT);
-        // this.grip.setSoftLimit(SoftLimitDirection.kReverse, (float)
-        // Claw.DEFAULT_OFFSET);
+        this.grip.setSoftLimit(SoftLimitDirection.kForward, Claw.LIMIT);
 
         this.clawPidController = new SparkMaxPID(this.grip, this.clawConstants);
 
@@ -116,15 +113,17 @@ public class ClawIO implements IIO {
         if ((!enabled) || (!this.calibrated))
             return;
 
-        // if (position == 0)
-        // this.grip.set((double) -0.4);
-        // else if (this.forwardLimit.get() && position == 1)
-        // this.grip.set((double) 0.4);
-        // else
-        // this.grip.set(0);
-
-        this.clawPidController.setSmartPosition(position, Claw.DEFAULT_OFFSET,
-                Claw.LIMIT);
+        // || (!this.forwardLimit.get() && position >= 1)
+        if ((this.grip.getReverseLimitSwitch(Type.kNormallyOpen).isPressed() && position <= 0)) {
+            this.clawEncoder.setPosition(position);
+            return;
+        } else if (Misc.WITHIN_TOLERANCE(this.getClawEncoder().getPosition(), position, 0.05)) {
+            this.grip.set(0);
+            return;
+        } else {
+            this.clawPidController.setSmartPosition(position, Claw.DEFAULT_OFFSET,
+                    Claw.LIMIT);
+        }
     }
 
     /**
@@ -241,8 +240,14 @@ public class ClawIO implements IIO {
         this.calibrated = false;
     }
 
+    public void push() {
+        this.clawPidController.pushConstantsToDashboard("Claw");
+    }
+
     @Override
     public void updateInputs() {
+        this.clawPidController.retrieveDashboardConstants();
+
         if ((!enabled) || (this.calibrated))
             return;
 

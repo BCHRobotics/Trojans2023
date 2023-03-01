@@ -8,6 +8,8 @@ import frc.util.control.ArmPresets;
 
 import java.lang.Math;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+
 public class Mechanism implements Subsystem {
     private static Mechanism instance;
 
@@ -15,10 +17,10 @@ public class Mechanism implements Subsystem {
     private ClawIO clawIO;
 
     private double endEffectorHeight;
-    private double wristOffset = Arm.WRIST_PARALLEL_OFFSET;
+    private double wristOffset = Arm.WRIST_PARALLEL_OFFSET + Arm.WRIST_DEFAULT_OFFSET;
 
-    private double armPos;
-    private double wristPos;
+    private double armAngle;
+    private double wristAngle;
     private double clawPos;
     private boolean pumpMode;
     private boolean bleed;
@@ -48,13 +50,13 @@ public class Mechanism implements Subsystem {
         this.clawIO = ClawIO.getInstance();
         this.resetPosition();
 
-        this.armIO.pushToDashboard();
+        this.clawIO.push();
     }
 
     @Override
     public void run() {
-        this.armIO.setShoulderAngle(this.armPos);
-        this.armIO.setWristAngle(this.wristPos); // remember wrist offset
+        this.armIO.setShoulderAngle(this.armAngle);
+        this.armIO.setWristAngle(this.wristAngle); // remember wrist offset
         this.clawIO.setClawPosition(this.clawPos);
         this.clawIO.setLeftPump(this.pumpMode);
         this.clawIO.setMidPump(this.pumpMode);
@@ -95,7 +97,7 @@ public class Mechanism implements Subsystem {
      * @param angle
      */
     public void setShoulderAngle(double angle) {
-        this.armPos = angle;
+        this.armAngle = angle;
     }
 
     /**
@@ -111,7 +113,7 @@ public class Mechanism implements Subsystem {
      * @param angle
      */
     public void setWristAngle(double angle) {
-        this.wristPos = angle;
+        this.wristAngle = angle;
     }
 
     /**
@@ -127,7 +129,7 @@ public class Mechanism implements Subsystem {
      * @param angle
      */
     public void setWristOffset(double angle) {
-        this.wristOffset = Arm.WRIST_PARALLEL_OFFSET + angle;
+        this.wristOffset = Arm.WRIST_PARALLEL_OFFSET + Arm.WRIST_DEFAULT_OFFSET + angle;
     }
 
     /**
@@ -144,8 +146,9 @@ public class Mechanism implements Subsystem {
      */
     public void setWristHeight(double height) {
         this.endEffectorHeight = height;
-        this.armPos = Math.acos(Math.toRadians((Arm.SHOULDER_HEIGHT - this.endEffectorHeight) / Arm.ARM_LENGTH));
-        this.wristPos = this.armPos + this.wristOffset;
+        this.armAngle = Math.toDegrees(Math.acos((Arm.SHOULDER_HEIGHT - this.endEffectorHeight) / Arm.ARM_LENGTH))
+                + Arm.SHOULDER_DEFAULT_OFFSET;
+        this.wristAngle = this.armAngle + this.wristOffset;
     }
 
     /**
