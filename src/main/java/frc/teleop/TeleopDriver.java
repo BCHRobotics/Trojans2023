@@ -2,6 +2,7 @@ package frc.teleop;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.peripherals.user.DriverInput;
+import frc.peripherals.user.OperatorInput;
 import frc.subsystems.Drivetrain;
 import frc.util.imaging.Limelight;
 
@@ -42,17 +43,21 @@ public class TeleopDriver implements TeleopComponent {
 
         SmartDashboard.putNumber("Max Drive Speed %", DriverInput.getDriveMaxSpeed() * 100);
 
-        if (DriverInput.getController().getBButton())
-            this.drive.resetEncoderPosition();
+        this.drive.balancePID(DriverInput.getBalanceMode());
 
-        // this.drive.balancePID(DriverInput.getBalanceMode());
-        if (DriverInput.getBalanceMode()) {
-            this.drive.setPosition(140, 140);
-        } else if (!DriverInput.getBalanceMode()) {
+        // if (DriverInput.getBalanceMode()) {
+        // this.drive.setPosition(48, 48);
+        // } else
+
+        if (!DriverInput.getBalanceMode()) {
             this.frwd = DriverInput.getDriveFrwd();
             this.turn = DriverInput.getDriveTurn();
-            this.drive.setBrakes(DriverInput.getDriveBrakes());
+            this.drive.setBrakes(DriverInput.getBrakeMode());
             this.drive.setOutput(frwd, turn);
+        }
+
+        if (OperatorInput.getController().getBButton()) {
+            this.drive.resetEncoderPosition();
         }
 
         if (DriverInput.getController().getXButtonReleased()) {

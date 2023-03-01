@@ -11,13 +11,16 @@ public class SmartControl extends PIDController {
     public SmartControl(SmartConstants constants) {
         super(constants.kP, constants.kI, constants.kD);
         this.constants = constants;
-        this.updateConstants();
     }
 
     public void updateConstants() {
         this.constants.getFromDashboard();
-        this.setPID(constants.kP, constants.kI, constants.kD);
+        this.setPID(this.constants.kP, this.constants.kI, this.constants.kD);
         this.ffController = new ArmFeedforward(constants.kS, constants.kG, constants.kV, constants.kA);
+    }
+
+    public void pushConstantsToDashboard(String label) {
+        this.constants.pushToDashboard(label);
     }
 
     public SmartConstants getConstants() {
@@ -25,7 +28,7 @@ public class SmartControl extends PIDController {
     }
 
     public double calculate(double setPoint, double feedback, double velFF) {
-        return this.ffController.calculate(setPoint, velFF) + this.calculate(feedback, setPoint);
+        return (this.calculate(feedback, setPoint) + this.constants.kFF);
     }
 
 }

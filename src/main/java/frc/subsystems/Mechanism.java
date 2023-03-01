@@ -15,13 +15,13 @@ public class Mechanism implements Subsystem {
     private ClawIO clawIO;
 
     private double endEffectorHeight;
-    private double wristOffset = Arm.WRIST_PARALLEL_OFFSET + Arm.WRIST_DEFAULT_OFFSET;
+    private double shoulderOffset;
+    private double wristOffset = Arm.WRIST_DEFAULT_OFFSET;
 
     private double armAngle;
     private double wristAngle;
     private double clawPos;
     private boolean pumpMode;
-    private boolean bleed;
 
     private boolean coneLED, cubeLED, blinkCone, blinkCube;
     private long previousTime, currentTime;
@@ -52,13 +52,9 @@ public class Mechanism implements Subsystem {
     @Override
     public void run() {
         this.armIO.setShoulderAngle(this.armAngle);
-        this.armIO.setWristAngle(this.wristAngle); // remember wrist offset
+        this.armIO.setWristAngle(this.wristAngle + this.wristOffset);
         this.clawIO.setClawPosition(this.clawPos);
-        this.clawIO.setLeftPump(false);
-        this.clawIO.setMidPump(this.pumpMode);
-        this.clawIO.setRightPump(false);
-        this.clawIO.setLeftValve(this.bleed);
-        this.clawIO.setRightValve(this.bleed);
+        this.clawIO.setPump(this.pumpMode);
 
         this.currentTime = System.currentTimeMillis();
 
@@ -83,8 +79,10 @@ public class Mechanism implements Subsystem {
      * Reset appendages to zero position
      */
     public void resetPosition() {
-        this.armIO.resetPositions();
-        this.clawIO.resetPosition();
+        this.armAngle = 0;
+        this.wristAngle = 0;
+        this.clawPos = 0;
+        this.pumpMode = false;
     }
 
     /**
@@ -120,12 +118,28 @@ public class Mechanism implements Subsystem {
     }
 
     /**
+     * Sets shoulder offset in degrees from encoder
+     * 
+     * @param angle
+     */
+    public void setShoulderOffset(double angle) {
+        this.shoulderOffset = angle;
+    }
+
+    /**
+     * @return Shoulder offset in degrees
+     */
+    public double getShoulderOffset() {
+        return this.shoulderOffset;
+    }
+
+    /**
      * Sets wrist offset in degrees from encoder
      * 
      * @param angle
      */
     public void setWristOffset(double angle) {
-        this.wristOffset = Arm.WRIST_PARALLEL_OFFSET + Arm.WRIST_DEFAULT_OFFSET + angle;
+        this.wristOffset = angle;
     }
 
     /**
@@ -141,10 +155,10 @@ public class Mechanism implements Subsystem {
      * @param position
      */
     public void setWristHeight(double height) {
-        this.endEffectorHeight = height;
-        this.armAngle = Math.toDegrees(Math.acos((Arm.SHOULDER_HEIGHT - this.endEffectorHeight) / Arm.ARM_LENGTH))
-                + Arm.SHOULDER_DEFAULT_OFFSET;
-        this.wristAngle = this.armAngle + this.wristOffset;
+        this.endEffectorHeight = height + this.shoulderOffset;
+        this.armAngle = Math.toDegrees(
+                Math.acos((Arm.SHOULDER_HEIGHT - Arm.WRIST_HEIGHT_OFFSET - this.endEffectorHeight) / Arm.ARM_LENGTH));
+        this.wristAngle = this.armAngle + Arm.WRIST_PARALLEL_OFFSET;
     }
 
     /**
@@ -161,7 +175,6 @@ public class Mechanism implements Subsystem {
      */
     public void setClawPos(double position) {
         this.clawPos = position;
-        // this.pumpMode = angle != 0;
 
     }
 
@@ -191,31 +204,13 @@ public class Mechanism implements Subsystem {
     }
 
     /**
-     * Set bleed state
-     * 
-     * @param state
-     */
-    public void setBleedMode(boolean state) {
-        this.bleed = state;
-    }
-
-    /**
-     * Get bleed state
-     * 
-     * @return
-     */
-    public boolean getBleedMode() {
-        return this.bleed;
-    }
-
-    /**
      * Sets arm to preset position
      * 
      * @param preset
      */
     public void goToPreset(ArmPresets preset) {
-        this.setShoulderAngle(preset.wristHeight);
-        this.setWristAngle(preset.wristOffset);
+        this.setWristHeight(preset.wristHeight);
+        this.setWristOffset(preset.wristOffset);
     }
 
     /**

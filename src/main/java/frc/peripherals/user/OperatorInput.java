@@ -19,30 +19,30 @@ public final class OperatorInput {
     }
 
     /**
-     * Get the wrist offset in degrees 0° --> 90°
+     * Get the wrist offset in degrees 0° --> 45°
      * 
      * @return Wrist offset
      */
     public static double getWristOffset() {
-        return operator.getJoystick(Side.RIGHT, Axis.Y) * 180;
+        return operator.getJoystick(Side.RIGHT, Axis.Y) * 45;
     }
 
     /**
-     * Get the wrist height in inches 0" --> 40"
+     * Get the wrist height in inches 0" --> 57.75"
      * 
      * @return Wrist height
      */
     public static double getWristHeight() {
-        return Math.abs(operator.getJoystick(Side.LEFT, Axis.Y) * 40);
+        return Math.abs(operator.getJoystick(Side.LEFT, Axis.Y) * 57.75);
     }
 
     /**
-     * Get the test offset in degrees 0° --> 90°
+     * Get the shoulder offset in inches 0" --> 12"
      * 
-     * @return test offset
+     * @return shoulder offset
      */
-    public static double getTestOffset() {
-        return Math.abs(operator.getJoystick(Side.LEFT, Axis.Y) * 116);
+    public static double getShoulderOffset() {
+        return operator.getJoystick(Side.LEFT, Axis.Y) * 12;
     }
 
     /**
@@ -52,6 +52,15 @@ public final class OperatorInput {
      */
     public static boolean getTestButton() {
         return operator.getRightBumper();
+    }
+
+    /**
+     * Get the Reset button boolean state
+     * 
+     * @return reset state
+     */
+    public static boolean getResetButton() {
+        return operator.getLeftStickButton();
     }
 
     /**

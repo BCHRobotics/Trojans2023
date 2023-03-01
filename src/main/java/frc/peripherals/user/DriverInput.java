@@ -52,8 +52,17 @@ public final class DriverInput {
 	 * 
 	 * @return Brake state
 	 */
-	public static boolean getDriveBrakes() {
+	public static boolean getBrakeMode() {
 		return driver.getLeftBumper() || driver.getRightBumper();
+	}
+
+	/**
+	 * Get the Automatic braking system
+	 * 
+	 * @return ABS state
+	 */
+	public static boolean getABS() {
+		return driver.getRightBumper();
 	}
 
 	/**

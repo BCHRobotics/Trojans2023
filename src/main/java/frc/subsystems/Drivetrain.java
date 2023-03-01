@@ -70,6 +70,7 @@ public class Drivetrain implements Subsystem {
         if (gyroEnabled) {
             // Objects for balancing
             this.gyroPid = new SmartControl(Chassis.GYRO_CONSTANTS);
+
             this.gyro = new Gyro(Chassis.GYRO_PORT);
         }
 
@@ -85,13 +86,11 @@ public class Drivetrain implements Subsystem {
     public void firstCycle() {
         if (!enabled)
             return;
-        if (gyroEnabled)
-            this.gyro.reset();
+
+        // if (gyroEnabled)
+        // this.gyro.reset();
 
         this.limelight.setDesiredTarget(LimelightTargetType.APRILTAG);
-
-        // Chassis.LEFT_DRIVE_CONSTANTS.pushToDashboard("Drive Left");
-        // Chassis.RIGHT_DRIVE_CONSTANTS.pushToDashboard("Drive Right");
 
         this.resetEncoderPosition();
     }
@@ -321,7 +320,7 @@ public class Drivetrain implements Subsystem {
             this.currentState = DriveState.BALANCE;
             this.gyroPid.enableContinuousInput(-45, 45);
             this.gyroPid.setSetpoint(0);
-            this.setOutput(this.gyroPid.calculate(this.gyro.getAngle()), 0);
+            this.setOutput(this.gyroPid.calculate(this.gyro.getPitch()), 0);
         } else
             this.unrestrained();
     }

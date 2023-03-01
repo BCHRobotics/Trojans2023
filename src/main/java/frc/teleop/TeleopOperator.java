@@ -65,8 +65,12 @@ public class TeleopOperator implements TeleopComponent {
                 break;
         }
 
-        // this.mech.setShoulderAngle(OperatorInput.getTestOffset());
-        // this.mech.setWristAngle(OperatorInput.getWristOffset());
+        if (OperatorInput.getResetButton()) {
+            this.mech.resetPosition();
+        }
+
+        // this.mech.setWristHeight(OperatorInput.getWristHeight());
+        // this.mech.setWristOffset(OperatorInput.getWristOffset());
 
         this.mech.run();
 

@@ -119,10 +119,15 @@ public class ArmIO implements IIO {
         if (!enabled)
             return;
 
+        double normalizedAngle = (this.shoulderEncoder.getPosition() - Arm.SHOULDER_DEFAULT_OFFSET)
+                / (Arm.SHOUDLER_MAX_EXTENSION_LIMIT - Arm.SHOULDER_DEFAULT_OFFSET);
+        double smoothedLimit = (normalizedAngle) * (Arm.WRIST_LIMIT - Arm.WRIST_PARALLEL_OFFSET)
+                + Arm.WRIST_PARALLEL_OFFSET + Arm.WRIST_DEFAULT_OFFSET;
         this.wristController.setSmartPosition(angle, Arm.WRIST_DEFAULT_OFFSET,
                 this.getShoulderEncoder().getPosition() < Arm.SHOUDLER_MAX_EXTENSION_LIMIT
-                        ? (Arm.WRIST_DEFAULT_OFFSET + Arm.WRIST_PARALLEL_OFFSET)
+                        ? (smoothedLimit)
                         : Arm.WRIST_LIMIT);
+
     }
 
     /**

@@ -76,6 +76,9 @@ public class DriveIO implements IIO {
         this.driveL1.setInverted(Chassis.INVERTED);
         this.driveR1.setInverted(!Chassis.INVERTED);
 
+        this.driveL1.setOpenLoopRampRate(Chassis.RAMP_RATE);
+        this.driveR1.setOpenLoopRampRate(Chassis.RAMP_RATE);
+
         this.driveL1Encoder.setPositionConversionFactor(Chassis.LEFT_POSITION_CONVERSION);
         this.driveR1Encoder.setPositionConversionFactor(Chassis.RIGHT_POSITION_CONVERSION);
 
@@ -110,6 +113,9 @@ public class DriveIO implements IIO {
 
         this.driveL2.setSmartCurrentLimit(60, 20);
         this.driveR2.setSmartCurrentLimit(60, 20);
+
+        this.driveL2.setOpenLoopRampRate(Chassis.RAMP_RATE);
+        this.driveR2.setOpenLoopRampRate(Chassis.RAMP_RATE);
 
         this.driveL2.follow(this.driveL1, Chassis.OUT_OF_SYNC);
         this.driveR2.follow(this.driveR1, Chassis.OUT_OF_SYNC);
@@ -151,7 +157,6 @@ public class DriveIO implements IIO {
     public void setDriveLeftPos(double position) {
         if (!enabled)
             return;
-        this.driveL1PidController.retrieveDashboardConstants();
         this.driveL1PidController.setSmartPosition(position);
     }
 
@@ -163,7 +168,6 @@ public class DriveIO implements IIO {
     public void setDriveRightPos(double position) {
         if (!enabled)
             return;
-        this.driveR1PidController.retrieveDashboardConstants();
         this.driveR1PidController.setSmartPosition(position);
     }
 
@@ -245,6 +249,9 @@ public class DriveIO implements IIO {
         if (!enabled)
             return;
 
+        // this.driveL1PidController.pushConstantsToDashboard("Drive Left");
+        // this.driveR1PidController.pushConstantsToDashboard("Drive Right");
+
         this.driveL1Encoder.setPosition(0);
         this.driveR1Encoder.setPosition(0);
 
@@ -258,6 +265,10 @@ public class DriveIO implements IIO {
     public void updateInputs() {
         if (!enabled)
             return;
+
+        // this.driveL1PidController.retrieveDashboardConstants();
+        // this.driveR1PidController.retrieveDashboardConstants();
+
     }
 
     /**
