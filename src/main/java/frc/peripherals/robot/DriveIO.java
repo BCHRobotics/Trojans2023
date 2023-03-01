@@ -7,12 +7,19 @@ import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import com.revrobotics.SparkMaxPIDController.AccelStrategy;
 
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.kinematics.DifferentialDriveOdometry;
+import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
+import edu.wpi.first.wpilibj.drive.DifferentialDrive;
+import edu.wpi.first.wpilibj.interfaces.Gyro;
+import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.Chassis;
 import frc.robot.Constants.Features;
 import frc.util.control.SparkMaxPID;
 
-public class DriveIO implements IIO {
+public class DriveIO extends SubsystemBase implements IIO {
     private static DriveIO instance;
 
     // Drive motors
@@ -37,6 +44,15 @@ public class DriveIO implements IIO {
     private boolean enabled = Features.DRIVE_ENABLED;
     private boolean miniBot = Features.MINI_BOT;
 
+    private MotorControllerGroup leftMotors = new MotorControllerGroup(driveL1);
+    private MotorControllerGroup rightMotors = new MotorControllerGroup(driveR1);
+
+    private DifferentialDrive drive = new DifferentialDrive(leftMotors, rightMotors);
+
+    private DifferentialDriveOdometry odometry;
+
+    private Gyro gyro = new NewGyro(Chassis.GYRO_PORT);
+
     public static DriveIO getInstance() {
         if (instance == null) {
             instance = new DriveIO();
@@ -45,13 +61,20 @@ public class DriveIO implements IIO {
     }
 
     private DriveIO() {
-        if (!enabled)
-            return;
+        if (!enabled) return;
 
         initMainMotors();
+        this.driveL1.restoreFactoryDefaults();
+        this.driveR1.restoreFactoryDefaults();
 
-        if (!miniBot)
+        if (!miniBot) {
             initFollowMotors();
+            this.driveL2.restoreFactoryDefaults();
+            this.driveR2.restoreFactoryDefaults();
+        }
+
+
+        odometry = new DifferentialDriveOdometry(gyro.getRotation2d(), driveL1Encoder.getPosition(),driveR1Encoder.getPosition());
     }
 
     /**
@@ -90,6 +113,7 @@ public class DriveIO implements IIO {
 
         this.driveL1PidController.setMotionProfileType(AccelStrategy.kTrapezoidal);
         this.driveR1PidController.setMotionProfileType(AccelStrategy.kTrapezoidal);
+
     }
 
     /**
@@ -278,4 +302,61 @@ public class DriveIO implements IIO {
             this.driveR2.disable();
         }
     }
+
+    public Gyro getGyro() {
+        return this.gyro;
+    }
+
+    public DifferentialDrive getDrive() {
+        return this.drive;
+    }
+
+    /**
+     * Returns the currently-estimated pose of the robot.
+     *
+     * @return The pose.
+     */
+    public Pose2d getPose() {
+        return odometry.getPoseMeters();
+    }
+
+    /**
+     * Controls the left and right sides of the drive directly with voltages.
+     *
+     * @param leftVolts the commanded left output
+     * @param rightVolts the commanded right output
+     */
+    public void tankDriveVolts(double leftVolts, double rightVolts) {
+        leftMotors.setVoltage(leftVolts);
+        rightMotors.setVoltage(rightVolts);
+        drive.feed();
+    }
+
+    /**
+     * Returns the current wheel speeds of the robot.
+     *
+     * @return The current wheel speeds.
+     */
+    public DifferentialDriveWheelSpeeds getWheelSpeeds() {
+        return new DifferentialDriveWheelSpeeds(driveL1Encoder.getVelocity(), driveR1Encoder.getVelocity());
+    }
+
+    /**
+     * Resets the odometry to the specified pose.
+     *
+     * @param pose The pose to which to set the odometry.
+     */
+    public void resetOdometry(Pose2d pose) {
+        driveL1.restoreFactoryDefaults();
+        driveR1.restoreFactoryDefaults();
+        odometry.resetPosition(gyro.getRotation2d(), driveL1Encoder.getPosition(), driveR1Encoder.getPosition(), pose);
+    }
+
+    @Override
+    public void periodic() {
+      // Update the odometry in the periodic block
+      odometry.update(gyro.getRotation2d(), driveL1Encoder.getPosition(), driveL1Encoder.getPosition());
+    }
+
+
 }

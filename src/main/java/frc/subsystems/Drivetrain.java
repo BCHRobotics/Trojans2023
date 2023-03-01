@@ -3,7 +3,7 @@ package frc.subsystems;
 // Import required classes
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.peripherals.robot.DriveIO;
-import frc.peripherals.robot.Gyro;
+import frc.peripherals.robot.NewGyro;
 import frc.robot.Constants.Chassis;
 import frc.robot.Constants.Features;
 import frc.util.control.SmartControl;
@@ -27,7 +27,7 @@ public class Drivetrain implements Subsystem {
 
     // Objects for balancing
     private SmartControl gyroPid;
-    private Gyro gyro;
+    private NewGyro gyro;
 
     // Objects for target seeking
     private SmartControl seekPID;
@@ -70,7 +70,7 @@ public class Drivetrain implements Subsystem {
         if (gyroEnabled) {
             // Objects for balancing
             this.gyroPid = new SmartControl(Chassis.GYRO_CONSTANTS);
-            this.gyro = new Gyro(Chassis.GYRO_PORT);
+            this.gyro = new NewGyro(Chassis.GYRO_PORT);
         }
 
         // Objects for target seeking
@@ -106,25 +106,27 @@ public class Drivetrain implements Subsystem {
         SmartDashboard.putNumber("DriveL Pos", this.getLeftPosition());
         SmartDashboard.putNumber("DriveR Pos", this.getRightPosition());
 
-        switch (currentState) {
-            case OUTPUT:
-                this.driveIO.setDriveLeft(this.leftOut);
-                this.driveIO.setDriveRight(this.rightOut);
-                break;
-            case POSITION:
-                this.driveIO.setDriveLeftPos(this.posLeft);
-                this.driveIO.setDriveRightPos(this.posRight);
-                break;
-            case BALANCE:
-                this.driveIO.setDriveLeftPos(this.leftOut);
-                this.driveIO.setDriveRightPos(this.rightOut);
-                break;
-            default:
-                this.disable();
-                break;
-        }
+        // Necessary Old Code
 
-        this.driveIO.brakeMode(this.currentState != DriveState.OUTPUT ? true : this.brakeMode);
+        // switch (currentState) {
+        //     case OUTPUT:
+        //         this.driveIO.setDriveLeft(this.leftOut);
+        //         this.driveIO.setDriveRight(this.rightOut);
+        //         break;
+        //     case POSITION:
+        //         this.driveIO.setDriveLeftPos(this.posLeft);
+        //         this.driveIO.setDriveRightPos(this.posRight);
+        //         break;
+        //     case BALANCE:
+        //         this.driveIO.setDriveLeftPos(this.leftOut);
+        //         this.driveIO.setDriveRightPos(this.rightOut);
+        //         break;
+        //     default:
+        //         this.disable();
+        //         break;
+        // }
+
+        // this.driveIO.brakeMode(this.currentState != DriveState.OUTPUT ? true : this.brakeMode);
     }
 
     @Override

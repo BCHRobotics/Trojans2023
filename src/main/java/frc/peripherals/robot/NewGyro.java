@@ -7,19 +7,19 @@ import edu.wpi.first.wpilibj.SerialPort;
 import frc.robot.Constants.Chassis;
 import frc.robot.Constants.Features;
 
-public class Gyro extends AHRS {
+public class NewGyro extends AHRS {
 
-    public Gyro(SerialPort.Port port) {
+    public NewGyro(SerialPort.Port port) {
         super(port);
         this.reset();
     }
 
-    public Gyro(SPI.Port port) {
+    public NewGyro(SPI.Port port) {
         super(port);
         this.reset();
     }
 
-    public Gyro() {
+    public NewGyro() {
         super(SPI.Port.kMXP);
         this.reset();
     }

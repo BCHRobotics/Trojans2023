@@ -3,10 +3,12 @@ package frc.teleop;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.peripherals.user.DriverInput;
 import frc.subsystems.Drivetrain;
+import frc.util.imaging.AdvancedTarget;
 import frc.util.imaging.Limelight;
 
 public class TeleopDriver implements TeleopComponent {
     private static TeleopDriver instance;
+    private static AdvancedTarget target = AdvancedTarget.getInstance();
 
     private Drivetrain drive;
     private Limelight limelight = Limelight.getInstance();
@@ -39,9 +41,11 @@ public class TeleopDriver implements TeleopComponent {
 
     @Override
     public void run() {
-
         SmartDashboard.putNumber("Max Drive Speed %", DriverInput.getDriveMaxSpeed() * 100);
-
+        
+        if (DriverInput.getController().getYButton()) {
+            target.getAutonomousCommand().execute();
+        }
         if (DriverInput.getController().getBButton())
             this.drive.resetEncoderPosition();
 
