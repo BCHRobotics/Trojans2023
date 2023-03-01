@@ -44,7 +44,7 @@ public class ClawIO implements IIO {
     // PID Constants
     private SparkMaxConstants clawConstants = Claw.CONSTANTS;
 
-    private DigitalInput forwardLimit;
+    // private DigitalInput forwardLimit;
 
     private boolean enabled = Features.CLAW_ENABLED;
     private boolean calibrated = false;
@@ -100,7 +100,7 @@ public class ClawIO implements IIO {
 
         this.clawPidController.setMotionProfileType(AccelStrategy.kSCurve);
 
-        this.forwardLimit = new DigitalInput(Claw.LIMIT_SWITCH_PORT);
+        // this.forwardLimit = new DigitalInput(Claw.LIMIT_SWITCH_PORT);
     }
 
     /**
@@ -171,7 +171,7 @@ public class ClawIO implements IIO {
         if (!enabled)
             return;
 
-        this.leftBleedValve.set(state); // TODO: Check Normal solenoid state
+        this.leftBleedValve.set(state);
     }
 
     /**
@@ -240,13 +240,9 @@ public class ClawIO implements IIO {
         this.calibrated = false;
     }
 
-    public void push() {
-        this.clawPidController.pushConstantsToDashboard("Claw");
-    }
-
     @Override
     public void updateInputs() {
-        this.clawPidController.retrieveDashboardConstants();
+        // this.clawPidController.retrieveDashboardConstants();
 
         if ((!enabled) || (this.calibrated))
             return;

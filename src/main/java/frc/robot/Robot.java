@@ -10,7 +10,6 @@ import frc.teleop.TeleopControl;
 import frc.auto.AutoBuilder;
 import frc.auto.AutoControl;
 import frc.peripherals.robot.IO;
-import frc.subsystems.Mechanism;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -62,8 +61,6 @@ public class Robot extends TimedRobot {
     @Override
     public void robotPeriodic() {
         SmartDashboard.updateValues();
-
-        SmartDashboard.putNumber("Claw Setpoint", Mechanism.getInstance().getClawPos());
     }
 
     /**

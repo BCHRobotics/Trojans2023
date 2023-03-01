@@ -90,8 +90,8 @@ public class Drivetrain implements Subsystem {
 
         this.limelight.setDesiredTarget(LimelightTargetType.APRILTAG);
 
-        Chassis.LEFT_DRIVE_CONSTANTS.pushToDashboard("Drive Left");
-        Chassis.RIGHT_DRIVE_CONSTANTS.pushToDashboard("Drive Right");
+        // Chassis.LEFT_DRIVE_CONSTANTS.pushToDashboard("Drive Left");
+        // Chassis.RIGHT_DRIVE_CONSTANTS.pushToDashboard("Drive Right");
 
         this.resetEncoderPosition();
     }

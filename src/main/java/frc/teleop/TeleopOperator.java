@@ -34,36 +34,39 @@ public class TeleopOperator implements TeleopComponent {
     @Override
     public void run() {
 
-        if (OperatorInput.getGamePiece() == 0) {
+        if (OperatorInput.getController().getYButton()) {
             this.mech.setClawPos(Misc.CONE_PRESET);
-            this.mech.setStatusLED(StatusLED.CONE_BLINK);
-        } else if (OperatorInput.getGamePiece() == 270) {
+            this.mech.setStatusLED(StatusLED.CONE);
+        } else if (OperatorInput.getController().getXButton()) {
             this.mech.setClawPos(Misc.CUBE_PRESET);
             this.mech.setStatusLED(StatusLED.CUBE);
-        } else if (OperatorInput.getGamePiece() == 180) {
+        } else if (OperatorInput.getController().getAButton()) {
             this.mech.setClawPos(0);
             this.mech.setStatusLED(StatusLED.OFF);
         }
 
-        // this.mech.setWristOffset(OperatorInput.getWristOffset());
-        // this.mech.setWristHeight(OperatorInput.getWristHeight());
+        if (OperatorInput.getController().getBButton())
+            this.mech.setSuctionMode(true);
+        else if (OperatorInput.getTestButton())
+            this.mech.setSuctionMode(false);
 
-        // if (OperatorInput.getTestButton()) {
-        // this.mech.setStatusLED(StatusLED.CONE);
-        // this.mech.setClawPos(0.7);
-        // this.mech.setSuctionMode(false);
-        // this.mech.setBleedMode(false);
-        // } else {
-        // this.mech.setStatusLED(StatusLED.CUBE);
-        // this.mech.setClawPos(0);
-        // this.mech.setSuctionMode(false);
-        // }
+        switch (OperatorInput.getGamePiece()) {
+            case 0:
+                this.mech.goToPreset(Misc.TOP_DROPOFF);
+                break;
+            case 90:
+                this.mech.goToPreset(Misc.STOWED_AWAY);
+                break;
+            case 180:
+                this.mech.goToPreset(Misc.GROUND_DROPOFF);
+                break;
+            case 270:
+                this.mech.goToPreset(Misc.MID_DROPOFF);
+                break;
+        }
 
-        // if (OperatorInput.getController().getAButton())
-        // this.mech.setBleedMode(false);
-
-        this.mech.setShoulderAngle(OperatorInput.getTestOffset());
-        this.mech.setWristAngle(OperatorInput.getWristOffset());
+        // this.mech.setShoulderAngle(OperatorInput.getTestOffset());
+        // this.mech.setWristAngle(OperatorInput.getWristOffset());
 
         this.mech.run();
 

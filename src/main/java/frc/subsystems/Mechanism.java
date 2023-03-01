@@ -8,8 +8,6 @@ import frc.util.control.ArmPresets;
 
 import java.lang.Math;
 
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-
 public class Mechanism implements Subsystem {
     private static Mechanism instance;
 
@@ -49,8 +47,6 @@ public class Mechanism implements Subsystem {
         this.armIO = ArmIO.getInstance();
         this.clawIO = ClawIO.getInstance();
         this.resetPosition();
-
-        this.clawIO.push();
     }
 
     @Override
@@ -58,9 +54,9 @@ public class Mechanism implements Subsystem {
         this.armIO.setShoulderAngle(this.armAngle);
         this.armIO.setWristAngle(this.wristAngle); // remember wrist offset
         this.clawIO.setClawPosition(this.clawPos);
-        this.clawIO.setLeftPump(this.pumpMode);
+        this.clawIO.setLeftPump(false);
         this.clawIO.setMidPump(this.pumpMode);
-        this.clawIO.setRightPump(this.pumpMode);
+        this.clawIO.setRightPump(false);
         this.clawIO.setLeftValve(this.bleed);
         this.clawIO.setRightValve(this.bleed);
 
@@ -218,8 +214,8 @@ public class Mechanism implements Subsystem {
      * @param preset
      */
     public void goToPreset(ArmPresets preset) {
-        this.setWristHeight(preset.wristHeight);
-        this.setWristOffset(preset.wristOffset);
+        this.setShoulderAngle(preset.wristHeight);
+        this.setWristAngle(preset.wristOffset);
     }
 
     /**

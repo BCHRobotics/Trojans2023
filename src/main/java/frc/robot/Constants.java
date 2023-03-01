@@ -13,7 +13,7 @@ public class Constants {
 
                 // Subsytems toggle logic
                 public static final boolean USING_DASHBOARD = true;
-                public static final boolean DRIVE_ENABLED = false;
+                public static final boolean DRIVE_ENABLED = true;
                 public static final boolean ARM_ENABLED = true;
                 public static final boolean CLAW_ENABLED = true;
                 public static final boolean GYRO_ENABLED = false;
@@ -87,7 +87,7 @@ public class Constants {
                 public static final double WRIST_PARALLEL_OFFSET = 90;
                 public static final double SHOULDER_DEFAULT_OFFSET = 17;
                 public static final double WRIST_DEFAULT_OFFSET = 10;
-                public static final float SHOULDER_LIMIT = 110 + (float) Arm.SHOULDER_DEFAULT_OFFSET;
+                public static final float SHOULDER_LIMIT = 130 + (float) Arm.SHOULDER_DEFAULT_OFFSET;
                 public static final float WRIST_LIMIT = 200 + (float) Arm.WRIST_DEFAULT_OFFSET;
                 public static final double SHOUDLER_MAX_EXTENSION_LIMIT = 55;
 
@@ -151,15 +151,15 @@ public class Constants {
                 }
 
                 // Arm preset profiles
-                public static final ArmPresets GROUND_PICKUP = new ArmPresets(0, 0);
+                public static final ArmPresets STOWED_AWAY = new ArmPresets(0, 30);
                 public static final ArmPresets STATION_PICKUP = new ArmPresets(0, 0);
-                public static final ArmPresets GROUND_DROPOFF = new ArmPresets(0, 0);
-                public static final ArmPresets MID_DROPOFF = new ArmPresets(0, 0);
-                public static final ArmPresets TOP_DROPOFF = new ArmPresets(0, 0);
+                public static final ArmPresets GROUND_DROPOFF = new ArmPresets(0, 100);
+                public static final ArmPresets MID_DROPOFF = new ArmPresets(95, 170);
+                public static final ArmPresets TOP_DROPOFF = new ArmPresets(116, 195);
 
                 // Limelight vision constants
                 public static final double LIMELIGHT_ANGLE = 21.5; // degrees
-                public static final double LIMELIGHT_HEIGHT = 91.25; // inches TODO: Correct limelight height
+                public static final double LIMELIGHT_HEIGHT = 91.25; // inches
                 public static final double LIMELIGHT_TOLERANCE = 0.5; // degrees (x axis)
                 public static final double TARGET_HEIGHT = 4.75; // inches
                 public static final double APRILTAG_HEIGHT = 18.125; // inches

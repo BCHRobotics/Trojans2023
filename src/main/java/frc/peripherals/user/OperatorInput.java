@@ -42,7 +42,7 @@ public final class OperatorInput {
      * @return test offset
      */
     public static double getTestOffset() {
-        return Math.abs(operator.getJoystick(Side.LEFT, Axis.Y) * 90);
+        return Math.abs(operator.getJoystick(Side.LEFT, Axis.Y) * 116);
     }
 
     /**
@@ -51,7 +51,7 @@ public final class OperatorInput {
      * @return test offset
      */
     public static boolean getTestButton() {
-        return operator.getYButton();
+        return operator.getRightBumper();
     }
 
     /**
