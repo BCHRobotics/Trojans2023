@@ -33,7 +33,8 @@ public class Constants {
                 public static final double MAX_INTERVAL = 0.25;
                 public static final double MAX_VEL = 144; // in/s
                 public static final double MAX_ACCEL = 288; // in/s^2
-                public static final double RAMP_RATE = 0.0; // 0.15
+                public static final double RAMP_RATE = 0.15;
+                public static final double TOLERANCE = 1;
                 public static final boolean INVERTED = false;
                 public static final boolean OUT_OF_SYNC = false;
 
@@ -52,9 +53,9 @@ public class Constants {
                                                                                                          // 1 sec
 
                 // input diameter = Δd inches between center wheels ~~v~~ in inches / degree
-                public static final double TURNING_CONVERSION = (TRACK_WIDTH * Math.PI) / 360.0;
+                public static final double TURNING_CONVERSION = (TRACK_WIDTH * Math.PI) / 180;
 
-                // Drive PID Constants
+                // Drive PID Constants TODO: Tune Drivetrain PID
                 public static final SparkMaxConstants LEFT_DRIVE_CONSTANTS = new SparkMaxConstants(
                                 0.00005, 0, 0, 0, 0.000185, -1, 1, 0, 0, 4000, 3500, 0.1);
                 public static final SparkMaxConstants RIGHT_DRIVE_CONSTANTS = new SparkMaxConstants(
@@ -63,6 +64,7 @@ public class Constants {
                 // Gyro constants
                 public static final SerialPort.Port GYRO_PORT = SerialPort.Port.kMXP;
                 public static final boolean GYRO_OUTPUT_INVERTED = false;
+                public static final double GYRO_TOLERANCE = 0.8;
 
                 // Gyro PID Constants
                 public static final SmartConstants GYRO_CONSTANTS = new SmartConstants(0, 0, 0, 0, 0.0082, 0.001,
@@ -110,6 +112,16 @@ public class Constants {
                                 2.1028E-05, 0, 5.1398E-05, 0, 0.00004, -1, 1,
                                 0, 0, 5700, 5700, 0.1);
 
+                // Arm preset profiles
+                public static final ArmPresets STOWED_AWAY = new ArmPresets(0, -70, 0);
+                public static final ArmPresets GROUND_DROPOFF = new ArmPresets(0, 0, 1);
+                public static final ArmPresets MID_DROPOFF = new ArmPresets(38, 0, 2);
+                public static final ArmPresets TOP_DROPOFF = new ArmPresets(50, 0, 3);
+                public static final ArmPresets STATION_PICKUP = new ArmPresets(0, 0, 4);
+
+                public static final ArmPresets[] PRESETS = { STOWED_AWAY, GROUND_DROPOFF,
+                                MID_DROPOFF, TOP_DROPOFF, STATION_PICKUP };
+
         }
 
         public static final class Claw {
@@ -150,23 +162,17 @@ public class Constants {
                         OFF
                 }
 
-                // Arm preset profiles
-                public static final ArmPresets STOWED_AWAY = new ArmPresets(0, -70);
-                public static final ArmPresets STATION_PICKUP = new ArmPresets(0, 0);
-                public static final ArmPresets GROUND_DROPOFF = new ArmPresets(0, 0);
-                public static final ArmPresets MID_DROPOFF = new ArmPresets(38, 0);
-                public static final ArmPresets TOP_DROPOFF = new ArmPresets(50, 0);
-
                 // Limelight vision constants
                 public static final double LIMELIGHT_ANGLE = 21.5; // degrees
                 public static final double LIMELIGHT_HEIGHT = 91.25; // inches
                 public static final double LIMELIGHT_TOLERANCE = 0.5; // degrees (x axis)
-                public static final double TARGET_HEIGHT = 4.75; // inches
+                public static final double LIMELIGHT_CHASSIS_OFFSET = 16; // inches
+                public static final double CUBE_TARGET_HEIGHT = 4.75; // inches
                 public static final double APRILTAG_HEIGHT = 18.125; // inches
 
                 // CSV Test version
                 public static final int VERSION = 1;
-                public static final String TEACH_MODE_FILE_NAME = "LIVE_RECORD" + "_" + VERSION;
+                public static final String TEACH_MODE_FILE_NAME = "LEAD_BY_NOSE" + "_" + VERSION;
 
                 // Autonomous directory
                 public static final String ROOT_DIRECTORY = "/home/lvuser/deploy/"; // "csv/";

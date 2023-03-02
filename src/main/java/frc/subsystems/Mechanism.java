@@ -23,6 +23,8 @@ public class Mechanism implements Subsystem {
     private double clawPos;
     private boolean pumpMode;
 
+    private ArmPresets preset;
+
     private boolean coneLED, cubeLED, blinkCone, blinkCube;
     private long previousTime, currentTime;
 
@@ -83,6 +85,7 @@ public class Mechanism implements Subsystem {
         this.wristAngle = 0;
         this.clawPos = 0;
         this.pumpMode = false;
+        this.resetStatusLED();
     }
 
     /**
@@ -179,7 +182,7 @@ public class Mechanism implements Subsystem {
     }
 
     /**
-     * @return Claw open vs closed angle
+     * @return Claw percent open (0 = open, 1 = closed)
      */
     public double getClawPos() {
         return this.clawIO.getClawEncoder().getPosition();
@@ -209,8 +212,37 @@ public class Mechanism implements Subsystem {
      * @param preset
      */
     public void goToPreset(ArmPresets preset) {
+        this.preset = preset;
         this.setWristHeight(preset.wristHeight);
         this.setWristOffset(preset.wristOffset);
+    }
+
+    /**
+     * Sets arm to preset position
+     * 
+     * @param ID
+     */
+    public void goToPreset(int ID) {
+        this.setWristHeight(Arm.PRESETS[ID].wristHeight);
+        this.setWristOffset(Arm.PRESETS[ID].wristOffset);
+    }
+
+    /**
+     * Retrieves last call to preset position
+     * 
+     * @return ArmPresets (Wrist Height, Wrist Offset)
+     */
+    public ArmPresets getPreset() {
+        return this.preset;
+    }
+
+    /**
+     * Retrieves last call to preset position ID
+     * 
+     * @return ArmPresets (Wrist Height, Wrist Offset) ID
+     */
+    public int getPresetID() {
+        return this.preset.ID;
     }
 
     /**
@@ -232,6 +264,34 @@ public class Mechanism implements Subsystem {
                 this.blinkCone = true;
                 break;
             case CUBE_BLINK:
+                this.blinkCube = true;
+                break;
+            default:
+                resetStatusLED();
+                break;
+        }
+
+    }
+
+    /**
+     * Set status led state
+     * 
+     * @param mode
+     */
+    public void setStatusLED(int mode) {
+        resetStatusLED();
+
+        switch (mode) {
+            case 1:
+                this.coneLED = true;
+                break;
+            case 2:
+                this.cubeLED = true;
+                break;
+            case 3:
+                this.blinkCone = true;
+                break;
+            case 4:
                 this.blinkCube = true;
                 break;
             default:

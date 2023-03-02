@@ -70,12 +70,24 @@ public class AutoExecute extends AutoComponent {
             }
             if (currentTime < data.get(0).get(0).longValue() * 1) { // t = 0.35
                 this.drive.setPosition((data.get(0).get(1)), (data.get(0).get(2)));
-                this.mech.setShoulderAngle(data.get(0).get(3));
-                this.mech.setWristAngle(data.get(0).get(4));
-                this.mech.setClawPos(data.get(0).get(5));
-                this.mech.setSuctionMode(data.get(0).get(6) == 1.0 ? true : false);
-                // this.drive.seekTarget(data.get(0).get(7));
-                this.drive.balancePID(data.get(0).get(8) == 1.0 ? true : false);
+                this.mech.goToPreset(data.get(0).get(3).intValue());
+                this.mech.setShoulderOffset(data.get(0).get(4));
+                this.mech.setWristOffset(data.get(0).get(5));
+                this.mech.setClawPos(data.get(0).get(6));
+                this.mech.setSuctionMode(data.get(0).get(7) == 1.0 ? true : false);
+                this.mech.setStatusLED(data.get(0).get(8).intValue());
+                switch (data.get(0).get(9).intValue()) {
+                    case 1:
+                        this.drive.calculatePath();
+                        break;
+                    case 2:
+                        this.drive.followPath();
+                        break;
+                    default:
+                        this.drive.clearPath();
+                        break;
+                }
+                this.drive.balancePID(data.get(0).get(10) == 1.0 ? true : false);
             } else {
                 data.remove(0);
             }

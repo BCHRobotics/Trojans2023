@@ -6,6 +6,7 @@ import frc.peripherals.robot.DriveIO;
 import frc.peripherals.robot.Gyro;
 import frc.robot.Constants.Chassis;
 import frc.robot.Constants.Features;
+import frc.robot.Constants.Misc;
 import frc.util.control.SmartControl;
 import frc.util.imaging.Limelight;
 import frc.util.imaging.Limelight.LimelightTargetType;
@@ -33,7 +34,7 @@ public class Drivetrain implements Subsystem {
     private SmartControl seekPID;
 
     // Limelight Objects needed
-    private Limelight limelight;
+    protected Limelight limelight;
 
     // Drive states
     private DriveState currentState = DriveState.POSITION;
@@ -48,6 +49,10 @@ public class Drivetrain implements Subsystem {
 
     // Drive brakes variable
     private boolean brakeMode;
+
+    private double theta;
+    private double x;
+    private double y;
 
     /**
      * Get the instance of the Drive, if none create a new instance
@@ -77,7 +82,7 @@ public class Drivetrain implements Subsystem {
         // Objects for target seeking
         this.seekPID = new SmartControl(Chassis.SEEK_CONSTANTS);
 
-        this.limelight = new Limelight();
+        this.limelight = Limelight.getInstance();
 
         this.firstCycle();
     }
@@ -87,8 +92,8 @@ public class Drivetrain implements Subsystem {
         if (!enabled)
             return;
 
-        // if (gyroEnabled)
-        // this.gyro.reset();
+        if (gyroEnabled)
+            this.gyro.reset();
 
         this.limelight.setDesiredTarget(LimelightTargetType.APRILTAG);
 
@@ -100,13 +105,14 @@ public class Drivetrain implements Subsystem {
         if (!enabled)
             return;
 
-        SmartDashboard.putString("DRIVE_STATE", this.currentState.toString());
+        SmartDashboard.putString("Drive Mode", this.currentState.toString());
 
-        SmartDashboard.putNumber("DriveL Pos", this.getLeftPosition());
-        SmartDashboard.putNumber("DriveR Pos", this.getRightPosition());
+        SmartDashboard.putNumber("Left Travel", this.getLeftPosition());
+        SmartDashboard.putNumber("Right Travel", this.getRightPosition());
 
         switch (currentState) {
             case OUTPUT:
+                this.driveIO.setRampRate(true);
                 this.driveIO.setDriveLeft(this.leftOut);
                 this.driveIO.setDriveRight(this.rightOut);
                 break;
@@ -115,8 +121,9 @@ public class Drivetrain implements Subsystem {
                 this.driveIO.setDriveRightPos(this.posRight);
                 break;
             case BALANCE:
-                this.driveIO.setDriveLeftPos(this.leftOut);
-                this.driveIO.setDriveRightPos(this.rightOut);
+                this.driveIO.setRampRate(false);
+                this.driveIO.setDriveLeft(this.leftOut);
+                this.driveIO.setDriveRight(this.rightOut);
                 break;
             default:
                 this.disable();
@@ -132,6 +139,10 @@ public class Drivetrain implements Subsystem {
             return;
 
         this.driveIO.stopAllOutputs();
+    }
+
+    public Limelight getLimelight() {
+        return this.limelight;
     }
 
     /**
@@ -202,6 +213,24 @@ public class Drivetrain implements Subsystem {
 
         this.posLeft = left;
         this.posRight = right;
+    }
+
+    /**
+     * Sets chasis position using relative encoders
+     * 
+     * @param left  relative position in inches
+     * @param right relative position in inches
+     */
+    public void setPosition(double left, double right, double angle) {
+        if (!enabled)
+            return;
+
+        this.currentState = DriveState.POSITION;
+
+        angle *= Chassis.TURNING_CONVERSION;
+
+        this.posLeft = left + angle;
+        this.posRight = right - angle;
     }
 
     /**
@@ -285,18 +314,17 @@ public class Drivetrain implements Subsystem {
 
         SmartDashboard.putNumber("Drive Heading θ", angle);
 
-        this.currentState = DriveState.POSITION;
+        angle *= Chassis.TURNING_CONVERSION;
 
-        this.setPosition(this.getLeftPosition() + (angle * Chassis.TURNING_CONVERSION),
-                this.getRightPosition() - (angle * Chassis.TURNING_CONVERSION));
+        this.setPosition(this.getLeftPosition() + angle, this.getRightPosition() - angle);
     }
 
     /**
-     * Turns drivetrain/chasis by a provided angle using PID
+     * Turns drivetrain/chasis to a provided target using PID
      * 
      * @param angle in degrees
      */
-    public void setYawPID(double angle) {
+    public void seekTarget(double angle) {
         SmartDashboard.putNumber("Drive Heading Φ", angle);
 
         this.seekPID.setSetpoint(0);
@@ -304,9 +332,9 @@ public class Drivetrain implements Subsystem {
     }
 
     /**
-     * Resets seekTargetPID() variables to remain idle
+     * Resets seekTarget() variables to remain idle
      */
-    public void yawIdle() {
+    public void seekIdle() {
         this.seekPID.reset();
     }
 
@@ -317,10 +345,10 @@ public class Drivetrain implements Subsystem {
         if (!gyroEnabled)
             return;
         if (trigger) {
-            this.currentState = DriveState.BALANCE;
-            this.gyroPid.enableContinuousInput(-45, 45);
+            this.gyroPid.enableContinuousInput(-25, 25);
             this.gyroPid.setSetpoint(0);
             this.setOutput(this.gyroPid.calculate(this.gyro.getPitch()), 0);
+            this.currentState = DriveState.BALANCE;
         } else
             this.unrestrained();
     }
@@ -356,6 +384,31 @@ public class Drivetrain implements Subsystem {
         }
         // drive to april tag but leave some space to prevent ramming the april tag
         // 2 is a placeholder
+    }
+
+    public void calculatePath() {
+        this.theta = (this.gyro.getYaw() > 0 ? 90 : -90) - this.gyro.getYaw() - this.limelight.getTargetX();
+        this.x = (this.limelight.getTargetDistance() * Math.cos(theta));
+        this.y = (this.limelight.getTargetDistance() * Math.sin(theta)) - Misc.LIMELIGHT_CHASSIS_OFFSET;
+    }
+
+    public void followPath() {
+
+        if (!Misc.WITHIN_TOLERANCE(this.gyro.getYaw(), theta, Chassis.GYRO_TOLERANCE))
+            this.setYaw(theta);
+        else if (!Misc.WITHIN_TOLERANCE(this.getLeftPosition(), x, Chassis.TOLERANCE))
+            this.setPosition(x, x);
+        else if (!Misc.WITHIN_TOLERANCE(this.gyro.getYaw(), 0, Chassis.GYRO_TOLERANCE))
+            this.setYaw(0);
+        else if (!Misc.WITHIN_TOLERANCE(this.getLeftPosition(), y, Chassis.TOLERANCE))
+            this.setPosition(y, y);
+
+    }
+
+    public void clearPath() {
+        this.theta = 0;
+        this.x = 0;
+        this.y = 0;
     }
 
 }

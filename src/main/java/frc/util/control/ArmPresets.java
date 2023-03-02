@@ -7,6 +7,7 @@ public class ArmPresets {
     // PID coefficients
     public double wristHeight;
     public double wristOffset;
+    public int ID;
 
     /**
      * PID Values for Basic Balancing Algorithm
@@ -14,9 +15,10 @@ public class ArmPresets {
      * @param wristHeight
      * @param wristOffset
      */
-    public ArmPresets(double height, double offset) {
+    public ArmPresets(double height, double offset, int ID) {
         this.wristHeight = height;
         this.wristOffset = offset;
+        this.ID = ID;
     }
 
     /**
@@ -25,8 +27,8 @@ public class ArmPresets {
      * @param name
      */
     public void pushToDashboard(String name) {
-        SmartDashboard.putNumber(name + "Wrist Height", wristHeight);
-        SmartDashboard.putNumber(name + "Wrist Offset", wristOffset);
+        SmartDashboard.putNumber(name + " Wrist Height", wristHeight);
+        SmartDashboard.putNumber(name + " Wrist Offset", wristOffset);
     }
 
     /**
@@ -35,8 +37,8 @@ public class ArmPresets {
      * @param name
      */
     public void getFromDashboard(String name) {
-        this.wristHeight = SmartDashboard.getNumber(name + "Wrist Height", 0);
-        this.wristOffset = SmartDashboard.getNumber(name + "Wrist Offset", 0);
+        this.wristHeight = SmartDashboard.getNumber(name + " Wrist Height", 0);
+        this.wristOffset = SmartDashboard.getNumber(name + " Wrist Offset", 0);
     }
 
     /**

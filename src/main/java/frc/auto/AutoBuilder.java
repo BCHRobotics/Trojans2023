@@ -46,10 +46,12 @@ public class AutoBuilder {
             rows.add((double) timer);
             rows.add((double) drive.getLeftPosition());
             rows.add((double) drive.getRightPosition());
-            rows.add((double) mech.getShoulderAngle());
-            rows.add((double) mech.getWristAngle());
+            rows.add((double) mech.getPresetID());
+            rows.add((double) mech.getShoulderOffset());
+            rows.add((double) mech.getWristOffset());
             rows.add((double) mech.getClawPos());
             rows.add((double) (mech.getSuctionMode() ? 1 : 0));
+            rows.add((double) 0.0); // Manual Tags (LED Status)
             rows.add((double) 0.0); // Manual Tags (Vision)
             rows.add((double) 0.0); // Manual Tags (Balancing)
             data.add(rows);
@@ -65,7 +67,7 @@ public class AutoBuilder {
             writer.setFileName(Misc.TEACH_MODE_FILE_NAME);
             writer.deleteCopy();
             writer.setHeader(
-                    "time,leftDrive,rightDrive,shoulder,wrist,claw,pump,limelight,balance");
+                    "time,leftDrive,rightDrive,armPresetID,shoulderOffset,wristOffset,claw,pump,led,limelight,balance");
             writer.importData(data);
             writer.output();
         } catch (Exception e) {

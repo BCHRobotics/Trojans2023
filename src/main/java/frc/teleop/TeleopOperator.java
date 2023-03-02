@@ -2,6 +2,7 @@ package frc.teleop;
 
 import frc.subsystems.Mechanism;
 import frc.peripherals.user.OperatorInput;
+import frc.robot.Constants.Arm;
 import frc.robot.Constants.Misc;
 import frc.robot.Constants.Misc.StatusLED;
 
@@ -52,22 +53,21 @@ public class TeleopOperator implements TeleopComponent {
 
         switch (OperatorInput.getGamePiece()) {
             case 0:
-                this.mech.goToPreset(Misc.TOP_DROPOFF);
+                this.mech.goToPreset(Arm.TOP_DROPOFF);
                 break;
             case 90:
-                this.mech.goToPreset(Misc.STOWED_AWAY);
+                this.mech.goToPreset(Arm.STOWED_AWAY);
                 break;
             case 180:
-                this.mech.goToPreset(Misc.GROUND_DROPOFF);
+                this.mech.goToPreset(Arm.GROUND_DROPOFF);
                 break;
             case 270:
-                this.mech.goToPreset(Misc.MID_DROPOFF);
+                this.mech.goToPreset(Arm.MID_DROPOFF);
                 break;
         }
 
-        if (OperatorInput.getResetButton()) {
+        if (OperatorInput.getResetButton())
             this.mech.resetPosition();
-        }
 
         // this.mech.setWristHeight(OperatorInput.getWristHeight());
         // this.mech.setWristOffset(OperatorInput.getWristOffset());

@@ -76,9 +76,6 @@ public class DriveIO implements IIO {
         this.driveL1.setInverted(Chassis.INVERTED);
         this.driveR1.setInverted(!Chassis.INVERTED);
 
-        this.driveL1.setOpenLoopRampRate(Chassis.RAMP_RATE);
-        this.driveR1.setOpenLoopRampRate(Chassis.RAMP_RATE);
-
         this.driveL1Encoder.setPositionConversionFactor(Chassis.LEFT_POSITION_CONVERSION);
         this.driveR1Encoder.setPositionConversionFactor(Chassis.RIGHT_POSITION_CONVERSION);
 
@@ -113,9 +110,6 @@ public class DriveIO implements IIO {
 
         this.driveL2.setSmartCurrentLimit(60, 20);
         this.driveR2.setSmartCurrentLimit(60, 20);
-
-        this.driveL2.setOpenLoopRampRate(Chassis.RAMP_RATE);
-        this.driveR2.setOpenLoopRampRate(Chassis.RAMP_RATE);
 
         this.driveL2.follow(this.driveL1, Chassis.OUT_OF_SYNC);
         this.driveR2.follow(this.driveR1, Chassis.OUT_OF_SYNC);
@@ -169,6 +163,26 @@ public class DriveIO implements IIO {
         if (!enabled)
             return;
         this.driveR1PidController.setSmartPosition(position);
+    }
+
+    public void setRampRate(boolean state) {
+        if (!enabled)
+            return;
+        this.driveL1.setOpenLoopRampRate(state ? Chassis.RAMP_RATE : 0);
+        this.driveR1.setOpenLoopRampRate(state ? Chassis.RAMP_RATE : 0);
+        this.driveL1.burnFlash();
+        this.driveR1.burnFlash();
+
+        if (!miniBot) {
+            this.driveL2.setOpenLoopRampRate(state ? Chassis.RAMP_RATE : 0);
+            this.driveR2.setOpenLoopRampRate(state ? Chassis.RAMP_RATE : 0);
+            this.driveL2.burnFlash();
+            this.driveR2.burnFlash();
+        }
+    }
+
+    public boolean getRampRate() {
+        return this.driveL1.getOpenLoopRampRate() > 0;
     }
 
     /**

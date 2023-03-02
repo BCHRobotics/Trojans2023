@@ -4,18 +4,14 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.peripherals.user.DriverInput;
 import frc.peripherals.user.OperatorInput;
 import frc.subsystems.Drivetrain;
-import frc.util.imaging.Limelight;
 
 public class TeleopDriver implements TeleopComponent {
     private static TeleopDriver instance;
 
     private Drivetrain drive;
-    private Limelight limelight = Limelight.getInstance();
 
     private double frwd = 0;
     private double turn = 0;
-
-    private double distance = 0;
 
     /**
      * Get the instance of the TeleopDriver, if none create a new instance
@@ -60,8 +56,12 @@ public class TeleopDriver implements TeleopComponent {
             this.drive.resetEncoderPosition();
         }
 
-        if (DriverInput.getController().getXButtonReleased()) {
-            this.drive.goToTarget();
+        if (DriverInput.getController().getXButton()) {
+            this.drive.calculatePath();
+        } else if (DriverInput.getController().getXButtonReleased()) {
+            this.drive.followPath();
+        } else {
+            this.drive.clearPath();
         }
 
         this.drive.run();
