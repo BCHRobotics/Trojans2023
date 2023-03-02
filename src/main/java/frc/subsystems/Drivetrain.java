@@ -50,6 +50,7 @@ public class Drivetrain implements Subsystem {
     // Drive brakes variable
     private boolean brakeMode;
 
+    private double phi;
     private double theta;
     private double x;
     private double y;
@@ -387,25 +388,27 @@ public class Drivetrain implements Subsystem {
     }
 
     public void calculatePath() {
-        this.theta = (this.gyro.getYaw() > 0 ? 90 : -90) - this.gyro.getYaw() - this.limelight.getTargetX();
+        this.phi = (this.gyro.getYaw() > 0 ? 90 : -90) - this.gyro.getYaw();
+        this.theta = this.phi - (this.limelight.getTargetX() * (this.gyro.getYaw() > 0 ? 1 : -1));
         this.x = (this.limelight.getTargetDistance() * Math.cos(theta));
         this.y = (this.limelight.getTargetDistance() * Math.sin(theta)) - Misc.LIMELIGHT_CHASSIS_OFFSET;
     }
 
     public void followPath() {
 
-        if (!Misc.WITHIN_TOLERANCE(this.gyro.getYaw(), theta, Chassis.GYRO_TOLERANCE))
-            this.setYaw(theta);
-        else if (!Misc.WITHIN_TOLERANCE(this.getLeftPosition(), x, Chassis.TOLERANCE))
-            this.setPosition(x, x);
+        if (!Misc.WITHIN_TOLERANCE(this.gyro.getYaw(), this.phi, Chassis.GYRO_TOLERANCE))
+            this.setYaw(this.phi);
+        else if (!Misc.WITHIN_TOLERANCE(this.getLeftPosition(), this.x, Chassis.TOLERANCE))
+            this.setPosition(this.x, this.x);
         else if (!Misc.WITHIN_TOLERANCE(this.gyro.getYaw(), 0, Chassis.GYRO_TOLERANCE))
             this.setYaw(0);
-        else if (!Misc.WITHIN_TOLERANCE(this.getLeftPosition(), y, Chassis.TOLERANCE))
-            this.setPosition(y, y);
+        else if (!Misc.WITHIN_TOLERANCE(this.getLeftPosition(), this.y, Chassis.TOLERANCE))
+            this.setPosition(this.y, this.y);
 
     }
 
     public void clearPath() {
+        this.phi = 0;
         this.theta = 0;
         this.x = 0;
         this.y = 0;
