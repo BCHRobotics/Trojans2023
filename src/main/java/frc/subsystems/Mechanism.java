@@ -4,6 +4,7 @@ import frc.peripherals.robot.ArmIO;
 import frc.peripherals.robot.ClawIO;
 import frc.robot.Constants.Arm;
 import frc.robot.Constants.Misc;
+import frc.robot.Constants.Misc.StatusLED;
 import frc.util.control.ArmPresets;
 
 import java.lang.Math;
@@ -24,6 +25,7 @@ public class Mechanism implements Subsystem {
     private boolean pumpMode;
 
     private ArmPresets preset;
+    private StatusLED previousState = StatusLED.OFF;
 
     private boolean coneLED, cubeLED, blinkCone, blinkCube;
     private long previousTime, currentTime;
@@ -85,6 +87,7 @@ public class Mechanism implements Subsystem {
         this.wristAngle = 0;
         this.clawPos = 0;
         this.pumpMode = false;
+        this.clawIO.recalibrateClaw();
         this.resetStatusLED();
     }
 
@@ -290,6 +293,8 @@ public class Mechanism implements Subsystem {
                 resetStatusLED();
                 break;
         }
+
+        this.previousState = state;
 
     }
 

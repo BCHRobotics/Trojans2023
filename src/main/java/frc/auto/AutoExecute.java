@@ -6,6 +6,7 @@ import java.util.List;
 
 import frc.subsystems.Drivetrain;
 import frc.subsystems.Mechanism;
+import frc.subsystems.Drivetrain.DriveState;
 import frc.util.csv.CSVReader;
 
 public class AutoExecute extends AutoComponent {
@@ -87,7 +88,11 @@ public class AutoExecute extends AutoComponent {
                         this.drive.clearPath();
                         break;
                 }
-                this.drive.balancePID(data.get(0).get(10) == 1.0 ? true : false);
+                if (data.get(0).get(10) == 1.0) {
+                    this.drive.setOutput(this.drive.balancePID(), 0);
+                    this.drive.setDriveMode(DriveState.BALANCE);
+                } else
+                    this.drive.unrestrained();
             } else {
                 data.remove(0);
             }

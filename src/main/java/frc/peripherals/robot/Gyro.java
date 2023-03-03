@@ -33,7 +33,7 @@ public class Gyro extends AHRS {
         if (!Features.GYRO_ENABLED)
             return 0;
         // Inverts and Rounds pitch angle to 1 decimal
-        return (float) Math.round((super.getPitch() * (Chassis.GYRO_OUTPUT_INVERTED ? -1 : 1) * 10)) / 10;
+        return (float) Math.round((super.getPitch() * (Chassis.GYRO_OUTPUT_INVERTED ? -1 : 1) * 1)) / 1;
     }
 
 }

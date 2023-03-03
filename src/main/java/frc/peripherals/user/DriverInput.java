@@ -25,8 +25,8 @@ public final class DriverInput {
 	 * @return Max drive speed
 	 */
 	public static double getDriveMaxSpeed() {
-		return Chassis.MAX_OUTPUT + (-(driver.getLeftTriggerAxis() * Chassis.MAX_INTERVAL)
-				+ (driver.getRightTriggerAxis() * Chassis.MAX_INTERVAL));
+		return Chassis.MAX_OUTPUT + ((driver.getRightTriggerAxis() * Chassis.MAX_INTERVAL)
+				- (driver.getLeftTriggerAxis() * Chassis.MAX_INTERVAL));
 	}
 
 	/**
@@ -62,7 +62,7 @@ public final class DriverInput {
 	 * @return ABS state
 	 */
 	public static boolean getABS() {
-		return driver.getRightBumper();
+		return driver.getLeftBumper();
 	}
 
 	/**

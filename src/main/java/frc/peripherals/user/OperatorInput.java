@@ -46,12 +46,66 @@ public final class OperatorInput {
     }
 
     /**
-     * Get the test button boolean state
+     * Get the cone toggle button boolean state
      * 
-     * @return test offset
+     * @return cone toggle
      */
-    public static boolean getTestButton() {
+    public static boolean getConeToggle() {
+        return operator.getYButton();
+    }
+
+    /**
+     * Get the cube toggle button boolean state
+     * 
+     * @return cube toggle
+     */
+    public static boolean getCubeToggle() {
+        return operator.getXButton();
+    }
+
+    /**
+     * Get the cone release suction button boolean state
+     * 
+     * @return cone release suction
+     */
+    public static boolean getConeReleaseSuction() {
+        return operator.getYButtonReleased();
+    }
+
+    /**
+     * Get the cube release suction button boolean state
+     * 
+     * @return cube release suction
+     */
+    public static boolean getCubeReleaseSuction() {
+        return operator.getXButtonReleased();
+    }
+
+    /**
+     * Get the claw release button boolean state
+     * 
+     * @return claw release
+     */
+    public static boolean getClawRelease() {
+        return operator.getAButton();
+    }
+
+    /**
+     * Get the release suction button boolean state
+     * 
+     * @return suction release
+     */
+    public static boolean getReleaseSuction() {
         return operator.getRightBumper();
+    }
+
+    /**
+     * Get the toggle suction button boolean state
+     * 
+     * @return suction toggle
+     */
+    public static boolean getToggleSuction() {
+        return operator.getBButton();
     }
 
     /**
@@ -70,6 +124,33 @@ public final class OperatorInput {
      */
     public static int getGamePiece() {
         return operator.getPOV();
+    }
+
+    /**
+     * Get the cube light button boolean state
+     * 
+     * @return cube request
+     */
+    public static boolean getCubeLight() {
+        return operator.getLeftBumperPressed();
+    }
+
+    /**
+     * Get the cone light button boolean state
+     * 
+     * @return cone request
+     */
+    public static boolean getConeLight() {
+        return operator.getRightBumperPressed();
+    }
+
+    /**
+     * Get the light release button boolean state
+     * 
+     * @return light release request
+     */
+    public static boolean getLightRelease() {
+        return operator.getLeftBumperReleased() || operator.getRightBumperReleased();
     }
 
     /**

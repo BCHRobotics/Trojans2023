@@ -35,20 +35,26 @@ public class TeleopOperator implements TeleopComponent {
     @Override
     public void run() {
 
-        if (OperatorInput.getController().getYButton()) {
-            this.mech.setClawPos(Misc.CONE_PRESET);
+        if (OperatorInput.getConeToggle()) {
             this.mech.setStatusLED(StatusLED.CONE);
-        } else if (OperatorInput.getController().getXButton()) {
-            this.mech.setClawPos(Misc.CUBE_PRESET);
+            this.mech.setClawPos(Misc.CONE_PRESET);
+            this.mech.setSuctionMode(true);
+        } else if (OperatorInput.getConeReleaseSuction()) {
+            this.mech.setSuctionMode(false);
+        } else if (OperatorInput.getCubeToggle()) {
             this.mech.setStatusLED(StatusLED.CUBE);
-        } else if (OperatorInput.getController().getAButton()) {
+            this.mech.setClawPos(Misc.CUBE_PRESET);
+            this.mech.setSuctionMode(true);
+        } else if (OperatorInput.getCubeReleaseSuction()) {
+            this.mech.setSuctionMode(false);
+        } else if (OperatorInput.getClawRelease()) {
             this.mech.setClawPos(0);
             this.mech.setStatusLED(StatusLED.OFF);
         }
 
-        if (OperatorInput.getController().getBButton())
+        if (OperatorInput.getToggleSuction())
             this.mech.setSuctionMode(true);
-        else if (OperatorInput.getTestButton())
+        else if (OperatorInput.getReleaseSuction())
             this.mech.setSuctionMode(false);
 
         switch (OperatorInput.getGamePiece()) {
@@ -68,6 +74,13 @@ public class TeleopOperator implements TeleopComponent {
 
         if (OperatorInput.getResetButton())
             this.mech.resetPosition();
+
+        if (OperatorInput.getConeLight())
+            this.mech.setStatusLED(StatusLED.CONE_BLINK);
+        else if (OperatorInput.getCubeLight())
+            this.mech.setStatusLED(StatusLED.CUBE_BLINK);
+        else if (OperatorInput.getLightRelease())
+            this.mech.setStatusLED(StatusLED.OFF);
 
         // this.mech.setWristHeight(OperatorInput.getWristHeight());
         // this.mech.setWristOffset(OperatorInput.getWristOffset());

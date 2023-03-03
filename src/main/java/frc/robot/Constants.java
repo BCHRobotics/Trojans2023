@@ -67,11 +67,10 @@ public class Constants {
                 public static final double GYRO_TOLERANCE = 0.8;
 
                 // Gyro PID Constants
-                public static final SmartConstants GYRO_CONSTANTS = new SmartConstants(0, 0, 0, 0, 0.0082, 0.001,
-                                0.00182, 0);
+                public static final PIDConstants GYRO_CONSTANTS = new PIDConstants(0.007, 0.001, 0, 0);
 
                 // Target seek PID Constants
-                public static final SmartConstants SEEK_CONSTANTS = new SmartConstants(0, 0, 0, 0, 0, 0, 0, 0);
+                public static final PIDConstants SEEK_CONSTANTS = new PIDConstants(0, 0, 0, 0);
 
         }
 
@@ -108,7 +107,7 @@ public class Constants {
                 // Mechanism PID Constants
                 public static final SparkMaxConstants SHOULDER_CONTROL_CONSTANTS = new SparkMaxConstants(
                                 0.00014028, 0, 0.00051398, 0, 2e-6, -0.4, 1,
-                                0, 0, 5700, 3500, 0.05);
+                                0, 0, 5700, 3500, 0.2);
                 public static final SparkMaxConstants WRIST_CONTROL_CONSTANTS = new SparkMaxConstants(
                                 2.1028E-05, 0, 5.1398E-05, 0, 0.00004, -1, 1,
                                 0, 0, 5700, 5700, 0.05);
@@ -135,7 +134,7 @@ public class Constants {
                 public static final float LIMIT = 1;
                 public static final int LIMIT_SWITCH_PORT = 2;
 
-                public static final double CONVERSION_FACTOR = (1.0 / 50.0); // #inches / #revs
+                public static final double CONVERSION_FACTOR = (1.0 / 57); // #inches / #revs
 
                 public static final SparkMaxConstants CONSTANTS = new SparkMaxConstants(
                                 0, 0, 0, 0, 0.0028, -1, 1, 0, 0, 5700, 4500, 0.01);
@@ -191,8 +190,8 @@ public class Constants {
                         return (value >= -tolerance) && (value <= tolerance);
                 }
 
-                public static final boolean WITHIN_TOLERANCE(double setpoint, double target, double tolerance) {
-                        return (setpoint >= (target - tolerance)) && (setpoint <= (target + tolerance));
+                public static final boolean WITHIN_TOLERANCE(double input, double setpoint, double tolerance) {
+                        return (input >= (setpoint - tolerance)) && (input <= (setpoint + tolerance));
                 }
         }
 

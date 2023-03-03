@@ -4,6 +4,8 @@
 
 package frc.robot;
 
+import edu.wpi.first.cameraserver.CameraServer;
+import edu.wpi.first.cscore.UsbCamera;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.teleop.TeleopControl;
@@ -33,6 +35,8 @@ public class Robot extends TimedRobot {
     private static boolean stopedRecording = false;
     private static boolean vectorButton = false;
 
+    private UsbCamera camera = CameraServer.startAutomaticCapture();
+
     /**
      * This function is run when the robot is first started up and should be used
      * for any
@@ -45,6 +49,8 @@ public class Robot extends TimedRobot {
         this.teleopControl = TeleopControl.getInstance();
         this.autoControl = AutoControl.getInstance();
         this.autoBuilder = AutoBuilder.getInstance();
+        camera.setResolution(200, 150);
+        CameraServer.getVideo(camera);
     }
 
     /**

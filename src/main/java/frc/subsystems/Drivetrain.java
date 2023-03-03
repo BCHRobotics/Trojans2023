@@ -7,7 +7,7 @@ import frc.peripherals.robot.Gyro;
 import frc.robot.Constants.Chassis;
 import frc.robot.Constants.Features;
 import frc.robot.Constants.Misc;
-import frc.util.control.SmartControl;
+import frc.util.control.PID;
 import frc.util.imaging.Limelight;
 import frc.util.imaging.Limelight.LimelightTargetType;
 
@@ -18,7 +18,7 @@ public class Drivetrain implements Subsystem {
     private boolean enabled = Features.DRIVE_ENABLED;
     private boolean gyroEnabled = Features.GYRO_ENABLED;
 
-    private enum DriveState {
+    public enum DriveState {
         OUTPUT,
         POSITION,
         BALANCE,
@@ -27,11 +27,11 @@ public class Drivetrain implements Subsystem {
     private DriveIO driveIO;
 
     // Objects for balancing
-    private SmartControl gyroPid;
+    private PID gyroPid;
     private Gyro gyro;
 
     // Objects for target seeking
-    private SmartControl seekPID;
+    private PID seekPID;
 
     // Limelight Objects needed
     protected Limelight limelight;
@@ -75,13 +75,13 @@ public class Drivetrain implements Subsystem {
 
         if (gyroEnabled) {
             // Objects for balancing
-            this.gyroPid = new SmartControl(Chassis.GYRO_CONSTANTS);
+            this.gyroPid = new PID(Chassis.GYRO_CONSTANTS);
 
             this.gyro = new Gyro(Chassis.GYRO_PORT);
         }
 
         // Objects for target seeking
-        this.seekPID = new SmartControl(Chassis.SEEK_CONSTANTS);
+        this.seekPID = new PID(Chassis.SEEK_CONSTANTS);
 
         this.limelight = Limelight.getInstance();
 
@@ -97,6 +97,8 @@ public class Drivetrain implements Subsystem {
             this.gyro.reset();
 
         this.limelight.setDesiredTarget(LimelightTargetType.APRILTAG);
+
+        this.gyroPid.pushConstantsToDashboard("Gyro");
 
         this.resetEncoderPosition();
     }
@@ -130,6 +132,9 @@ public class Drivetrain implements Subsystem {
                 this.disable();
                 break;
         }
+
+        this.gyroPid.retrieveDashboardConstants();
+        SmartDashboard.putNumber("Pitch", this.gyro.getPitch());
 
         this.driveIO.brakeMode(this.currentState != DriveState.OUTPUT ? true : this.brakeMode);
     }
@@ -320,38 +325,40 @@ public class Drivetrain implements Subsystem {
         this.setPosition(this.getLeftPosition() + angle, this.getRightPosition() - angle);
     }
 
-    /**
-     * Turns drivetrain/chasis to a provided target using PID
-     * 
-     * @param angle in degrees
-     */
-    public void seekTarget(double angle) {
-        SmartDashboard.putNumber("Drive Heading Φ", angle);
+    // /**
+    // * Turns drivetrain/chasis to a provided target using PID
+    // *
+    // * @param angle in degrees
+    // */
+    // public void seekTarget(double angle) {
+    // SmartDashboard.putNumber("Drive Heading Φ", angle);
 
-        this.seekPID.setSetpoint(0);
-        this.setOutput(this.seekPID.calculate(angle), 0);
-    }
+    // this.seekPID.setSetpoint(0);
+    // this.setOutput(this.seekPID.calculate(angle), 0);
+    // }
 
-    /**
-     * Resets seekTarget() variables to remain idle
-     */
-    public void seekIdle() {
-        this.seekPID.reset();
-    }
+    // /**
+    // * Resets seekTarget() variables to remain idle
+    // */
+    // public void seekIdle() {
+    // this.seekPID.reset();
+    // }
 
     /**
      * Uses PID to balance robot on charging station
      */
-    public void balancePID(boolean trigger) {
-        if (!gyroEnabled)
-            return;
-        if (trigger) {
-            this.gyroPid.enableContinuousInput(-35, 35);
-            this.gyroPid.setSetpoint(0);
-            this.setOutput(this.gyroPid.calculate(this.gyro.getPitch()), 0);
-            this.currentState = DriveState.BALANCE;
-        } else
-            this.unrestrained();
+    public double balancePID() {
+        if (!gyroEnabled) {
+            return 0;
+        }
+
+        // this.currentState = DriveState.BALANCE;
+        this.gyroPid.setTarget(0);
+        this.gyroPid.referenceTimer();
+        this.gyroPid.setInput(this.gyro.getPitch());
+        this.gyroPid.calculate();
+        System.out.println(this.gyroPid.getOutput());
+        return this.gyroPid.getOutput();
     }
 
     /**
@@ -366,11 +373,11 @@ public class Drivetrain implements Subsystem {
     /**
      * Resets balance method variables to remain idle when not balancing
      */
-    private void unrestrained() {
+    public void unrestrained() {
         if (!gyroEnabled)
             return;
-        this.gyroPid.disableContinuousInput();
-        this.gyroPid.reset();
+        this.gyroPid.resetTimer();
+        this.gyroPid.resetError();
     }
 
     public void goToTarget() { // goes to april tag

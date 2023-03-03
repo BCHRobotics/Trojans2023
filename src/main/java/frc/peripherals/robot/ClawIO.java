@@ -9,6 +9,7 @@ import com.revrobotics.SparkMaxLimitSwitch.Type;
 import com.revrobotics.SparkMaxPIDController.AccelStrategy;
 
 import edu.wpi.first.wpilibj.DigitalOutput;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants.Claw;
 import frc.robot.Constants.Features;
 import frc.robot.Constants.Misc;
@@ -157,6 +158,16 @@ public class ClawIO implements IIO {
     }
 
     /**
+     * Recalibrates claw to zero position
+     */
+    public void recalibrateClaw() {
+        if (!enabled)
+            return;
+
+        this.calibrated = false;
+    }
+
+    /**
      * Resets claw encoder to zero position
      * 
      * <p>
@@ -172,6 +183,9 @@ public class ClawIO implements IIO {
     @Override
     public void updateInputs() {
         // this.clawPidController.retrieveDashboardConstants();
+
+        SmartDashboard.putBoolean("Cube Request", this.cubeLED.get());
+        SmartDashboard.putBoolean("Cone Request", this.coneLED.get());
 
         if ((!enabled) || (this.calibrated))
             return;
