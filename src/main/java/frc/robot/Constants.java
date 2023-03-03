@@ -173,11 +173,11 @@ public class Constants {
                 public static final double APRILTAG_HEIGHT = 18.125; // inches
 
                 // CSV Test version
-                public static final int VERSION = 1;
+                public static final int VERSION = 2;
                 public static final String TEACH_MODE_FILE_NAME = "LEAD_BY_NOSE" + "_" + VERSION;
 
                 // Autonomous directory
-                public static final String ROOT_DIRECTORY = "/home/lvuser/deploy/"; // "csv/";
+                public static final String ROOT_DIRECTORY = "csv/"; // "csv/";
 
                 public static final double ENSURE_RANGE(double value, double min, double max) {
                         return Math.min(Math.max(value, min), max);

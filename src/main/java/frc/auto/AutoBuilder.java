@@ -46,11 +46,11 @@ public class AutoBuilder {
             rows.add((double) timer);
             rows.add((double) drive.getLeftPosition());
             rows.add((double) drive.getRightPosition());
-            rows.add((double) mech.getPresetID());
-            rows.add((double) mech.getShoulderOffset());
-            rows.add((double) mech.getWristOffset());
-            rows.add((double) mech.getClawPos());
-            rows.add((double) (mech.getSuctionMode() ? 1 : 0));
+            rows.add((double) 0.0); // Manual Tags (Arm Preset)
+            rows.add((double) 0.0); // Manual Tags (Shoulder Offset)
+            rows.add((double) 0.0); // Manual Tags (Wrist Offset)
+            rows.add((double) 0.0); // Manual Tags (Claw Percentage)
+            rows.add((double) 0.0); // Manual Tags (Pump mode)
             rows.add((double) 0.0); // Manual Tags (LED Status)
             rows.add((double) 0.0); // Manual Tags (Vision)
             rows.add((double) 0.0); // Manual Tags (Balancing)

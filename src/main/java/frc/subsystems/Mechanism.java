@@ -262,7 +262,7 @@ public class Mechanism implements Subsystem {
      * @return ArmPresets (Wrist Height, Wrist Offset) ID
      */
     public int getPresetID() {
-        return this.preset.ID;
+        return 0;
     }
 
     /**
