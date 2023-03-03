@@ -223,8 +223,28 @@ public class Mechanism implements Subsystem {
      * @param ID
      */
     public void goToPreset(int ID) {
-        this.setWristHeight(Arm.PRESETS[ID].wristHeight);
-        this.setWristOffset(Arm.PRESETS[ID].wristOffset);
+        switch (ID) {
+            case 0:
+                this.resetPosition();
+                break;
+            case 1:
+                this.goToPreset(Arm.STOWED_AWAY);
+                break;
+            case 2:
+                this.goToPreset(Arm.GROUND_DROPOFF);
+                break;
+            case 3:
+                this.goToPreset(Arm.MID_DROPOFF);
+                break;
+            case 4:
+                this.goToPreset(Arm.TOP_DROPOFF);
+                break;
+            case 5:
+                this.goToPreset(Arm.STATION_PICKUP);
+                break;
+            default:
+                this.resetPosition();
+        }
     }
 
     /**

@@ -346,7 +346,7 @@ public class Drivetrain implements Subsystem {
         if (!gyroEnabled)
             return;
         if (trigger) {
-            this.gyroPid.enableContinuousInput(-25, 25);
+            this.gyroPid.enableContinuousInput(-35, 35);
             this.gyroPid.setSetpoint(0);
             this.setOutput(this.gyroPid.calculate(this.gyro.getPitch()), 0);
             this.currentState = DriveState.BALANCE;

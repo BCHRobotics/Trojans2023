@@ -57,9 +57,9 @@ public class Constants {
 
                 // Drive PID Constants TODO: Tune Drivetrain PID
                 public static final SparkMaxConstants LEFT_DRIVE_CONSTANTS = new SparkMaxConstants(
-                                0.00005, 0, 0, 0, 0.000185, -1, 1, 0, 0, 4000, 3500, 0.1);
+                                0.00012, 0, 0.0025, 0, 0.00005, -1, 1, 0, 0, 6000, 2000, 0.2);
                 public static final SparkMaxConstants RIGHT_DRIVE_CONSTANTS = new SparkMaxConstants(
-                                0.00005, 0, 0, 0, 0.000185, -1, 1, 0, 0, 4000, 3500, 0.1);
+                                0.00012, 0, 0.0025, 0, 0.00005, -1, 1, 0, 0, 6000, 2000, 0.2);
 
                 // Gyro constants
                 public static final SerialPort.Port GYRO_PORT = SerialPort.Port.kMXP;
@@ -95,31 +95,33 @@ public class Constants {
                 public static final float SHOULDER_LIMIT = 130 + (float) Arm.SHOULDER_DEFAULT_OFFSET;
                 public static final float WRIST_LIMIT = 200 + (float) Arm.WRIST_DEFAULT_OFFSET;
                 public static final double SHOUDLER_MAX_EXTENSION_LIMIT = 55;
+                public static final double SHOULDER_TOLERANCE = 1;
 
                 // Robot arm ABSOLUTE encoder inversions
                 public static final boolean SHOULDER_ENCODER_INVERTED = false;
                 public static final boolean WRIST_ENCODER_INVERTED = false;
 
                 // Robot arm ABSOLUTE encoder offset
-                public static final double SHOULDER_ENCODER_OFFSET = (204.7660160) - Arm.SHOULDER_DEFAULT_OFFSET;
+                public static final double SHOULDER_ENCODER_OFFSET = (204.9660160) - Arm.SHOULDER_DEFAULT_OFFSET;
                 public static final double WRIST_ENCODER_OFFSET = (172.0870650) - Arm.WRIST_DEFAULT_OFFSET;
 
                 // Mechanism PID Constants
                 public static final SparkMaxConstants SHOULDER_CONTROL_CONSTANTS = new SparkMaxConstants(
                                 0.00014028, 0, 0.00051398, 0, 2e-6, -0.4, 1,
-                                0, 0, 5700, 3500, 0.1);
+                                0, 0, 5700, 3500, 0.05);
                 public static final SparkMaxConstants WRIST_CONTROL_CONSTANTS = new SparkMaxConstants(
                                 2.1028E-05, 0, 5.1398E-05, 0, 0.00004, -1, 1,
-                                0, 0, 5700, 5700, 0.1);
+                                0, 0, 5700, 5700, 0.05);
 
                 // Arm preset profiles
-                public static final ArmPresets STOWED_AWAY = new ArmPresets(0, -70, 0);
-                public static final ArmPresets GROUND_DROPOFF = new ArmPresets(0, 0, 1);
-                public static final ArmPresets MID_DROPOFF = new ArmPresets(38, 0, 2);
-                public static final ArmPresets TOP_DROPOFF = new ArmPresets(50, 0, 3);
-                public static final ArmPresets STATION_PICKUP = new ArmPresets(0, 0, 4);
+                public static final ArmPresets DEFAULT_PRESET = new ArmPresets(0, -90, 0);
+                public static final ArmPresets STOWED_AWAY = new ArmPresets(0, -70, 1);
+                public static final ArmPresets GROUND_DROPOFF = new ArmPresets(0, 0, 2);
+                public static final ArmPresets MID_DROPOFF = new ArmPresets(38, 0, 3);
+                public static final ArmPresets TOP_DROPOFF = new ArmPresets(50, 0, 4);
+                public static final ArmPresets STATION_PICKUP = new ArmPresets(42, 0, 5);
 
-                public static final ArmPresets[] PRESETS = { STOWED_AWAY, GROUND_DROPOFF,
+                public static final ArmPresets[] PRESETS = { DEFAULT_PRESET, STOWED_AWAY, GROUND_DROPOFF,
                                 MID_DROPOFF, TOP_DROPOFF, STATION_PICKUP };
 
         }

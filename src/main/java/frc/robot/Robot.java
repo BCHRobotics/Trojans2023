@@ -154,7 +154,7 @@ public class Robot extends TimedRobot {
                 if (vectorButton == true) {
                     this.autoBuilder.recordData();
                     vectorButton = false;
-                    SmartDashboard.putBoolean("Record Vector", false);
+                    SmartDashboard.putBoolean("Record Vector", vectorButton);
                 }
 
             } else {

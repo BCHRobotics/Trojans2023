@@ -10,6 +10,7 @@ import com.revrobotics.SparkMaxPIDController.AccelStrategy;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants.Chassis;
 import frc.robot.Constants.Features;
+import frc.robot.Constants.Misc;
 import frc.util.control.SparkMaxPID;
 
 public class DriveIO implements IIO {
@@ -49,6 +50,9 @@ public class DriveIO implements IIO {
             return;
 
         initMainMotors();
+
+        // this.driveL1PidController.pushConstantsToDashboard("Drive Left");
+        // this.driveR1PidController.pushConstantsToDashboard("Drive Right");
 
         if (!miniBot)
             initFollowMotors();
@@ -149,7 +153,7 @@ public class DriveIO implements IIO {
      * @param position
      */
     public void setDriveLeftPos(double position) {
-        if (!enabled)
+        if (!enabled || Misc.WITHIN_TOLERANCE(this.getDriveL1Encoder().getPosition(), position, 1))
             return;
         this.driveL1PidController.setSmartPosition(position);
     }
@@ -160,7 +164,7 @@ public class DriveIO implements IIO {
      * @param position
      */
     public void setDriveRightPos(double position) {
-        if (!enabled)
+        if (!enabled || Misc.WITHIN_TOLERANCE(this.getDriveR1Encoder().getPosition(), position, 1))
             return;
         this.driveR1PidController.setSmartPosition(position);
     }
@@ -263,9 +267,10 @@ public class DriveIO implements IIO {
         if (!enabled)
             return;
 
-        // this.driveL1PidController.pushConstantsToDashboard("Drive Left");
-        // this.driveR1PidController.pushConstantsToDashboard("Drive Right");
+        this.resetEncoders();
+    }
 
+    public void resetEncoders() {
         this.driveL1Encoder.setPosition(0);
         this.driveR1Encoder.setPosition(0);
 

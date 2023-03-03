@@ -39,20 +39,18 @@ public class TeleopDriver implements TeleopComponent {
 
         SmartDashboard.putNumber("Max Drive Speed %", DriverInput.getDriveMaxSpeed() * 100);
 
-        this.drive.balancePID(DriverInput.getBalanceMode());
+        // this.drive.balancePID(DriverInput.getBalanceMode());
 
-        // if (DriverInput.getBalanceMode()) {
-        // this.drive.setPosition(48, 48);
-        // } else
-
-        if (!DriverInput.getBalanceMode()) {
+        if (DriverInput.getBalanceMode()) {
+            this.drive.setPosition(48, 48);
+        } else if (!DriverInput.getBalanceMode()) {
             this.frwd = DriverInput.getDriveFrwd();
             this.turn = DriverInput.getDriveTurn();
             this.drive.setBrakes(DriverInput.getBrakeMode());
             this.drive.setOutput(frwd, turn);
         }
 
-        if (OperatorInput.getController().getBButton()) {
+        if (DriverInput.getController().getBButton()) {
             this.drive.resetEncoderPosition();
         }
 

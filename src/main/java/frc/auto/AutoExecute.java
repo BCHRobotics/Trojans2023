@@ -68,7 +68,7 @@ public class AutoExecute extends AutoComponent {
                 data.clear();
                 return;
             }
-            if (currentTime < data.get(0).get(0).longValue() * 1) { // t = 0.35
+            if (currentTime < (data.get(0).get(0).longValue() * 1)) { // t = 0.35
                 this.drive.setPosition((data.get(0).get(1)), (data.get(0).get(2)));
                 this.mech.goToPreset(data.get(0).get(3).intValue());
                 this.mech.setShoulderOffset(data.get(0).get(4));

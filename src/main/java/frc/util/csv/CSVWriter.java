@@ -18,7 +18,7 @@ public final class CSVWriter {
     private String directory = new String();
 
     public CSVWriter(String root) {
-        directory = root;
+        this.directory = root;
     }
 
     public void setFileName(String fileName) {
@@ -35,19 +35,19 @@ public final class CSVWriter {
     }
 
     public void setHeader(String inputHeaders) {
-        headers = inputHeaders;
+        this.headers = inputHeaders;
     }
 
     public void importData(List<List<Double>> data) {
-        dataLines = data;
+        this.dataLines = data;
     }
 
     public void output() throws IOException {
 
         File csvOutputFile = new File(this.filePath);
         try (PrintWriter pw = new PrintWriter(csvOutputFile)) {
-            pw.println(headers);
-            dataLines.stream().map(this::convertToCSV).forEach(pw::println);
+            pw.println(this.headers);
+            this.dataLines.stream().map(this::convertToCSV).forEach(pw::println);
         } catch (Exception e) {
             return;
         }

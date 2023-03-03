@@ -10,6 +10,7 @@ import com.revrobotics.SparkMaxPIDController.AccelStrategy;
 
 import frc.robot.Constants.Arm;
 import frc.robot.Constants.Features;
+import frc.robot.Constants.Misc;
 import frc.util.control.SparkMaxPID;
 
 public class ArmIO implements IIO {
@@ -104,7 +105,7 @@ public class ArmIO implements IIO {
      * @param angle
      */
     public void setShoulderAngle(double angle) {
-        if (!enabled)
+        if (!enabled || Misc.WITHIN_TOLERANCE(this.getShoulderEncoder().getPosition(), angle, Arm.SHOULDER_TOLERANCE))
             return;
 
         this.shoulderController.setSmartPosition(angle, Arm.SHOULDER_DEFAULT_OFFSET, Arm.SHOULDER_LIMIT);
