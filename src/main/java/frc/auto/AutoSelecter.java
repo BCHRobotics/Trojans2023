@@ -17,11 +17,10 @@ public class AutoSelecter {
 
     private AutoSelecter() {
         autoChooser = new SendableChooser<String>();
-        autoChooser.setDefaultOption("CONE_HIGH_BALANCE", "AUTO_PATH_1");
-        autoChooser.addOption("CUBE_HIGH_BALANCE", "AUTO_PATH_2");
-        autoChooser.addOption("2_CONE_LOW", "AUTO_PATH_3");
-        autoChooser.addOption("2_CUBE_LOW", "AUTO_PATH_4");
-        autoChooser.addOption("DRIVE_BACK", "AUTO_PATH_5");
+        autoChooser.setDefaultOption("DRIVE_BACK", "DRIVE_BACK_V1");
+        autoChooser.addOption("DRIVE_BALANCE", "DRIVE_BALANCE_V3");
+        autoChooser.addOption("SCORE BALANCE", "SCORE_BALANCE_V1");
+        autoChooser.addOption("SCORE HIGH", "SCORE_HIGH_V1");
         autoChooser.addOption("LEAD_BY_NOSE_PLAYBACK", Misc.TEACH_MODE_FILE_NAME);
 
         SmartDashboard.putData("Autonomous Route", autoChooser);
