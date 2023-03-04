@@ -127,6 +127,15 @@ public final class OperatorInput {
     }
 
     /**
+     * Get the Operator station request
+     * 
+     * @return Operator station request
+     */
+    public static boolean getStationRequest() {
+        return operator.getRightStickButton();
+    }
+
+    /**
      * Get the cube light button boolean state
      * 
      * @return cube request

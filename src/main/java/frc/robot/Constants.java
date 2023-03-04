@@ -117,7 +117,7 @@ public class Constants {
                 public static final ArmPresets STOWED_AWAY = new ArmPresets(0, -70, 1);
                 public static final ArmPresets GROUND_DROPOFF = new ArmPresets(0, 0, 2);
                 public static final ArmPresets MID_DROPOFF = new ArmPresets(38, 0, 3);
-                public static final ArmPresets TOP_DROPOFF = new ArmPresets(50, 0, 4);
+                public static final ArmPresets TOP_DROPOFF = new ArmPresets(52, 0, 4);
                 public static final ArmPresets STATION_PICKUP = new ArmPresets(42, 0, 5);
 
                 public static final ArmPresets[] PRESETS = { DEFAULT_PRESET, STOWED_AWAY, GROUND_DROPOFF,

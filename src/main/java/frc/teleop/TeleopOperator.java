@@ -72,6 +72,9 @@ public class TeleopOperator implements TeleopComponent {
                 break;
         }
 
+        if (OperatorInput.getStationRequest())
+            this.mech.goToPreset(Arm.STATION_PICKUP);
+
         if (OperatorInput.getResetButton())
             this.mech.resetPosition();
 
