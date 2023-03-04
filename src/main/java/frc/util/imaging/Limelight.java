@@ -30,6 +30,10 @@ public class Limelight {
         this.currentTarget = target;
     }
 
+    public void setPipeline() {
+        this.networkTable.getEntry("pipeline").setNumber(1);
+    }
+
     public LimelightTargetType getDesiredTarget() {
         return this.currentTarget;
     }

@@ -50,20 +50,28 @@ public class TeleopDriver implements TeleopComponent {
             this.drive.setOutput(frwd, turn);
         }
 
-        if (DriverInput.getController().getBButton()) {
-            this.drive.resetEncoderPosition();
-        }
+        // if (DriverInput.getController().getBButton()) {
+        // this.drive.resetEncoderPosition();
+        // }
 
-        if (DriverInput.getController().getXButton()) {
-            this.drive.calculatePath();
-        } else if (DriverInput.getController().getXButtonReleased()) {
-            this.drive.followPath();
-        } else {
-            this.drive.clearPath();
-        }
+        // if (DriverInput.getController().getXButton()) {
+        // this.drive.calculatePath();
+        // } else if (DriverInput.getController().getXButtonReleased()) {
+        // this.drive.followPath();
+        // } else {
+        // this.drive.clearPath();
+        // }
+
+        if (DriverInput.getTurnAlign())
+            this.drive.alignTarget();
 
         if (DriverInput.getABS())
             this.drive.setOutput(0, 0);
+
+        if (DriverInput.getTurnLeft())
+            this.drive.setYaw(-23);
+        else if (DriverInput.getTurnRight())
+            this.drive.setYaw(23);
 
         this.drive.run();
 

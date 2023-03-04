@@ -54,6 +54,7 @@ public class Constants {
 
                 // input diameter = Δd inches between center wheels ~~v~~ in inches / degree
                 public static final double TURNING_CONVERSION = (TRACK_WIDTH * Math.PI) / 180;
+                // public static final double TURNING_CONVERSION = (17) / 90;
 
                 // Drive PID Constants TODO: Tune Drivetrain PID
                 public static final SparkMaxConstants LEFT_DRIVE_CONSTANTS = new SparkMaxConstants(
@@ -101,7 +102,7 @@ public class Constants {
                 public static final boolean WRIST_ENCODER_INVERTED = false;
 
                 // Robot arm ABSOLUTE encoder offset
-                public static final double SHOULDER_ENCODER_OFFSET = (204.9660160) - Arm.SHOULDER_DEFAULT_OFFSET;
+                public static final double SHOULDER_ENCODER_OFFSET = (205.0932670) - Arm.SHOULDER_DEFAULT_OFFSET;
                 public static final double WRIST_ENCODER_OFFSET = (172.0870650) - Arm.WRIST_DEFAULT_OFFSET;
 
                 // Mechanism PID Constants
@@ -148,7 +149,7 @@ public class Constants {
 
                 // Game piece actuator presets in degrees
                 public static final double CUBE_PRESET = 0.7;
-                public static final double CONE_PRESET = 1;
+                public static final double CONE_PRESET = 0.93;
 
                 public static final int CUBE_LED_PORT = 1;
                 public static final int CONE_LED_PORT = 0;

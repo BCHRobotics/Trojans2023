@@ -96,7 +96,8 @@ public class Drivetrain implements Subsystem {
         if (gyroEnabled)
             this.gyro.reset();
 
-        this.limelight.setDesiredTarget(LimelightTargetType.APRILTAG);
+        this.limelight.setDesiredTarget(LimelightTargetType.CONE);
+        this.limelight.setPipeline();
 
         this.gyroPid.pushConstantsToDashboard("Gyro");
 
@@ -318,9 +319,24 @@ public class Drivetrain implements Subsystem {
         if (!enabled)
             return;
 
-        SmartDashboard.putNumber("Drive Heading θ", angle);
+        // SmartDashboard.putNumber("Drive Heading θ", angle);
 
         angle *= Chassis.TURNING_CONVERSION;
+
+        this.setPosition(this.getLeftPosition() + angle, this.getRightPosition() - angle);
+    }
+
+    /**
+     * Aligns robot chassis with cone or cube
+     * 
+     */
+    public void alignTarget() {
+        if (!enabled)
+            return;
+
+        // SmartDashboard.putNumber("Drive Heading θ", angle);
+
+        double angle = this.limelight.getTargetX() * Chassis.TURNING_CONVERSION;
 
         this.setPosition(this.getLeftPosition() + angle, this.getRightPosition() - angle);
     }
