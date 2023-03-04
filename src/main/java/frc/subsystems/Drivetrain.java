@@ -323,7 +323,7 @@ public class Drivetrain implements Subsystem {
 
         angle *= Chassis.TURNING_CONVERSION;
 
-        this.setPosition(this.getLeftPosition() + angle, this.getRightPosition() - angle);
+        this.setPosition(angle, -angle);
     }
 
     /**
@@ -336,9 +336,7 @@ public class Drivetrain implements Subsystem {
 
         // SmartDashboard.putNumber("Drive Heading θ", angle);
 
-        double angle = this.limelight.getTargetX() * Chassis.TURNING_CONVERSION;
-
-        this.setPosition(this.getLeftPosition() + angle, this.getRightPosition() - angle);
+       this.setYaw(this.limelight.getTargetX());
     }
 
     // /**

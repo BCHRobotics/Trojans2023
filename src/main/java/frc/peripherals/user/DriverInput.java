@@ -44,7 +44,7 @@ public final class DriverInput {
 	 * @return Drive turning speed
 	 */
 	public static double getDriveTurn() {
-		return (driver.getJoystick(Side.RIGHT, Axis.X) * (getDriveMaxSpeed() - 0.1));
+		return (driver.getJoystick(Side.RIGHT, Axis.X) * (getDriveMaxSpeed() - 0.15));
 	}
 
 	/**
@@ -79,6 +79,15 @@ public final class DriverInput {
 	 * 
 	 * @return Align Mode
 	 */
+	public static boolean getTurnAlignPressed() {
+		return driver.getAButtonPressed();
+	}
+
+	/**
+	 * Get whether or not the drive should be aligning the robot with the target
+	 * 
+	 * @return Align Mode
+	 */
 	public static boolean getTurnAlign() {
 		return driver.getAButton();
 	}
@@ -88,8 +97,26 @@ public final class DriverInput {
 	 * 
 	 * @return Driver X button
 	 */
+	public static boolean getTurnLeftPressed() {
+		return driver.getXButtonPressed();
+	}
+
+	/**
+	 * Get the Driver trun left boolean
+	 * 
+	 * @return Driver X button
+	 */
 	public static boolean getTurnLeft() {
-		return driver.getXButtonReleased();
+		return driver.getXButton();
+	}
+
+	/**
+	 * Get the Driver trun right boolean
+	 * 
+	 * @return Driver B button
+	 */
+	public static boolean getTurnRightPressed() {
+		return driver.getBButtonPressed();
 	}
 
 	/**
@@ -98,7 +125,7 @@ public final class DriverInput {
 	 * @return Driver B button
 	 */
 	public static boolean getTurnRight() {
-		return driver.getBButtonReleased();
+		return driver.getBButton();
 	}
 
 	/**
