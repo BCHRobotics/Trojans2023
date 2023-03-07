@@ -129,6 +129,15 @@ public final class DriverInput {
 	}
 
 	/**
+	 * Get the Driver limelight test
+	 * 
+	 * @return Driver d pad
+	 */
+	public static int getDPad(){
+		return driver.getPOV();
+	}
+
+	/**
 	 * Set driver controller rumble mode
 	 * 
 	 * @param type      Left, Right, Both
