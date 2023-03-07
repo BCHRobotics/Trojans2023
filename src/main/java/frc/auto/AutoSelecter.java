@@ -17,7 +17,7 @@ public class AutoSelecter {
 
     private AutoSelecter() {
         autoChooser = new SendableChooser<String>();
-        autoChooser.setDefaultOption("DRIVE_BACK", "DRIVE_BACK_V1");
+        autoChooser.setDefaultOption("DRIVE_BACK", "DRIVE_BACK_V6");
         autoChooser.addOption("DRIVE_BALANCE", "DRIVE_BALANCE_V3");
         autoChooser.addOption("SCORE BALANCE", "SCORE_BALANCE_V1");
         autoChooser.addOption("SCORE HIGH", "SCORE_HIGH_V1");

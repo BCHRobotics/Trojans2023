@@ -102,7 +102,7 @@ public class Constants {
                 public static final boolean WRIST_ENCODER_INVERTED = false;
 
                 // Robot arm ABSOLUTE encoder offset
-                public static final double SHOULDER_ENCODER_OFFSET = (205.0932670) - Arm.SHOULDER_DEFAULT_OFFSET;
+                public static final double SHOULDER_ENCODER_OFFSET = (204.7492790) - Arm.SHOULDER_DEFAULT_OFFSET;
                 public static final double WRIST_ENCODER_OFFSET = (172.0870650) - Arm.WRIST_DEFAULT_OFFSET;
 
                 // Mechanism PID Constants
@@ -135,7 +135,7 @@ public class Constants {
                 public static final float LIMIT = 1;
                 public static final int LIMIT_SWITCH_PORT = 2;
 
-                public static final double CONVERSION_FACTOR = (1.0 / 57); // #inches / #revs
+                public static final double CONVERSION_FACTOR = (1.0 / 190); // #inches / #revs
 
                 public static final SparkMaxConstants CONSTANTS = new SparkMaxConstants(
                                 0, 0, 0, 0, 0.0028, -1, 1, 0, 0, 5700, 4500, 0.01);
@@ -149,7 +149,7 @@ public class Constants {
 
                 // Game piece actuator presets in degrees
                 public static final double CUBE_PRESET = 0.7;
-                public static final double CONE_PRESET = 0.93;
+                public static final double CONE_PRESET = 1;
 
                 public static final int CUBE_LED_PORT = 1;
                 public static final int CONE_LED_PORT = 0;

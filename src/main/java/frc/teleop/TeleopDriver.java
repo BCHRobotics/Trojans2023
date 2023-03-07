@@ -62,19 +62,19 @@ public class TeleopDriver implements TeleopComponent {
         // this.drive.clearPath();
         // }
 
-        if (DriverInput.getTurnAlignPressed() || DriverInput.getTurnLeftPressed() || DriverInput.getTurnRightPressed()) {
+        if (DriverInput.getTurnAlignPressed() || DriverInput.getTurnLeftPressed()
+                || DriverInput.getTurnRightPressed()) {
             this.drive.setOutput(0, 0);
             this.drive.resetEncoderPosition();
         } else if (DriverInput.getTurnAlign())
             this.drive.alignTarget();
         else if (DriverInput.getTurnLeft())
-            this.drive.setYaw(-23);
+            this.drive.setYaw(-10);
         else if (DriverInput.getTurnRight())
-            this.drive.setYaw(23);
+            this.drive.setYaw(10);
 
         if (DriverInput.getABS())
             this.drive.setOutput(0, 0);
-
 
         this.drive.run();
 

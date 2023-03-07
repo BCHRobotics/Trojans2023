@@ -98,6 +98,7 @@ public class Drivetrain implements Subsystem {
 
         this.limelight.setDesiredTarget(LimelightTargetType.CONE);
         this.limelight.setPipeline();
+        this.limelight.setLedMode(1);
 
         this.gyroPid.pushConstantsToDashboard("Gyro");
 
@@ -336,7 +337,7 @@ public class Drivetrain implements Subsystem {
 
         // SmartDashboard.putNumber("Drive Heading θ", angle);
 
-       this.setYaw(this.limelight.getTargetX());
+        this.setYaw(this.limelight.getTargetX());
     }
 
     // /**

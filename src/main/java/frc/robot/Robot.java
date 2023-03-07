@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.teleop.TeleopControl;
 import frc.auto.AutoBuilder;
 import frc.auto.AutoControl;
+import frc.peripherals.robot.ClawIO;
 import frc.peripherals.robot.IO;
 
 /**
@@ -89,6 +90,7 @@ public class Robot extends TimedRobot {
     @Override
     public void autonomousInit() {
         this.robotIO.resetInputs();
+        // ClawIO.getInstance().recalibrateClaw();
         this.autoControl.initialize();
     }
 

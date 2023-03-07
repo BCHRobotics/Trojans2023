@@ -66,8 +66,6 @@ public class ClawIO implements IIO {
 
         this.grip.restoreFactoryDefaults();
 
-        this.grip.setIdleMode(CANSparkMax.IdleMode.kBrake);
-
         this.grip.setSmartCurrentLimit(20, 10);
 
         this.grip.setInverted(false);
@@ -106,6 +104,8 @@ public class ClawIO implements IIO {
             this.clawPidController.setSmartPosition(position, Claw.DEFAULT_OFFSET,
                     Claw.LIMIT);
         }
+
+        this.grip.setIdleMode(CANSparkMax.IdleMode.kBrake);
     }
 
     /**
