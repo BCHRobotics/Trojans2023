@@ -2,6 +2,7 @@ package frc.teleop;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.peripherals.user.DriverInput;
+import frc.robot.Constants.Misc;
 import frc.subsystems.Drivetrain;
 import frc.subsystems.Drivetrain.DriveState;
 import frc.util.imaging.Limelight;
@@ -65,8 +66,22 @@ public class TeleopDriver implements TeleopComponent {
         // } else {
         // this.drive.clearPath();
         // }
+        
         if(DriverInput.getDPad() == 0){
-            System.out.println("" + limelight.getTargetExists());
+            System.out.println("Does April Tag Exist: " + (limelight.getTargetExists()==false?"NO":"YES"));
+
+            //if angle from limelight is not +-3 from the april tag then turn towards the april tag
+            if(Misc.WITHIN_TOLERANCE(limelight.getTargetX(), 3)){
+                this.drive.setYaw(limelight.getTargetX());
+            }else{
+                //if robot is lined up with april tag drive in forward the distance from the april tag
+                //to the robot
+
+                //leave some room so the robot does not ram into the april tag (3 is a placeholder)
+
+                //this.drive.resetEncoderPosition();
+                //this.drive.setPosition(0, limelight.getTargetDistance()-3);
+            }
         }
 
         if (DriverInput.getTurnAlignPressed() || DriverInput.getTurnLeftPressed()
