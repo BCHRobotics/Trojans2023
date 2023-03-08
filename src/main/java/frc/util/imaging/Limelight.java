@@ -31,7 +31,7 @@ public class Limelight {
     }
 
     public void setPipeline() {
-        this.networkTable.getEntry("pipeline").setNumber(1);
+        this.networkTable.getEntry("pipeline").setNumber(7);
     }
 
     public LimelightTargetType getDesiredTarget() {
