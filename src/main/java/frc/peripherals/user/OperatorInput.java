@@ -104,9 +104,9 @@ public final class OperatorInput {
      * 
      * @return suction toggle
      */
-    public static boolean getToggleSuction() {
-        return operator.getBButton();
-    }
+    // public static boolean getToggleSuction() {
+    // return operator.getBButton();
+    // }
 
     /**
      * Get the Reset button boolean state

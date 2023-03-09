@@ -133,7 +133,7 @@ public final class DriverInput {
 	 * 
 	 * @return Driver d pad
 	 */
-	public static int getDPad(){
+	public static int getDPad() {
 		return driver.getPOV();
 	}
 

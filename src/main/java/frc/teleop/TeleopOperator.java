@@ -52,9 +52,10 @@ public class TeleopOperator implements TeleopComponent {
             this.mech.setStatusLED(StatusLED.OFF);
         }
 
-        if (OperatorInput.getToggleSuction())
-            this.mech.setSuctionMode(true);
-        else if (OperatorInput.getReleaseSuction())
+        // if (OperatorInput.getToggleSuction())
+        // this.mech.setSuctionMode(true);
+        // else
+        if (OperatorInput.getReleaseSuction())
             this.mech.setSuctionMode(false);
 
         switch (OperatorInput.getGamePiece()) {
