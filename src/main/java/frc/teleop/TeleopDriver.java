@@ -38,6 +38,8 @@ public class TeleopDriver implements TeleopComponent {
         this.drive.firstCycle();
     }
 
+    private boolean DPadUpPressedConst = false;
+
     @Override
     public void run() {
 
@@ -84,6 +86,8 @@ public class TeleopDriver implements TeleopComponent {
                 // this.drive.resetEncoderPosition();
                 // this.drive.setPosition(0, limelight.getTargetDistance()-3);
             }
+        } else if (DriverInput.getDPad() != 0) {
+            DPadUpPressedConst = false;
         }
 
         if (DriverInput.getTurnAlignPressed() || DriverInput.getTurnLeftPressed()
