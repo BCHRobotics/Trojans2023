@@ -340,24 +340,29 @@ public class Drivetrain implements Subsystem {
         this.setYaw(this.limelight.getTargetX());
     }
 
-    // /**
-    // * Turns drivetrain/chasis to a provided target using PID
-    // *
-    // * @param angle in degrees
-    // */
-    // public void seekTarget(double angle) {
-    // SmartDashboard.putNumber("Drive Heading Φ", angle);
+    /**
+     * Turns drivetrain/chasis to a provided target using PID
+     *
+     * @param angle in degrees
+     */
+    public void seekTarget(double angle) {
+        SmartDashboard.putNumber("Drive Heading Φ", angle);
 
-    // this.seekPID.setSetpoint(0);
-    // this.setOutput(this.seekPID.calculate(angle), 0);
-    // }
+        this.currentState = DriveState.POSITION;
+        this.seekPID.setTarget(angle);
+        this.seekPID.referenceTimer();
+        this.seekPID.setInput(this.limelight.getTargetX());
+        this.seekPID.calculate();
+        this.setOutput(0, this.seekPID.getOutput());
+    }
 
-    // /**
-    // * Resets seekTarget() variables to remain idle
-    // */
-    // public void seekIdle() {
-    // this.seekPID.reset();
-    // }
+    /**
+     * Resets seekTarget() variables to remain idle
+     */
+    public void seekIdle() {
+        this.seekPID.resetTimer();
+        this.seekPID.resetError();
+    }
 
     /**
      * Uses PID to balance robot on charging station
