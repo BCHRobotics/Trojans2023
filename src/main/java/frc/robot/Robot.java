@@ -11,7 +11,6 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.teleop.TeleopControl;
 import frc.auto.AutoBuilder;
 import frc.auto.AutoControl;
-import frc.peripherals.robot.ClawIO;
 import frc.peripherals.robot.IO;
 
 /**

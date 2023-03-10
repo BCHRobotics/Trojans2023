@@ -5,7 +5,6 @@ import java.util.List;
 
 import frc.robot.Constants.Misc;
 import frc.subsystems.Drivetrain;
-import frc.subsystems.Mechanism;
 import frc.util.csv.CSVWriter;
 
 public class AutoBuilder {
@@ -18,7 +17,6 @@ public class AutoBuilder {
     private static long timer;
 
     private static Drivetrain drive;
-    private static Mechanism mech;
 
     public static AutoBuilder getInstance() {
         if (instance == null) {
@@ -30,7 +28,6 @@ public class AutoBuilder {
     private AutoBuilder() {
         writer = new CSVWriter(Misc.ROOT_DIRECTORY);
         drive = Drivetrain.getInstance();
-        mech = Mechanism.getInstance();
     }
 
     public void setStartRecording() {
@@ -65,7 +62,6 @@ public class AutoBuilder {
     public void convertData() {
         try {
             writer.setFileName(Misc.TEACH_MODE_FILE_NAME);
-            // writer.deleteCopy();
             writer.setHeader(
                     "time,leftDrive,rightDrive,armPresetID,shoulderOffset,wristOffset,claw,pump,led,limelight,balance");
             writer.importData(data);

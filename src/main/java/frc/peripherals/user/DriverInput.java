@@ -129,6 +129,16 @@ public final class DriverInput {
 	}
 
 	/**
+	 * Get the press of any position mode dependant buttons
+	 * 
+	 * @return Position Mode Trigger
+	 */
+	public static boolean getAutoPositionInitiate() {
+		return (getTurnAlignPressed() || getTurnLeftPressed()
+				|| getTurnRightPressed());
+	}
+
+	/**
 	 * Get the Driver limelight test
 	 * 
 	 * @return Driver d pad

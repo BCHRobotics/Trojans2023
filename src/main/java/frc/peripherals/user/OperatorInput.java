@@ -46,6 +46,15 @@ public final class OperatorInput {
     }
 
     /**
+     * Get the request to manually override a preset position
+     * 
+     * @return manual offset request
+     */
+    public static boolean manualOffsetRequest() {
+        return (getShoulderOffset() != 0 || getWristOffset() != 0);
+    }
+
+    /**
      * Get the cone toggle button boolean state
      * 
      * @return cone toggle

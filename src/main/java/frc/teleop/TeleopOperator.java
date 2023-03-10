@@ -52,25 +52,27 @@ public class TeleopOperator implements TeleopComponent {
             this.mech.setStatusLED(StatusLED.OFF);
         }
 
-        // if (OperatorInput.getToggleSuction())
-        // this.mech.setSuctionMode(true);
-        // else
         if (OperatorInput.getReleaseSuction())
             this.mech.setSuctionMode(false);
 
-        switch (OperatorInput.getGamePiece()) {
-            case 0:
-                this.mech.goToPreset(Arm.TOP_DROPOFF);
-                break;
-            case 90:
-                this.mech.goToPreset(Arm.STOWED_AWAY);
-                break;
-            case 180:
-                this.mech.goToPreset(Arm.GROUND_DROPOFF);
-                break;
-            case 270:
-                this.mech.goToPreset(Arm.MID_DROPOFF);
-                break;
+        if (OperatorInput.manualOffsetRequest()) {
+            this.mech.setShoulderOffset(OperatorInput.getShoulderOffset());
+            this.mech.setWristOffset(OperatorInput.getWristOffset());
+        } else {
+            switch (OperatorInput.getGamePiece()) {
+                case 0:
+                    this.mech.goToPreset(Arm.TOP_DROPOFF);
+                    break;
+                case 90:
+                    this.mech.goToPreset(Arm.STOWED_AWAY);
+                    break;
+                case 180:
+                    this.mech.goToPreset(Arm.GROUND_DROPOFF);
+                    break;
+                case 270:
+                    this.mech.goToPreset(Arm.MID_DROPOFF);
+                    break;
+            }
         }
 
         if (OperatorInput.getStationRequest())
@@ -85,9 +87,6 @@ public class TeleopOperator implements TeleopComponent {
             this.mech.setStatusLED(StatusLED.CUBE_BLINK);
         else if (OperatorInput.getLightRelease())
             this.mech.setStatusLED(StatusLED.OFF);
-
-        // this.mech.setWristHeight(OperatorInput.getWristHeight());
-        // this.mech.setWristOffset(OperatorInput.getWristOffset());
 
         this.mech.run();
 

@@ -168,7 +168,6 @@ public class Drivetrain implements Subsystem {
      * 
      * @param state
      */
-    @Deprecated
     public void setDriveMode(DriveState state) {
         if (!enabled)
             return;
@@ -328,16 +327,16 @@ public class Drivetrain implements Subsystem {
     }
 
     /**
-     * Aligns robot chassis with cone or cube
+     * Aligns robot chassis with neareset detected limelight target
      * 
      */
     public void alignTarget() {
         if (!enabled)
             return;
 
-        // SmartDashboard.putNumber("Drive Heading θ", angle);
+        SmartDashboard.putNumber("Drive Heading θ", this.limelight.getTargetX());
 
-        this.setYaw(this.limelight.getTargetX());
+        this.seekTarget(this.limelight.getTargetX());
     }
 
     /**
@@ -348,12 +347,21 @@ public class Drivetrain implements Subsystem {
     public void seekTarget(double angle) {
         SmartDashboard.putNumber("Drive Heading Φ", angle);
 
-        this.currentState = DriveState.POSITION;
         this.seekPID.setTarget(angle);
         this.seekPID.referenceTimer();
         this.seekPID.setInput(this.limelight.getTargetX());
         this.seekPID.calculate();
         this.setOutput(0, this.seekPID.getOutput());
+        this.currentState = DriveState.POSITION;
+    }
+
+    /**
+     * Returns whether or not the robot is facing the target
+     */
+    public boolean facingTarget() {
+        if (!gyroEnabled)
+            return false;
+        return this.seekPID.atSetpoint();
     }
 
     /**
@@ -367,18 +375,17 @@ public class Drivetrain implements Subsystem {
     /**
      * Uses PID to balance robot on charging station
      */
-    public double balancePID() {
+    public void balancePID() {
         if (!gyroEnabled) {
-            return 0;
+            return;
         }
 
-        // this.currentState = DriveState.BALANCE;
         this.gyroPid.setTarget(0);
         this.gyroPid.referenceTimer();
         this.gyroPid.setInput(this.gyro.getPitch());
         this.gyroPid.calculate();
-        System.out.println(this.gyroPid.getOutput());
-        return this.gyroPid.getOutput();
+        this.setOutput(this.gyroPid.getOutput(), 0);
+        this.currentState = DriveState.BALANCE;
     }
 
     /**
