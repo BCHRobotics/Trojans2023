@@ -40,17 +40,17 @@ public class AutoBuilder {
             timer = currentTime - startTime;
 
             List<Double> rows = new ArrayList<Double>();
-            rows.add((double) timer);
-            rows.add((double) drive.getLeftPosition());
-            rows.add((double) drive.getRightPosition());
-            rows.add((double) 0.0); // Manual Tags (Arm Preset)
-            rows.add((double) 0.0); // Manual Tags (Shoulder Offset)
-            rows.add((double) 0.0); // Manual Tags (Wrist Offset)
-            rows.add((double) 0.0); // Manual Tags (Claw Percentage)
-            rows.add((double) 0.0); // Manual Tags (Pump mode)
-            rows.add((double) 0.0); // Manual Tags (LED Status)
-            rows.add((double) 0.0); // Manual Tags (Vision)
-            rows.add((double) 0.0); // Manual Tags (Balancing)
+            rows.add((double) timer); // Command end time, time to of which to kill previous command and begin new one
+            rows.add((double) drive.getLeftPosition()); // Chassis left encoder position
+            rows.add((double) drive.getRightPosition()); // Chassis right encoder position
+            rows.add((double) 0.0); // Manual Tags (Arm Preset) {0,1,2,3,4,5}
+            rows.add((double) 0.0); // Manual Tags (Shoulder Offset) {-12 --> 12 inches}
+            rows.add((double) 0.0); // Manual Tags (Wrist Offset) {-20 --> 20 degrees}
+            rows.add((double) 0.0); // Manual Tags (Claw Percentage) {0 --> 1 %open}
+            rows.add((double) 0.0); // Manual Tags (Pump mode) {0,1}
+            rows.add((double) 0.0); // Manual Tags (LED Status) {0,1,2}
+            rows.add((double) 0.0); // Manual Tags (Vision) {0,1}
+            rows.add((double) 0.0); // Manual Tags (Balancing) {0,1}
             data.add(rows);
         } catch (Exception e) {
             System.err.println(e);
@@ -63,7 +63,7 @@ public class AutoBuilder {
         try {
             writer.setFileName(Misc.TEACH_MODE_FILE_NAME);
             writer.setHeader(
-                    "time,leftDrive,rightDrive,armPresetID,shoulderOffset,wristOffset,claw,pump,led,limelight,balance");
+                    "time,leftDrive,rightDrive,armPreset,shoulderOffset,wristOffset,claw,pump,led,limelight,balance");
             writer.importData(data);
             writer.output();
         } catch (Exception e) {

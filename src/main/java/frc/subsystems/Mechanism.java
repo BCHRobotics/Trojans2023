@@ -2,8 +2,9 @@ package frc.subsystems;
 
 import frc.peripherals.robot.ArmIO;
 import frc.peripherals.robot.ClawIO;
+import frc.peripherals.robot.LEDIO;
 import frc.robot.Constants.Arm;
-import frc.robot.Constants.Misc;
+import frc.robot.Constants.Misc.LED_STATE;
 import frc.util.control.ArmPresets;
 
 import java.lang.Math;
@@ -13,6 +14,7 @@ public class Mechanism implements Subsystem {
 
     private ArmIO armIO;
     private ClawIO clawIO;
+    private LEDIO ledIO;
 
     private double endEffectorHeight;
     private double shoulderOffset;
@@ -25,8 +27,7 @@ public class Mechanism implements Subsystem {
 
     private ArmPresets preset;
 
-    private boolean coneLED, cubeLED, blinkCone, blinkCube;
-    private long previousTime, currentTime;
+    private LED_STATE ledState;
 
     /**
      * Get the instance of the Mechanism, if none create a new instance
@@ -48,6 +49,7 @@ public class Mechanism implements Subsystem {
     public void firstCycle() {
         this.armIO = ArmIO.getInstance();
         this.clawIO = ClawIO.getInstance();
+        this.ledIO = LEDIO.getInstance();
         this.resetPosition();
     }
 
@@ -57,18 +59,7 @@ public class Mechanism implements Subsystem {
         this.armIO.setWristAngle(this.wristAngle + this.wristOffset);
         this.clawIO.setClawPosition(this.clawPos);
         this.clawIO.setPump(this.pumpMode);
-
-        this.currentTime = System.currentTimeMillis();
-
-        if ((this.currentTime >= this.previousTime + Misc.BLINK_INTERVAL)) {
-            if (this.blinkCone)
-                this.coneLED = !this.coneLED;
-            if (this.blinkCube)
-                this.cubeLED = !this.cubeLED;
-            this.previousTime = this.currentTime;
-        }
-
-        this.clawIO.setStatusLED(this.coneLED, this.cubeLED);
+        this.ledIO.setLEDState(this.ledState);
     }
 
     @Override
@@ -86,7 +77,7 @@ public class Mechanism implements Subsystem {
         this.clawPos = 0;
         this.pumpMode = false;
         this.clawIO.recalibrateClaw();
-        this.resetStatusLED();
+        this.ledIO.resetInputs();
     }
 
     /**
@@ -224,28 +215,29 @@ public class Mechanism implements Subsystem {
      * @param ID
      */
     public void goToPreset(int ID) {
-        switch (ID) {
-            case 0:
-                this.resetPosition();
-                break;
-            case 1:
-                this.goToPreset(Arm.STOWED_AWAY);
-                break;
-            case 2:
-                this.goToPreset(Arm.GROUND_DROPOFF);
-                break;
-            case 3:
-                this.goToPreset(Arm.MID_DROPOFF);
-                break;
-            case 4:
-                this.goToPreset(Arm.TOP_DROPOFF);
-                break;
-            case 5:
-                this.goToPreset(Arm.STATION_PICKUP);
-                break;
-            default:
-                this.resetPosition();
-        }
+        // switch (ID) {
+        // case 0:
+        // this.goToPreset(Arm.DEFAULT);
+        // break;
+        // case 1:
+        // this.goToPreset(Arm.TRANSPORT);
+        // break;
+        // case 2:
+        // this.goToPreset(Arm.GROUND);
+        // break;
+        // case 3:
+        // this.goToPreset(Arm.MID);
+        // break;
+        // case 4:
+        // this.goToPreset(Arm.STATION);
+        // break;
+        // case 5:
+        // this.goToPreset(Arm.TOP);
+        // break;
+        // default:
+        // this.resetPosition();
+        // }
+        this.goToPreset(Arm.PRESETS[ID]);
     }
 
     /**
@@ -258,74 +250,45 @@ public class Mechanism implements Subsystem {
     }
 
     /**
-     * Retrieves last call to preset position ID
+     * Set status led state
      * 
-     * @return ArmPresets (Wrist Height, Wrist Offset) ID
+     * @param status
      */
-    public int getPresetID() {
-        return 0;
+    public void setLEDState(LED_STATE status) {
+        this.ledState = status;
     }
 
     /**
      * Set status led state
      * 
-     * @param state
+     * @param status
      */
-    public void setStatusLED(Misc.StatusLED state) {
-        resetStatusLED();
+    public void setLEDState(int status) {
 
-        switch (state) {
-            case CONE:
-                this.coneLED = true;
-                break;
-            case CUBE:
-                this.cubeLED = true;
-                break;
-            case CONE_BLINK:
-                this.blinkCone = true;
-                break;
-            case CUBE_BLINK:
-                this.blinkCube = true;
-                break;
-            default:
-                resetStatusLED();
-                break;
-        }
-
-    }
-
-    /**
-     * Set status led state
-     * 
-     * @param mode
-     */
-    public void setStatusLED(int mode) {
-        resetStatusLED();
-
-        switch (mode) {
+        switch (status) {
             case 1:
-                this.coneLED = true;
+                this.ledState = LED_STATE.CONE;
                 break;
             case 2:
-                this.cubeLED = true;
+                this.ledState = LED_STATE.CUBE;
                 break;
             case 3:
-                this.blinkCone = true;
+                this.ledState = LED_STATE.BOTH;
                 break;
             case 4:
-                this.blinkCube = true;
+                this.ledState = LED_STATE.CUBE_BLINK;
+                break;
+            case 5:
+                this.ledState = LED_STATE.CONE_BLINK;
+                break;
+            case 6:
+                this.ledState = LED_STATE.BOTH_BLINK;
                 break;
             default:
-                resetStatusLED();
+                this.ledIO.resetInputs();
                 break;
         }
 
     }
 
-    private void resetStatusLED() {
-        this.coneLED = false;
-        this.cubeLED = false;
-        this.blinkCone = false;
-        this.blinkCube = false;
-    }
 }

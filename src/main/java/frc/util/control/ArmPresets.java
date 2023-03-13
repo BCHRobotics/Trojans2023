@@ -7,7 +7,6 @@ public class ArmPresets {
     // PID coefficients
     public double wristHeight;
     public double wristOffset;
-    public int ID;
 
     /**
      * PID Values for Basic Balancing Algorithm
@@ -15,10 +14,9 @@ public class ArmPresets {
      * @param wristHeight
      * @param wristOffset
      */
-    public ArmPresets(double height, double offset, int ID) {
+    public ArmPresets(double height, double offset) {
         this.wristHeight = height;
         this.wristOffset = offset;
-        this.ID = ID;
     }
 
     /**

@@ -129,7 +129,7 @@ public class SparkMaxPID {
     }
 
     public void setPosition(double setPoint, double min, double max) {
-        this.setSmartPosition(Misc.ENSURE_RANGE(setPoint, min, max));
+        this.setPosition(Misc.ENSURE_RANGE(setPoint, min, max));
     }
 
     public void setVelocity(double speed) {

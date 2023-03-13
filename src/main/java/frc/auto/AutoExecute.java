@@ -68,14 +68,14 @@ public class AutoExecute extends AutoComponent {
                 data.clear();
                 return;
             }
-            if (currentTime < (data.get(0).get(0).longValue() * 1)) { // t = 0.35
+            if (currentTime < (data.get(0).get(0).longValue() * 1)) {
                 this.drive.setPosition((data.get(0).get(1)), (data.get(0).get(2)));
                 this.mech.goToPreset(data.get(0).get(3).intValue());
                 this.mech.setShoulderOffset(data.get(0).get(4));
                 this.mech.setWristOffset(data.get(0).get(5));
                 this.mech.setClawPos(data.get(0).get(6));
                 this.mech.setSuctionMode(data.get(0).get(7) == 1.0 ? true : false);
-                this.mech.setStatusLED(data.get(0).get(8).intValue());
+                this.mech.setLEDState(data.get(0).get(8).intValue());
                 switch (data.get(0).get(9).intValue()) {
                     case 1:
                         this.drive.calculatePath();

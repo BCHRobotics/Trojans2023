@@ -17,6 +17,7 @@ public class Constants {
                 public static final boolean ARM_ENABLED = true;
                 public static final boolean CLAW_ENABLED = true;
                 public static final boolean GYRO_ENABLED = true;
+                public static final boolean LEDS_ENABLED = true;
                 public static final boolean MINI_BOT = false;
         }
 
@@ -33,8 +34,8 @@ public class Constants {
                 public static final double MAX_INTERVAL = 0.25;
                 public static final double MAX_VEL = 144; // in/s
                 public static final double MAX_ACCEL = 288; // in/s^2
-                public static final double RAMP_RATE = 0.15;
-                public static final double TOLERANCE = 1;
+                public static final double RAMP_RATE = 0.15; // s
+                public static final double TOLERANCE = 1; // in
                 public static final boolean INVERTED = false;
                 public static final boolean OUT_OF_SYNC = false;
 
@@ -42,7 +43,7 @@ public class Constants {
                 public static final double WHEEL_DIAMETER = 6;
                 public static final double TRACK_WIDTH = 19;
 
-                // Chasis conversion factors TODO: Collect conversion data
+                // Chasis conversion factors TODO: Re-collect conversion data
                 public static final double LEFT_POSITION_CONVERSION = 48 / 18.23804473876953; // inches per
                 // revolutions
                 public static final double RIGHT_POSITION_CONVERSION = 48 / 18.14280891418457; // #inches / #revs
@@ -53,10 +54,9 @@ public class Constants {
                                                                                                          // 1 sec
 
                 // input diameter = Δd inches between center wheels ~~v~~ in inches / degree
-                public static final double TURNING_CONVERSION = (TRACK_WIDTH * Math.PI) / 180;
-                // public static final double TURNING_CONVERSION = (17) / 90;
+                public static final double TURNING_CONVERSION = (TRACK_WIDTH * Math.PI) / 360;
 
-                // Drive PID Constants TODO: Tune Drivetrain PID
+                // Drive PID Constants TODO: Re-tune Drivetrain PID
                 public static final SparkMaxConstants LEFT_DRIVE_CONSTANTS = new SparkMaxConstants(
                                 0.00012, 0, 0.0025, 0, 0.00005, -1, 1, 0, 0, 6000, 2000, 0.2);
                 public static final SparkMaxConstants RIGHT_DRIVE_CONSTANTS = new SparkMaxConstants(
@@ -67,11 +67,11 @@ public class Constants {
                 public static final boolean GYRO_OUTPUT_INVERTED = false;
                 public static final double GYRO_TOLERANCE = 0.8;
 
-                // Gyro PID Constants
+                // Gyro PID Constants TODO: Re-tune gyro
                 public static final PIDConstants GYRO_CONSTANTS = new PIDConstants(0.007, 0.001, 0, 0);
 
-                // Target seek PID Constants
-                public static final PIDConstants SEEK_CONSTANTS = new PIDConstants(0, 0, 0, 0);
+                // Target seek PID Constants TODO: Tune seeking constants
+                public static final PIDConstants SEEK_CONSTANTS = new PIDConstants(0.00012, 0, 0.0025, 0.00005);
 
         }
 
@@ -105,7 +105,7 @@ public class Constants {
                 public static final double SHOULDER_ENCODER_OFFSET = (204.7492790) - Arm.SHOULDER_DEFAULT_OFFSET;
                 public static final double WRIST_ENCODER_OFFSET = (172.0870650) - Arm.WRIST_DEFAULT_OFFSET;
 
-                // Mechanism PID Constants
+                // Mechanism PID Constants TODO: Re-tune after modified wrist installation
                 public static final SparkMaxConstants SHOULDER_CONTROL_CONSTANTS = new SparkMaxConstants(
                                 0.00014028, 0, 0.00051398, 0, 2e-6, -0.4, 1,
                                 0, 0, 5700, 3500, 0.2);
@@ -113,16 +113,15 @@ public class Constants {
                                 2.1028E-05, 0, 5.1398E-05, 0, 0.00004, -1, 1,
                                 0, 0, 5700, 5700, 0.05);
 
-                // Arm preset profiles
-                public static final ArmPresets DEFAULT_PRESET = new ArmPresets(0, -90, 0);
-                public static final ArmPresets STOWED_AWAY = new ArmPresets(0, -70, 1);
-                public static final ArmPresets GROUND_DROPOFF = new ArmPresets(0, 0, 2);
-                public static final ArmPresets MID_DROPOFF = new ArmPresets(38, 0, 3);
-                public static final ArmPresets TOP_DROPOFF = new ArmPresets(52, 0, 4);
-                public static final ArmPresets STATION_PICKUP = new ArmPresets(41, 0, 5);
+                // Arm preset profiles TODO: Verify Presets with Drive Team
+                public static final ArmPresets DEFAULT = new ArmPresets(0, -90);
+                public static final ArmPresets TRANSPORT = new ArmPresets(0, -70);
+                public static final ArmPresets GROUND = new ArmPresets(0, 0);
+                public static final ArmPresets MID = new ArmPresets(38, 0);
+                public static final ArmPresets STATION = new ArmPresets(41, 0);
+                public static final ArmPresets TOP = new ArmPresets(52, 0);
 
-                public static final ArmPresets[] PRESETS = { DEFAULT_PRESET, STOWED_AWAY, GROUND_DROPOFF,
-                                MID_DROPOFF, TOP_DROPOFF, STATION_PICKUP };
+                public static final ArmPresets[] PRESETS = { DEFAULT, TRANSPORT, GROUND, MID, STATION, TOP };
 
         }
 
@@ -156,11 +155,13 @@ public class Constants {
 
                 public static final int BLINK_INTERVAL = 500; // milliseconds
 
-                public static enum StatusLED {
+                public static enum LED_STATE {
                         CONE,
                         CUBE,
+                        BOTH,
                         CONE_BLINK,
                         CUBE_BLINK,
+                        BOTH_BLINK,
                         OFF
                 }
 

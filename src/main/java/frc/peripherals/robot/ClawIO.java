@@ -8,7 +8,6 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import com.revrobotics.SparkMaxLimitSwitch.Type;
 import com.revrobotics.SparkMaxPIDController.AccelStrategy;
 
-import edu.wpi.first.wpilibj.DigitalOutput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants.Claw;
 import frc.robot.Constants.Features;
@@ -22,10 +21,6 @@ public class ClawIO implements IIO {
     // Claw motors
     private CANSparkMax grip;
     private CANSparkMax pump;
-
-    // Claw Status LEDs
-    private DigitalOutput coneLED;
-    private DigitalOutput cubeLED;
 
     // Claw encoders
     private RelativeEncoder clawEncoder;
@@ -58,9 +53,6 @@ public class ClawIO implements IIO {
     private void initMotors() {
         this.grip = new CANSparkMax(Claw.MOTOR_ID, MotorType.kBrushless);
         this.pump = new CANSparkMax(Claw.PUMP_ID, MotorType.kBrushed);
-
-        this.coneLED = new DigitalOutput(Misc.CONE_LED_PORT);
-        this.cubeLED = new DigitalOutput(Misc.CUBE_LED_PORT);
 
         this.clawEncoder = grip.getEncoder();
 
@@ -121,20 +113,6 @@ public class ClawIO implements IIO {
     }
 
     /**
-     * Sets status LED
-     * 
-     * @param cone
-     * @param cube
-     */
-    public void setStatusLED(boolean cone, boolean cube) {
-        if (!enabled)
-            return;
-
-        this.coneLED.set(cone);
-        this.cubeLED.set(cube);
-    }
-
-    /**
      * Gets claw relative encoder object
      * 
      * @return Claw Relative Encoder
@@ -183,9 +161,6 @@ public class ClawIO implements IIO {
     @Override
     public void updateInputs() {
         // this.clawPidController.retrieveDashboardConstants();
-
-        SmartDashboard.putBoolean("Cube Request", this.cubeLED.get());
-        SmartDashboard.putBoolean("Cone Request", this.coneLED.get());
 
         if ((!enabled) || (this.calibrated))
             return;

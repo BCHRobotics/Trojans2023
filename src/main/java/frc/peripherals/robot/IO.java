@@ -18,6 +18,7 @@ public class IO {
         this.subsystems.add(DriveIO.getInstance());
         this.subsystems.add(ArmIO.getInstance());
         this.subsystems.add(ClawIO.getInstance());
+        this.subsystems.add(LEDIO.getInstance());
     }
 
     /**
