@@ -1,7 +1,7 @@
 package frc.peripherals.user;
 
 import edu.wpi.first.wpilibj.XboxController;
-import frc.robot.Constants.Misc;
+import frc.robot.Constants.MISC;
 
 public final class Controller extends XboxController {
 
@@ -22,7 +22,7 @@ public final class Controller extends XboxController {
     }
 
     protected double getJoystick(Side side, Axis axis) {
-        double deadzone = Misc.CONTROLLER_DEADZONE;
+        double deadzone = MISC.CONTROLLER_DEADZONE;
 
         boolean left = side == Side.LEFT;
         boolean y = axis == Axis.Y;

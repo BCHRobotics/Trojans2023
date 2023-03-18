@@ -3,7 +3,8 @@ package frc.util.imaging;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import frc.robot.Constants.Misc;
+import frc.robot.Constants.MISC;
+import frc.robot.Constants.ROBOT;
 
 public class Limelight {
     private static Limelight instance;
@@ -89,11 +90,11 @@ public class Limelight {
      * @return distance to target
      */
     public double getTargetDistance() {
-        double a1 = Misc.LIMELIGHT_ANGLE; // Limelight mount angle
+        double a1 = MISC.LIMELIGHT_ANGLE; // Limelight mount angle
         double a2 = Math.abs(this.getTargetY()); // Limelight measured angle to target
         double aT = a1 + a2; // Total anlge in degrees
-        double h1 = Misc.LIMELIGHT_HEIGHT; // Limelight lens Height in inches
-        double h2 = Misc.APRILTAG_HEIGHT; // Known Height of Target in inches
+        double h1 = MISC.LIMELIGHT_HEIGHT; // Limelight lens Height in inches
+        double h2 = MISC.APRILTAG_HEIGHT; // Known Height of Target in inches
 
         double distance = (h1 - h2) / Math.tan(Math.toRadians(aT));
 
@@ -108,7 +109,7 @@ public class Limelight {
      * @return reached target
      */
     public boolean reachedTargetX() {
-        return (Misc.WITHIN_TOLERANCE(getTargetX(), Misc.LIMELIGHT_TOLERANCE));
+        return (ROBOT.WITHIN_TOLERANCE(getTargetX(), MISC.LIMELIGHT_TOLERANCE));
     }
 
 }

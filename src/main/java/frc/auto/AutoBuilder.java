@@ -3,7 +3,7 @@ package frc.auto;
 import java.util.ArrayList;
 import java.util.List;
 
-import frc.robot.Constants.Misc;
+import frc.robot.Constants.MISC;
 import frc.subsystems.Drivetrain;
 import frc.util.csv.CSVWriter;
 
@@ -26,7 +26,7 @@ public class AutoBuilder {
     }
 
     private AutoBuilder() {
-        writer = new CSVWriter(Misc.ROOT_DIRECTORY);
+        writer = new CSVWriter(MISC.ROOT_DIRECTORY);
         drive = Drivetrain.getInstance();
     }
 
@@ -61,7 +61,7 @@ public class AutoBuilder {
 
     public void convertData() {
         try {
-            writer.setFileName(Misc.TEACH_MODE_FILE_NAME);
+            writer.setFileName(MISC.TEACH_MODE_FILE_NAME);
             writer.setHeader(
                     "time,leftDrive,rightDrive,armPreset,shoulderOffset,wristOffset,claw,pump,led,limelight,balance");
             writer.importData(data);

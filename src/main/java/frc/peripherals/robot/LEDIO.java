@@ -1,12 +1,14 @@
 package frc.peripherals.robot;
 
 // Import required Libraries
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.DigitalOutput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-// Import required Classes
-import frc.robot.Constants.Features;
-import frc.robot.Constants.Misc;
-import frc.robot.Constants.Misc.LED_STATE;
+
+// Import required Modules
+import frc.robot.Constants.ROBOT;
+import frc.robot.Constants.MISC;
+import frc.robot.Constants.MISC.LED_STATE;
 
 public class LEDIO implements IIO {
     private static LEDIO instance;
@@ -15,24 +17,29 @@ public class LEDIO implements IIO {
     private DigitalOutput coneLED;
     private DigitalOutput cubeLED;
 
+    // Current LED state
     private LED_STATE ledState;
 
-    private long previousTime, currentTime;
+    // Timer variables
+    private Timer timer;
 
-    private boolean enabled = Features.LEDS_ENABLED;
+    // LEDs enabled / disabled
+    private boolean enabled = ROBOT.LEDS_ENABLED;
 
     public static LEDIO getInstance() {
-        if (instance == null) {
+        if (instance == null)
             instance = new LEDIO();
-        }
+
         return instance;
     }
 
     private LEDIO() {
         if (!enabled)
             return;
-        this.coneLED = new DigitalOutput(Misc.CONE_LED_PORT);
-        this.cubeLED = new DigitalOutput(Misc.CUBE_LED_PORT);
+
+        this.coneLED = new DigitalOutput(MISC.CONE_LED_PORT);
+        this.cubeLED = new DigitalOutput(MISC.CUBE_LED_PORT);
+        this.timer = new Timer();
     }
 
     /**
@@ -45,39 +52,13 @@ public class LEDIO implements IIO {
             return;
 
         this.ledState = state;
+        if (this.blinkRequired())
+            this.timer.start();
     }
 
-    @Override
-    public void resetInputs() {
-        if (!enabled)
-            return;
-
-        this.ledState = LED_STATE.OFF;
-        this.currentTime = 0;
-        this.previousTime = 0;
-        this.stopAllOutputs();
-    }
-
-    @Override
-    public void updateInputs() {
-        if (!enabled)
-            return;
-        SmartDashboard.putBoolean("Cube Request", this.cubeLED.get());
-        SmartDashboard.putBoolean("Cone Request", this.coneLED.get());
-
-        this.currentTime = System.currentTimeMillis();
-
-        if (this.blinkRequired()) {
-            if ((this.currentTime >= this.previousTime + Misc.BLINK_INTERVAL)) {
-                this.pushState();
-                this.previousTime = this.currentTime;
-            } else
-                this.stopAllOutputs();
-        } else
-            this.pushState();
-
-    }
-
+    /**
+     * Pushes current LED state to Digital Outputs
+     */
     private void pushState() {
         if (!enabled)
             return;
@@ -91,16 +72,66 @@ public class LEDIO implements IIO {
         }
     }
 
+    /**
+     * Checks to see if the current LED state will require a timer
+     * 
+     * @return Blink required
+     */
     private boolean blinkRequired() {
         return (this.ledState == LED_STATE.CONE_BLINK || this.ledState == LED_STATE.CUBE_BLINK
                 || this.ledState == LED_STATE.BOTH_BLINK);
     }
 
     /**
-     * Disables claw and pump motors
+     * Initializes LED strips
      */
     @Override
-    public void stopAllOutputs() {
+    public void init() {
+        if (!enabled)
+            return;
+
+        this.reset();
+    }
+
+    /**
+     * Updates LED strips
+     */
+    @Override
+    public void update() {
+        if (!enabled)
+            return;
+
+        SmartDashboard.putBoolean("Cube Request", this.cubeLED.get());
+        SmartDashboard.putBoolean("Cone Request", this.coneLED.get());
+
+        if (this.blinkRequired()) {
+            if (this.timer.advanceIfElapsed(MISC.BLINK_INTERVAL))
+                this.pushState();
+            else
+                this.disable();
+        } else
+            this.pushState();
+
+    }
+
+    /**
+     * Resets LED strips
+     */
+    @Override
+    public void reset() {
+        if (!enabled)
+            return;
+
+        this.ledState = LED_STATE.OFF;
+        this.timer.reset();
+        this.disable();
+    }
+
+    /**
+     * Disables LED strips
+     */
+    @Override
+    public void disable() {
         if (!enabled)
             return;
         this.coneLED.set(false);

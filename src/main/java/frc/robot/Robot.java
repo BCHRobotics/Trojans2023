@@ -45,7 +45,7 @@ public class Robot extends TimedRobot {
     @Override
     public void robotInit() {
         this.robotIO = IO.getInstance();
-        this.robotIO.resetInputs();
+        this.robotIO.reset();
         this.teleopControl = TeleopControl.getInstance();
         this.autoControl = AutoControl.getInstance();
         this.autoBuilder = AutoBuilder.getInstance();
@@ -88,7 +88,7 @@ public class Robot extends TimedRobot {
      */
     @Override
     public void autonomousInit() {
-        this.robotIO.resetInputs();
+        this.robotIO.reset();
         // ClawIO.getInstance().recalibrateClaw();
         this.autoControl.initialize();
     }
@@ -96,14 +96,14 @@ public class Robot extends TimedRobot {
     /** This function is called periodically during autonomous. */
     @Override
     public void autonomousPeriodic() {
-        this.robotIO.updateInputs();
+        this.robotIO.update();
         this.autoControl.runCycle();
     }
 
     /** This function is called once when teleop is enabled. */
     @Override
     public void teleopInit() {
-        this.robotIO.resetInputs();
+        this.robotIO.reset();
         this.teleopControl.initialize();
         Robot.teleopInitialized = true;
     }
@@ -111,17 +111,17 @@ public class Robot extends TimedRobot {
     /** This function is called periodically during operator control. */
     @Override
     public void teleopPeriodic() {
-        if (!Robot.teleopInitialized) {
+        if (!Robot.teleopInitialized)
             this.teleopInit();
-        }
-        this.robotIO.updateInputs();
+
+        this.robotIO.update();
         this.teleopControl.runCycle();
     }
 
     /** This function is called once when the robot is disabled. */
     @Override
     public void disabledInit() {
-        this.robotIO.stopAllOutputs();
+        this.robotIO.disable();
         this.teleopControl.disable();
         this.autoControl.disable();
     }
@@ -129,13 +129,13 @@ public class Robot extends TimedRobot {
     /** This function is called periodically when disabled. */
     @Override
     public void disabledPeriodic() {
-        this.robotIO.updateInputs();
+        this.robotIO.update();
     }
 
     /** This function is called once when test mode is enabled. */
     @Override
     public void testInit() {
-        this.robotIO.resetInputs();
+        this.robotIO.reset();
         this.teleopControl.initialize();
 
         SmartDashboard.putBoolean("Recording", false);
@@ -145,7 +145,7 @@ public class Robot extends TimedRobot {
     /** This function is called periodically during test mode. */
     @Override
     public void testPeriodic() {
-        this.robotIO.updateInputs();
+        this.robotIO.update();
         SmartDashboard.updateValues();
 
         try {
@@ -168,7 +168,7 @@ public class Robot extends TimedRobot {
                 isRecording = false;
                 if (stopedRecording == false) {
                     this.autoBuilder.convertData();
-                    this.robotIO.resetInputs();
+                    this.robotIO.reset();
                     stopedRecording = true;
                 }
             }

@@ -3,113 +3,64 @@ package frc.peripherals.robot;
 // Import required Libraries
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
-import com.revrobotics.CANSparkMax.SoftLimitDirection;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
-import com.revrobotics.SparkMaxLimitSwitch.Type;
-import com.revrobotics.SparkMaxPIDController.AccelStrategy;
 
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import frc.robot.Constants.Claw;
-import frc.robot.Constants.Features;
-import frc.robot.Constants.Misc;
-import frc.util.control.SparkMaxConstants;
-import frc.util.control.SparkMaxPID;
+// Import required Modules
+import frc.robot.Constants.*;
 
 public class ClawIO implements IIO {
     private static ClawIO instance;
 
-    // Claw motors
-    private CANSparkMax grip;
-    private CANSparkMax pump;
+    // Claw motor
+    private CANSparkMax claw;
 
-    // Claw encoders
+    // Claw encoder
     private RelativeEncoder clawEncoder;
 
-    // PID Controllers
-    private SparkMaxPID clawPidController;
-
-    // PID Constants
-    private SparkMaxConstants clawConstants = Claw.CONSTANTS;
-
-    private boolean enabled = Features.CLAW_ENABLED;
-    private boolean calibrated = false;
+    // Claw enabled / disabled
+    private boolean enabled = ROBOT.CLAW_ENABLED;
 
     public static ClawIO getInstance() {
-        if (instance == null) {
+        if (instance == null)
             instance = new ClawIO();
-        }
+
         return instance;
     }
 
     private ClawIO() {
         if (!enabled)
             return;
-        initMotors();
+
+        initPeripherals();
     }
 
     /**
-     * Initializes claw motors
+     * Initializes wrist peripherals
      */
-    private void initMotors() {
-        this.grip = new CANSparkMax(Claw.MOTOR_ID, MotorType.kBrushless);
-        this.pump = new CANSparkMax(Claw.PUMP_ID, MotorType.kBrushed);
+    private void initPeripherals() {
 
-        this.clawEncoder = grip.getEncoder();
+        // Initialize motor controller
+        this.claw = new CANSparkMax(WRIST.ID, MotorType.kBrushless);
+        this.claw.restoreFactoryDefaults();
+        this.claw.setIdleMode(CANSparkMax.IdleMode.kBrake);
+        this.claw.setSmartCurrentLimit(40, 20);
+        this.claw.setInverted(false);
 
-        this.grip.restoreFactoryDefaults();
-
-        this.grip.setSmartCurrentLimit(20, 10);
-
-        this.grip.setInverted(false);
-
-        this.grip.enableSoftLimit(SoftLimitDirection.kForward, false);
-        this.grip.getReverseLimitSwitch(Type.kNormallyOpen).enableLimitSwitch(true);
-
-        this.grip.setSoftLimit(SoftLimitDirection.kForward, Claw.LIMIT);
-
-        this.clawPidController = new SparkMaxPID(this.grip, this.clawConstants);
-
-        this.clawPidController.setFeedbackDevice(clawEncoder);
-
-        this.clawEncoder.setPositionConversionFactor(Claw.CONVERSION_FACTOR);
-
-        this.clawPidController.setMotionProfileType(AccelStrategy.kSCurve);
+        // Initialize encoder
+        this.clawEncoder = this.claw.getEncoder();
+        this.clawEncoder.setPositionConversionFactor(WRIST.CONVERSION_FACTOR);
     }
 
     /**
-     * Sets claw travel in inches
+     * Sets the claw wheel speed in percent output [0 --> 1]
      * 
-     * @param position
+     * @param percent
      */
-    public void setClawPosition(double position) {
-
-        if ((!enabled) || (!this.calibrated))
-            return;
-
-        if ((this.grip.getReverseLimitSwitch(Type.kNormallyOpen).isPressed() && position <= 0)) {
-            this.clawEncoder.setPosition(position);
-            return;
-        } else if (Misc.WITHIN_TOLERANCE(this.getClawEncoder().getPosition(), position, 0.05)) {
-            this.grip.set(0);
-            return;
-        } else {
-            this.clawPidController.setSmartPosition(position, Claw.DEFAULT_OFFSET,
-                    Claw.LIMIT);
-        }
-
-        this.grip.setIdleMode(CANSparkMax.IdleMode.kBrake);
-    }
-
-    /**
-     * Sets pneumatic suction state boolean
-     * 
-     * @param state
-     */
-    public void setPump(boolean state) {
+    public void setClawSpeed(double percent) {
         if (!enabled)
             return;
 
-        this.pump.set(state ? 1 : 0);
+        this.claw.set(percent);
     }
 
     /**
@@ -125,64 +76,44 @@ public class ClawIO implements IIO {
     }
 
     /**
-     * Resets claw to zero position
-     */
-    public void resetPosition() {
-        if (!enabled)
-            return;
-
-        this.setClawPosition(0);
-        this.setPump(false);
-    }
-
-    /**
-     * Recalibrates claw to zero position
-     */
-    public void recalibrateClaw() {
-        if (!enabled)
-            return;
-
-        this.calibrated = false;
-    }
-
-    /**
-     * Resets claw encoder to zero position
-     * 
-     * <p>
-     * Deprecated since claw encoders should not be reset outside of class
-     */
-    @Deprecated
-    public void resetInputs() {
-        if (!enabled)
-            return;
-        this.calibrated = false;
-    }
-
-    @Override
-    public void updateInputs() {
-        // this.clawPidController.retrieveDashboardConstants();
-
-        if ((!enabled) || (this.calibrated))
-            return;
-
-        if (this.grip.getReverseLimitSwitch(Type.kNormallyOpen).isPressed()) {
-            this.grip.set(0);
-            this.clawEncoder.setPosition(0);
-            this.calibrated = true;
-        } else
-            this.grip.set((double) -0.4);
-    }
-
-    /**
-     * Disables claw and pump motors
+     * Initializes claw motors
      */
     @Override
-    public void stopAllOutputs() {
+    public void init() {
         if (!enabled)
             return;
 
-        this.grip.disable();
-        this.pump.disable();
+        this.reset();
     }
 
+    /**
+     * Updates claw peripherals
+     */
+    @Override
+    public void update() {
+        if (!enabled)
+            return;
+    }
+
+    /**
+     * Resets claw to zero velocity
+     */
+    @Override
+    public void reset() {
+        if (!enabled)
+            return;
+
+        this.setClawSpeed(0);
+    }
+
+    /**
+     * Disables claw motor
+     */
+    @Override
+    public void disable() {
+        if (!enabled)
+            return;
+
+        this.claw.disable();
+    }
 }

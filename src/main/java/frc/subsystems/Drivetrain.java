@@ -2,21 +2,21 @@ package frc.subsystems;
 
 // Import required classes
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import frc.peripherals.robot.DriveIO;
+import frc.peripherals.robot.ChassisIO;
 import frc.peripherals.robot.Gyro;
-import frc.robot.Constants.Chassis;
-import frc.robot.Constants.Features;
-import frc.robot.Constants.Misc;
+import frc.robot.Constants.CHASSIS;
+import frc.robot.Constants.ROBOT;
+import frc.robot.Constants.MISC;
 import frc.util.control.PID;
 import frc.util.imaging.Limelight;
 import frc.util.imaging.Limelight.LimelightTargetType;
 
-public class Drivetrain implements Subsystem {
+public class Drivetrain extends Subsystem {
 
     private static Drivetrain instance;
 
-    private boolean enabled = Features.DRIVE_ENABLED;
-    private boolean gyroEnabled = Features.GYRO_ENABLED;
+    private boolean enabled = ROBOT.DRIVE_ENABLED;
+    private boolean gyroEnabled = ROBOT.GYRO_ENABLED;
 
     public enum DriveState {
         OUTPUT,
@@ -24,7 +24,7 @@ public class Drivetrain implements Subsystem {
         BALANCE,
     }
 
-    private DriveIO driveIO;
+    private ChassisIO driveIO;
 
     // Objects for balancing
     private PID gyroPid;
@@ -71,25 +71,25 @@ public class Drivetrain implements Subsystem {
         if (!enabled)
             return;
 
-        this.driveIO = DriveIO.getInstance();
+        this.driveIO = ChassisIO.getInstance();
 
         if (gyroEnabled) {
             // Objects for balancing
-            this.gyroPid = new PID(Chassis.GYRO_CONSTANTS);
+            this.gyroPid = new PID(CHASSIS.GYRO_CONSTANTS);
 
-            this.gyro = new Gyro(Chassis.GYRO_PORT);
+            this.gyro = new Gyro(CHASSIS.GYRO_PORT);
         }
 
         // Objects for target seeking
-        this.seekPID = new PID(Chassis.SEEK_CONSTANTS);
+        this.seekPID = new PID(CHASSIS.SEEK_CONSTANTS);
 
         this.limelight = Limelight.getInstance();
 
-        this.firstCycle();
+        this.init();
     }
 
     @Override
-    public void firstCycle() {
+    public void init() {
         if (!enabled)
             return;
 
@@ -146,7 +146,7 @@ public class Drivetrain implements Subsystem {
         if (!enabled)
             return;
 
-        this.driveIO.stopAllOutputs();
+        this.driveIO.disable();
     }
 
     public Limelight getLimelight() {
@@ -160,7 +160,7 @@ public class Drivetrain implements Subsystem {
         if (!enabled)
             return;
 
-        this.driveIO.resetInputs();
+        this.driveIO.init();
     }
 
     /**
@@ -234,7 +234,7 @@ public class Drivetrain implements Subsystem {
 
         this.currentState = DriveState.POSITION;
 
-        angle *= Chassis.TURNING_CONVERSION;
+        angle *= CHASSIS.TURNING_CONVERSION;
 
         this.posLeft = left + angle;
         this.posRight = right - angle;
@@ -321,7 +321,7 @@ public class Drivetrain implements Subsystem {
 
         // SmartDashboard.putNumber("Drive Heading θ", angle);
 
-        angle *= Chassis.TURNING_CONVERSION;
+        angle *= CHASSIS.TURNING_CONVERSION;
 
         this.setPosition(angle, -angle);
     }
@@ -425,18 +425,18 @@ public class Drivetrain implements Subsystem {
         this.phi = (this.gyro.getYaw() > 0 ? 90 : -90) - this.gyro.getYaw();
         this.theta = this.phi - (this.limelight.getTargetX() * (this.gyro.getYaw() > 0 ? 1 : -1));
         this.x = (this.limelight.getTargetDistance() * Math.cos(theta));
-        this.y = (this.limelight.getTargetDistance() * Math.sin(theta)) - Misc.LIMELIGHT_CHASSIS_OFFSET;
+        this.y = (this.limelight.getTargetDistance() * Math.sin(theta)) - MISC.LIMELIGHT_CHASSIS_OFFSET;
     }
 
     public void followPath() {
 
-        if (!Misc.WITHIN_TOLERANCE(this.gyro.getYaw(), this.phi, Chassis.GYRO_TOLERANCE))
+        if (!ROBOT.WITHIN_TOLERANCE(this.gyro.getYaw(), this.phi, CHASSIS.GYRO_TOLERANCE))
             this.setYaw(this.phi);
-        else if (!Misc.WITHIN_TOLERANCE(this.getLeftPosition(), this.x, Chassis.TOLERANCE))
+        else if (!ROBOT.WITHIN_TOLERANCE(this.getLeftPosition(), this.x, CHASSIS.TOLERANCE))
             this.setPosition(this.x, this.x);
-        else if (!Misc.WITHIN_TOLERANCE(this.gyro.getYaw(), 0, Chassis.GYRO_TOLERANCE))
+        else if (!ROBOT.WITHIN_TOLERANCE(this.gyro.getYaw(), 0, CHASSIS.GYRO_TOLERANCE))
             this.setYaw(0);
-        else if (!Misc.WITHIN_TOLERANCE(this.getLeftPosition(), this.y, Chassis.TOLERANCE))
+        else if (!ROBOT.WITHIN_TOLERANCE(this.getLeftPosition(), this.y, CHASSIS.TOLERANCE))
             this.setPosition(this.y, this.y);
 
     }

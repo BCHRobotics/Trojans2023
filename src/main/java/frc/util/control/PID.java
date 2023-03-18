@@ -1,6 +1,6 @@
 package frc.util.control;
 
-import frc.robot.Constants.Misc;
+import frc.robot.Constants.ROBOT;
 
 public class PID {
 
@@ -57,7 +57,7 @@ public class PID {
     }
 
     public boolean atSetpoint() {
-        return Misc.WITHIN_TOLERANCE(this.input, this.setpoint, 1);
+        return ROBOT.WITHIN_TOLERANCE(this.input, this.setpoint, 1);
     }
 
     public void pushConstantsToDashboard(String label) {

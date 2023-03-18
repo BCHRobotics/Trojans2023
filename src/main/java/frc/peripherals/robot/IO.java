@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 public class IO {
 
-    public ArrayList<IIO> subsystems;
+    public ArrayList<IIO> peripherals;
     private static IO instance;
 
     public static IO getInstance() {
@@ -14,37 +14,47 @@ public class IO {
     }
 
     private IO() {
-        this.subsystems = new ArrayList<>();
-        this.subsystems.add(DriveIO.getInstance());
-        this.subsystems.add(ArmIO.getInstance());
-        this.subsystems.add(ClawIO.getInstance());
-        this.subsystems.add(LEDIO.getInstance());
+        this.peripherals = new ArrayList<>();
+        this.peripherals.add(ChassisIO.getInstance());
+        this.peripherals.add(ShoulderIO.getInstance());
+        this.peripherals.add(WristIO.getInstance());
+        this.peripherals.add(ClawIO.getInstance());
+        this.peripherals.add(LEDIO.getInstance());
     }
 
     /**
-     * Updates all robot inputs
+     * Initializes all peripherals
      */
-    public void updateInputs() {
-        for (IIO io : this.subsystems) {
-            io.updateInputs();
+    public void init() {
+        for (IIO io : peripherals) {
+            io.init();
         }
     }
 
     /**
-     * Reset relative encoders to zero position
+     * Updates all peripherals
      */
-    public void resetInputs() {
-        for (IIO io : subsystems) {
-            io.resetInputs();
+    public void update() {
+        for (IIO io : this.peripherals) {
+            io.update();
         }
     }
 
     /**
-     * Disables all robot outputs
+     * Resets all peripherals
      */
-    public void stopAllOutputs() {
-        for (IIO io : subsystems) {
-            io.stopAllOutputs();
+    public void reset() {
+        for (IIO io : peripherals) {
+            io.reset();
+        }
+    }
+
+    /**
+     * Disables all peripherals
+     */
+    public void disable() {
+        for (IIO io : peripherals) {
+            io.disable();
         }
     }
 

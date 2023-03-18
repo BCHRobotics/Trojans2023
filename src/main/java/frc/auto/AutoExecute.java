@@ -36,8 +36,8 @@ public class AutoExecute extends AutoComponent {
     @Override
     public void firstCycle() {
         data.clear();
-        this.drive.firstCycle();
-        this.mech.firstCycle();
+        this.drive.init();
+        this.mech.init();
         startTime = System.currentTimeMillis();
         try {
             data = CSVReader.convertToArrayList(AutoSelecter.getInstance().getFileName());
@@ -49,15 +49,6 @@ public class AutoExecute extends AutoComponent {
 
     @Override
     public void run() {
-        driveMode();
-        this.drive.run();
-        this.mech.run();
-    }
-
-    /**
-     * Shooter mode for autonomous
-     */
-    private void driveMode() {
         currentTime = System.currentTimeMillis() - startTime;
 
         try {
@@ -73,8 +64,7 @@ public class AutoExecute extends AutoComponent {
                 this.mech.goToPreset(data.get(0).get(3).intValue());
                 this.mech.setShoulderOffset(data.get(0).get(4));
                 this.mech.setWristOffset(data.get(0).get(5));
-                this.mech.setClawPos(data.get(0).get(6));
-                this.mech.setSuctionMode(data.get(0).get(7) == 1.0 ? true : false);
+                this.mech.setClawSpeed(data.get(0).get(6));
                 this.mech.setLEDState(data.get(0).get(8).intValue());
                 switch (data.get(0).get(9).intValue()) {
                     case 1:
@@ -99,6 +89,9 @@ public class AutoExecute extends AutoComponent {
             e.printStackTrace();
             return;
         }
+
+        this.drive.run();
+        this.mech.run();
     }
 
     @Override

@@ -3,18 +3,23 @@ package frc.peripherals.robot;
 public interface IIO {
 
     /**
-     * Updates device inputs
+     * Initializes peripherals
      */
-    void updateInputs();
+    void init();
 
     /**
-     * Resets device inputs
+     * Updates peripherals
      */
-    void resetInputs();
+    void update();
 
     /**
-     * Disables device ouputs
+     * Resets peripherals
      */
-    void stopAllOutputs();
+    void reset();
+
+    /**
+     * Disables peripherals
+     */
+    void disable();
 
 }

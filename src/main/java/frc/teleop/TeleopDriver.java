@@ -31,7 +31,7 @@ public class TeleopDriver implements TeleopComponent {
 
     @Override
     public void firstCycle() {
-        this.drive.firstCycle();
+        this.drive.init();
     }
 
     @Override

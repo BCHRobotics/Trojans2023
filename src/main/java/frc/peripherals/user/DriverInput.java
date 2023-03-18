@@ -3,12 +3,12 @@ package frc.peripherals.user;
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import frc.peripherals.user.Controller.Axis;
 import frc.peripherals.user.Controller.Side;
-import frc.robot.Constants.Chassis;
-import frc.robot.Constants.Misc;
+import frc.robot.Constants.CHASSIS;
+import frc.robot.Constants.MISC;
 
 public final class DriverInput {
 
-	private static Controller driver = new Controller(Misc.DRIVER_PORT);
+	private static Controller driver = new Controller(MISC.DRIVER_PORT);
 
 	/**
 	 * Get the driver controller
@@ -25,8 +25,8 @@ public final class DriverInput {
 	 * @return Max drive speed
 	 */
 	public static double getDriveMaxSpeed() {
-		return Chassis.MAX_OUTPUT + ((driver.getRightTriggerAxis() * Chassis.MAX_INTERVAL)
-				- (driver.getLeftTriggerAxis() * Chassis.MAX_INTERVAL));
+		return CHASSIS.MAX_OUTPUT + ((driver.getRightTriggerAxis() * CHASSIS.MAX_INTERVAL)
+				- (driver.getLeftTriggerAxis() * CHASSIS.MAX_INTERVAL));
 	}
 
 	/**

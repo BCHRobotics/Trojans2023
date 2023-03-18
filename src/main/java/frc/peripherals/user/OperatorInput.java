@@ -3,11 +3,11 @@ package frc.peripherals.user;
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import frc.peripherals.user.Controller.Axis;
 import frc.peripherals.user.Controller.Side;
-import frc.robot.Constants.Misc;
+import frc.robot.Constants.MISC;
 
 public final class OperatorInput {
 
-    private static Controller operator = new Controller(Misc.OPERATOR_PORT);
+    private static Controller operator = new Controller(MISC.OPERATOR_PORT);
 
     /**
      * Get the operator controller
@@ -19,7 +19,7 @@ public final class OperatorInput {
     }
 
     /**
-     * Get the wrist offset in degrees 0° --> 45°
+     * Get the wrist offset in degrees [-45° --> 45°]
      * 
      * @return Wrist offset
      */
@@ -28,7 +28,7 @@ public final class OperatorInput {
     }
 
     /**
-     * Get the wrist height in inches 0" --> 57.75"
+     * Get the wrist height in inches [0" --> 57.75"]
      * 
      * @return Wrist height
      */
@@ -37,7 +37,7 @@ public final class OperatorInput {
     }
 
     /**
-     * Get the shoulder offset in inches 0" --> 12"
+     * Get the shoulder offset in inches [-12" --> 12"]
      * 
      * @return shoulder offset
      */

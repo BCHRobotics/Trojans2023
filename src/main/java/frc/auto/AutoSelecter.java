@@ -2,7 +2,7 @@ package frc.auto;
 
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import frc.robot.Constants.Misc;
+import frc.robot.Constants.MISC;
 
 public class AutoSelecter {
     private static AutoSelecter instance;
@@ -21,7 +21,7 @@ public class AutoSelecter {
         autoChooser.addOption("DRIVE_BALANCE", "DRIVE_BALANCE_V3");
         autoChooser.addOption("SCORE BALANCE", "SCORE_BALANCE_V1");
         autoChooser.addOption("SCORE HIGH", "SCORE_HIGH_V1");
-        autoChooser.addOption("LEAD_BY_NOSE_PLAYBACK", Misc.TEACH_MODE_FILE_NAME);
+        autoChooser.addOption("LEAD_BY_NOSE_PLAYBACK", MISC.TEACH_MODE_FILE_NAME);
 
         SmartDashboard.putData("Autonomous Route", autoChooser);
     }

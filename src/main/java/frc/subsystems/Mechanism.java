@@ -1,29 +1,30 @@
 package frc.subsystems;
 
-import frc.peripherals.robot.ArmIO;
+import frc.peripherals.robot.ShoulderIO;
+import frc.peripherals.robot.WristIO;
 import frc.peripherals.robot.ClawIO;
 import frc.peripherals.robot.LEDIO;
-import frc.robot.Constants.Arm;
-import frc.robot.Constants.Misc.LED_STATE;
+import frc.robot.Constants.*;
+import frc.robot.Constants.MISC.LED_STATE;
 import frc.util.control.ArmPresets;
 
 import java.lang.Math;
 
-public class Mechanism implements Subsystem {
+public class Mechanism extends Subsystem {
     private static Mechanism instance;
 
-    private ArmIO armIO;
+    private ShoulderIO shoulderIO;
+    private WristIO wristIO;
     private ClawIO clawIO;
     private LEDIO ledIO;
 
     private double endEffectorHeight;
     private double shoulderOffset;
-    private double wristOffset = Arm.WRIST_DEFAULT_OFFSET;
+    private double wristOffset = WRIST.DEFAULT_OFFSET;
 
-    private double armAngle;
+    private double shoulderAngle;
     private double wristAngle;
-    private double clawPos;
-    private boolean pumpMode;
+    private double clawSpeed;
 
     private ArmPresets preset;
 
@@ -42,12 +43,13 @@ public class Mechanism implements Subsystem {
     }
 
     protected Mechanism() {
-        this.firstCycle();
+        this.init();
     }
 
     @Override
-    public void firstCycle() {
-        this.armIO = ArmIO.getInstance();
+    public void init() {
+        this.shoulderIO = ShoulderIO.getInstance();
+        this.wristIO = WristIO.getInstance();
         this.clawIO = ClawIO.getInstance();
         this.ledIO = LEDIO.getInstance();
         this.resetPosition();
@@ -55,29 +57,27 @@ public class Mechanism implements Subsystem {
 
     @Override
     public void run() {
-        this.armIO.setShoulderAngle(this.armAngle);
-        this.armIO.setWristAngle(this.wristAngle + this.wristOffset);
-        this.clawIO.setClawPosition(this.clawPos);
-        this.clawIO.setPump(this.pumpMode);
+        this.shoulderIO.setShoulderAngle(this.shoulderAngle);
+        this.wristIO.setWristAngle((this.wristAngle + this.wristOffset), this.shoulderAngle);
+        this.clawIO.setClawSpeed(this.clawSpeed);
         this.ledIO.setLEDState(this.ledState);
     }
 
     @Override
     public void disable() {
-        this.armIO.stopAllOutputs();
-        this.clawIO.stopAllOutputs();
+        this.shoulderIO.disable();
+        this.wristIO.disable();
+        this.clawIO.disable();
     }
 
     /**
      * Reset appendages to zero position
      */
     public void resetPosition() {
-        this.armAngle = 0;
+        this.shoulderAngle = 0;
         this.wristAngle = 0;
-        this.clawPos = 0;
-        this.pumpMode = false;
-        this.clawIO.recalibrateClaw();
-        this.ledIO.resetInputs();
+        this.clawSpeed = 0;
+        this.ledIO.init();
     }
 
     /**
@@ -86,14 +86,14 @@ public class Mechanism implements Subsystem {
      * @param angle
      */
     public void setShoulderAngle(double angle) {
-        this.armAngle = angle;
+        this.shoulderAngle = angle;
     }
 
     /**
      * @return Shoulder anlge in degrees from encoder
      */
     public double getShoulderAngle() {
-        return this.armIO.getShoulderEncoder().getPosition();
+        return this.shoulderIO.getShoulderEncoder().getPosition();
     }
 
     /**
@@ -109,7 +109,7 @@ public class Mechanism implements Subsystem {
      * @return Wrist angle in degrees from encoder
      */
     public double getWristAngle() {
-        return this.armIO.getWristEncoder().getPosition();
+        return this.wristIO.getWristEncoder().getPosition();
     }
 
     /**
@@ -151,9 +151,10 @@ public class Mechanism implements Subsystem {
      */
     public void setWristHeight(double height) {
         this.endEffectorHeight = height + this.shoulderOffset;
-        this.armAngle = Math.toDegrees(
-                Math.acos((Arm.SHOULDER_HEIGHT - Arm.WRIST_HEIGHT_OFFSET - this.endEffectorHeight) / Arm.ARM_LENGTH));
-        this.wristAngle = this.armAngle + Arm.WRIST_PARALLEL_OFFSET;
+        this.shoulderAngle = Math.toDegrees(
+                Math.acos((SHOULDER.HEIGHT - WRIST.HEIGHT_OFFSET - this.endEffectorHeight)
+                        / ROBOT.ARM_LENGTH));
+        this.wristAngle = this.shoulderAngle + WRIST.PARALLEL_OFFSET;
     }
 
     /**
@@ -164,38 +165,20 @@ public class Mechanism implements Subsystem {
     }
 
     /**
-     * Sets Claw position in actuator degrees
+     * Sets Claw speed in percent output
      * 
-     * @param position
+     * @param speed
      */
-    public void setClawPos(double position) {
-        this.clawPos = position;
+    public void setClawSpeed(double speed) {
+        this.clawSpeed = speed;
 
     }
 
     /**
-     * @return Claw percent open (0 = open, 1 = closed)
+     * @return Claw velocity (RPM)
      */
-    public double getClawPos() {
-        return this.clawIO.getClawEncoder().getPosition();
-    }
-
-    /**
-     * Set pump state
-     * 
-     * @param state
-     */
-    public void setSuctionMode(boolean state) {
-        this.pumpMode = state;
-    }
-
-    /**
-     * Get pump state
-     * 
-     * @return
-     */
-    public boolean getSuctionMode() {
-        return this.pumpMode;
+    public double getClawSpeed() {
+        return this.clawIO.getClawEncoder().getVelocity();
     }
 
     /**
@@ -237,7 +220,7 @@ public class Mechanism implements Subsystem {
         // default:
         // this.resetPosition();
         // }
-        this.goToPreset(Arm.PRESETS[ID]);
+        this.goToPreset(ROBOT.PRESETS[ID]);
     }
 
     /**
@@ -285,7 +268,7 @@ public class Mechanism implements Subsystem {
                 this.ledState = LED_STATE.BOTH_BLINK;
                 break;
             default:
-                this.ledIO.resetInputs();
+                this.ledIO.init();
                 break;
         }
 

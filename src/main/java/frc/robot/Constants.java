@@ -7,21 +7,55 @@ public class Constants {
 
         // All units used are: Degrees, Revolutions, Inches, RPM, inches / sec
 
-        public static final class Features {
+        public static final class ROBOT {
                 // System time loop constants
                 public static final double LOOP_TIME = 0.02; // seconds
 
                 // Subsytems toggle logic
                 public static final boolean USING_DASHBOARD = true;
                 public static final boolean DRIVE_ENABLED = true;
-                public static final boolean ARM_ENABLED = true;
+                public static final boolean SHOULDER_ENABLED = true;
+                public static final boolean WRIST_ENABLED = true;
                 public static final boolean CLAW_ENABLED = true;
                 public static final boolean GYRO_ENABLED = true;
                 public static final boolean LEDS_ENABLED = true;
                 public static final boolean MINI_BOT = false;
+
+                // Robot dimensions (inches)
+                public static final double FOREARM_LENGTH = 15;
+                public static final double ARM_LENGTH = 36;
+                public static final double ARM_MAX_HEIGHT = 55;
+                public static final double WHEEL_DIAMETER = 6;
+                public static final double TRACK_WIDTH = 19;
+
+                // Arm preset profiles TODO: Verify Presets with Drive Team
+                public static final ArmPresets DEFAULT = new ArmPresets(0, -90);
+                public static final ArmPresets TRANSPORT = new ArmPresets(0, -70);
+                public static final ArmPresets GROUND = new ArmPresets(0, 0);
+                public static final ArmPresets MID = new ArmPresets(38, 0);
+                public static final ArmPresets STATION = new ArmPresets(41, 0);
+                public static final ArmPresets TOP = new ArmPresets(52, 0);
+                public static final ArmPresets[] PRESETS = { DEFAULT, TRANSPORT, GROUND, MID, STATION, TOP };
+
+                // Setpoint enforcment
+                public static final double ENSURE_RANGE(double value, double min, double max) {
+                        return Math.min(Math.max(value, min), max);
+                }
+
+                public static final boolean IN_RANGE(double value, double min, double max) {
+                        return (value >= min) && (value <= max);
+                }
+
+                public static final boolean WITHIN_TOLERANCE(double value, double tolerance) {
+                        return (value >= -tolerance) && (value <= tolerance);
+                }
+
+                public static final boolean WITHIN_TOLERANCE(double input, double setpoint, double tolerance) {
+                        return (input >= (setpoint - tolerance)) && (input <= (setpoint + tolerance));
+                }
         }
 
-        public static final class Chassis {
+        public static final class CHASSIS {
 
                 // CAN ID(s) for Drivetrain
                 public static final int FRONT_LEFT_ID = 10;
@@ -39,10 +73,6 @@ public class Constants {
                 public static final boolean INVERTED = false;
                 public static final boolean OUT_OF_SYNC = false;
 
-                // Chassis dimensions needed
-                public static final double WHEEL_DIAMETER = 6;
-                public static final double TRACK_WIDTH = 19;
-
                 // Chasis conversion factors TODO: Re-collect conversion data
                 public static final double LEFT_POSITION_CONVERSION = 48 / 18.23804473876953; // inches per
                 // revolutions
@@ -54,7 +84,7 @@ public class Constants {
                                                                                                          // 1 sec
 
                 // input diameter = Δd inches between center wheels ~~v~~ in inches / degree
-                public static final double TURNING_CONVERSION = (TRACK_WIDTH * Math.PI) / 360;
+                public static final double TURNING_CONVERSION = (ROBOT.TRACK_WIDTH * Math.PI) / 360;
 
                 // Drive PID Constants TODO: Re-tune Drivetrain PID
                 public static final SparkMaxConstants LEFT_DRIVE_CONSTANTS = new SparkMaxConstants(
@@ -75,72 +105,43 @@ public class Constants {
 
         }
 
-        public static final class Arm {
-                // CAN ID(s) for Robot Arm
-                public static final int SHOULDER_ID = 20;
-                public static final int WRIST_ID = 21;
-
-                // Robot dimensions (inches)
-                public static final double SHOULDER_HEIGHT = 36.75;
-                public static final double ARM_LENGTH = 36;
-                public static final double WRIST_HEIGHT_OFFSET = 2.25;
-                public static final double FOREARM_LENGTH = 15;
-
-                // Robot arm conversion factors
-                public static final double SHOULDER_CONVERSION_FACTOR = 360; // Convert revs to degrees
-                public static final double WRIST_CONVERSION_FACTOR = 360; // Convert revs to degrees
-                public static final double WRIST_PARALLEL_OFFSET = 90;
-                public static final double SHOULDER_DEFAULT_OFFSET = 17;
-                public static final double WRIST_DEFAULT_OFFSET = SHOULDER_DEFAULT_OFFSET;
-                public static final float SHOULDER_LIMIT = 130 + (float) Arm.SHOULDER_DEFAULT_OFFSET;
-                public static final float WRIST_LIMIT = 200 + (float) Arm.WRIST_DEFAULT_OFFSET;
-                public static final double SHOUDLER_MAX_EXTENSION_LIMIT = 55;
-                public static final double SHOULDER_TOLERANCE = 1;
-
-                // Robot arm ABSOLUTE encoder inversions
-                public static final boolean SHOULDER_ENCODER_INVERTED = false;
-                public static final boolean WRIST_ENCODER_INVERTED = false;
-
-                // Robot arm ABSOLUTE encoder offset
-                public static final double SHOULDER_ENCODER_OFFSET = (204.7492790) - Arm.SHOULDER_DEFAULT_OFFSET;
-                public static final double WRIST_ENCODER_OFFSET = (172.0870650) - Arm.WRIST_DEFAULT_OFFSET;
-
-                // Mechanism PID Constants TODO: Re-tune after modified wrist installation
-                public static final SparkMaxConstants SHOULDER_CONTROL_CONSTANTS = new SparkMaxConstants(
+        public static final class SHOULDER {
+                public static final int ID = 20;
+                public static final double HEIGHT = 36.75;
+                public static final double CONVERSION_FACTOR = 360; // Convert revs to degrees
+                public static final double DEFAULT_OFFSET = 17;
+                public static final float LIMIT = 130 + (float) SHOULDER.DEFAULT_OFFSET;
+                public static final double TOLERANCE = 1;
+                public static final boolean ENCODER_INVERTED = false;
+                public static final double ENCODER_OFFSET = (204.7492790) - SHOULDER.DEFAULT_OFFSET;
+                public static final SparkMaxConstants CONTROL_CONSTANTS = new SparkMaxConstants(
                                 0.00014028, 0, 0.00051398, 0, 2e-6, -0.4, 1,
                                 0, 0, 5700, 3500, 0.2);
-                public static final SparkMaxConstants WRIST_CONTROL_CONSTANTS = new SparkMaxConstants(
+        }
+
+        public static final class WRIST {
+                public static final int ID = 21;
+                public static final double HEIGHT_OFFSET = 2.25;
+                public static final double CONVERSION_FACTOR = 360; // Convert revs to degrees
+                public static final double PARALLEL_OFFSET = 90;
+                public static final double DEFAULT_OFFSET = SHOULDER.DEFAULT_OFFSET;
+                public static final float LIMIT = 200 + (float) WRIST.DEFAULT_OFFSET;
+                public static final double TOLERANCE = 1;
+                public static final boolean ENCODER_INVERTED = false;
+                public static final double ENCODER_OFFSET = (172.0870650) - WRIST.DEFAULT_OFFSET;
+                // Mechanism PID Constants TODO: Re-tune after modified wrist installation
+                public static final SparkMaxConstants CONTROL_CONSTANTS = new SparkMaxConstants(
                                 2.1028E-05, 0, 5.1398E-05, 0, 0.00004, -1, 1,
                                 0, 0, 5700, 5700, 0.05);
-
-                // Arm preset profiles TODO: Verify Presets with Drive Team
-                public static final ArmPresets DEFAULT = new ArmPresets(0, -90);
-                public static final ArmPresets TRANSPORT = new ArmPresets(0, -70);
-                public static final ArmPresets GROUND = new ArmPresets(0, 0);
-                public static final ArmPresets MID = new ArmPresets(38, 0);
-                public static final ArmPresets STATION = new ArmPresets(41, 0);
-                public static final ArmPresets TOP = new ArmPresets(52, 0);
-
-                public static final ArmPresets[] PRESETS = { DEFAULT, TRANSPORT, GROUND, MID, STATION, TOP };
-
         }
 
-        public static final class Claw {
-                // CAN ID(s) for End Effector
+        public static final class CLAW {
                 public static final int MOTOR_ID = 30;
-                public static final int PUMP_ID = 32;
-
-                public static final double DEFAULT_OFFSET = 0;
-                public static final float LIMIT = 1;
-                public static final int LIMIT_SWITCH_PORT = 2;
-
-                public static final double CONVERSION_FACTOR = (1.0 / 190); // #inches / #revs
-
-                public static final SparkMaxConstants CONSTANTS = new SparkMaxConstants(
-                                0, 0, 0, 0, 0.0028, -1, 1, 0, 0, 5700, 4500, 0.01);
+                public static final double CONVERSION_FACTOR = 1; // RPM
+                public static final double CURRENT_SPIKE = 0; // Amps
         }
 
-        public static final class Misc {
+        public static final class MISC {
                 // Controller deadzones
                 public static final double CONTROLLER_DEADZONE = 0.1;
                 public static final int DRIVER_PORT = 0;
@@ -179,22 +180,6 @@ public class Constants {
 
                 // Autonomous directory
                 public static final String ROOT_DIRECTORY = "csv/"; // "csv/";
-
-                public static final double ENSURE_RANGE(double value, double min, double max) {
-                        return Math.min(Math.max(value, min), max);
-                }
-
-                public static final boolean IN_RANGE(double value, double min, double max) {
-                        return (value >= min) && (value <= max);
-                }
-
-                public static final boolean WITHIN_TOLERANCE(double value, double tolerance) {
-                        return (value >= -tolerance) && (value <= tolerance);
-                }
-
-                public static final boolean WITHIN_TOLERANCE(double input, double setpoint, double tolerance) {
-                        return (input >= (setpoint - tolerance)) && (input <= (setpoint + tolerance));
-                }
         }
 
 }

@@ -2,9 +2,8 @@ package frc.teleop;
 
 import frc.subsystems.Mechanism;
 import frc.peripherals.user.OperatorInput;
-import frc.robot.Constants.Arm;
-import frc.robot.Constants.Misc;
-import frc.robot.Constants.Misc.LED_STATE;
+import frc.robot.Constants.*;
+import frc.robot.Constants.MISC.LED_STATE;
 
 public class TeleopOperator implements TeleopComponent {
     private static TeleopOperator instance;
@@ -29,31 +28,28 @@ public class TeleopOperator implements TeleopComponent {
 
     @Override
     public void firstCycle() {
-        this.mech.firstCycle();
+        this.mech.init();
     }
 
     @Override
     public void run() {
 
-        if (OperatorInput.getConeToggle()) {
-            this.mech.setLEDState(LED_STATE.CONE);
-            this.mech.setClawPos(Misc.CONE_PRESET);
-            this.mech.setSuctionMode(true);
-        } else if (OperatorInput.getConeReleaseSuction()) {
-            this.mech.setSuctionMode(false);
-        } else if (OperatorInput.getCubeToggle()) {
-            this.mech.setLEDState(LED_STATE.CUBE);
-            this.mech.setClawPos(Misc.CUBE_PRESET);
-            this.mech.setSuctionMode(true);
-        } else if (OperatorInput.getCubeReleaseSuction()) {
-            this.mech.setSuctionMode(false);
-        } else if (OperatorInput.getClawRelease()) {
-            this.mech.setClawPos(0);
-            this.mech.setLEDState(LED_STATE.OFF);
-        }
-
-        if (OperatorInput.getReleaseSuction())
-            this.mech.setSuctionMode(false);
+        // if (OperatorInput.getConeToggle()) {
+        // this.mech.setLEDState(LED_STATE.CONE);
+        // this.mech.setClawPos(MISC.CONE_PRESET);
+        // this.mech.setSuctionMode(true);
+        // } else if (OperatorInput.getConeReleaseSuction()) {
+        // this.mech.setSuctionMode(false);
+        // } else if (OperatorInput.getCubeToggle()) {
+        // this.mech.setLEDState(LED_STATE.CUBE);
+        // this.mech.setClawPos(MISC.CUBE_PRESET);
+        // this.mech.setSuctionMode(true);
+        // } else if (OperatorInput.getCubeReleaseSuction()) {
+        // this.mech.setSuctionMode(false);
+        // } else if (OperatorInput.getClawRelease()) {
+        // this.mech.setClawPos(0);
+        // this.mech.setLEDState(LED_STATE.OFF);
+        // }
 
         if (OperatorInput.manualOffsetRequest()) {
             this.mech.setShoulderOffset(OperatorInput.getShoulderOffset());
@@ -61,22 +57,22 @@ public class TeleopOperator implements TeleopComponent {
         } else {
             switch (OperatorInput.getGamePiece()) {
                 case 0:
-                    this.mech.goToPreset(Arm.TOP);
+                    this.mech.goToPreset(ROBOT.TOP);
                     break;
                 case 90:
-                    this.mech.goToPreset(Arm.TRANSPORT);
+                    this.mech.goToPreset(ROBOT.TRANSPORT);
                     break;
                 case 180:
-                    this.mech.goToPreset(Arm.GROUND);
+                    this.mech.goToPreset(ROBOT.GROUND);
                     break;
                 case 270:
-                    this.mech.goToPreset(Arm.MID);
+                    this.mech.goToPreset(ROBOT.MID);
                     break;
             }
         }
 
         if (OperatorInput.getStationRequest())
-            this.mech.goToPreset(Arm.STATION);
+            this.mech.goToPreset(ROBOT.STATION);
 
         if (OperatorInput.getResetButton())
             this.mech.resetPosition();
